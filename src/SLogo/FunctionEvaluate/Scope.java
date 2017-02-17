@@ -25,16 +25,36 @@ public class Scope {
         dictionaryCommands = initCommandDictionary();
     }
 
-    public Variable getVariableByName(String name) {
-        return dictionaryVariables.get(name);
+    public Variable getVariableByName(String name) throws VariableNotFoundException {
+        if (dictionaryVariables.containsKey(name)) {
+            return dictionaryVariables.get(name);
+        } else {
+            throw new VariableNotFoundException(name);
+        }
     }
 
-    public Invokable getFunctionByName(String name) {
-        return dictionaryCommands.get(name);
+    public Invokable getFunctionByName(String name) throws FunctionNotFoundException {
+        if (dictionaryCommands.containsKey(name)) {
+            return dictionaryCommands.get(name);
+        } else {
+            throw new FunctionNotFoundException(name);
+        }
     }
 
     private Map<String, Invokable> initCommandDictionary() {
         //TODO: map names to functions
         return new HashMap<>();
+    }
+
+    public class VariableNotFoundException extends RuntimeException {
+        VariableNotFoundException(String variableName) {
+            super("Variable \'" + variableName + "\' is unbound.");
+        }
+    }
+
+    public class FunctionNotFoundException extends RuntimeException {
+        FunctionNotFoundException(String functionName) {
+            super("Function \'" + functionName + "\' is undefined.");
+        }
     }
 }

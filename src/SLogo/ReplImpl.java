@@ -22,15 +22,18 @@ public class ReplImpl implements Repl {
     private SLogoView parentNode;
     private int currentIndex;
 
-    public ReplImpl(InputStream input) {
+    public ReplImpl(InputStream input, SLogoView view) {
         inputScanner = new Scanner(input);
         parser = new ParserImpl(DEFAULT_LANGUAGE, DEFAULT_DELIMITER);
+        history = new ArrayList<>();
         currentIndex = 0;
+        parentNode = view;
     }
 
     @Override
-    public void read() {
-        history.add(parser.parse(inputScanner.nextLine()));
+    public void read() throws Exception {
+        String input = inputScanner.nextLine();
+        history.add(parser.parse(input));
     }
 
     @Override
@@ -47,9 +50,13 @@ public class ReplImpl implements Repl {
     @Override
     public void loop() {
         while (true) {
-            read();
-            evaluate();
-            print();
+            try {
+                read();
+                evaluate();
+                print();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

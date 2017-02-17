@@ -11,7 +11,7 @@ public interface Repl {
     /**
      * Take in user input
      */
-    void read();
+    void read() throws Exception;
 
     /**
      * Invoke method based on input
@@ -26,7 +26,7 @@ public interface Repl {
     /**
      * Repeat the above
      */
-    void loop();
+    void loop() throws Exception;
 
     /**
      * @return list of all previous commands run

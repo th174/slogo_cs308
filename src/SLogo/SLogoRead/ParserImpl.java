@@ -27,10 +27,11 @@ public class ParserImpl implements Parser {
     public ParserImpl(String languageSet, String delimiter) {
         this.delimiter = delimiter;
         this.languageSet = languageSet;
+        currentScope = new Scope(languageSet);
     }
 
     @Override
-    public Command parse(String inputString) {
+    public Command parse(String inputString) throws Scope.VariableNotFoundException, Scope.FunctionNotFoundException {
         String[] params = inputString.split(delimiter);
         List<String> flags = new ArrayList<>();
         List<Variable> args = new ArrayList<>();

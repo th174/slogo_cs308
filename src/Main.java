@@ -1,4 +1,5 @@
 import SLogo.ReplImpl;
+import SLogo.SLogoView.SLogoViewImpl;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -19,7 +20,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
 //        launch(args);
-        ReplImpl repl = new ReplImpl(System.in);
+        ReplImpl repl = new ReplImpl(System.in, new SLogoViewImpl());
         repl.loop();
     }
 }
