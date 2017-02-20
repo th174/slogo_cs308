@@ -48,6 +48,13 @@ When a user types “fd 50” in the command window, the REPL loop will grab tha
 
 **Use Case 3 (Stone):** *User makes a new variable with MAKE*
 
+
+**Use Case 4 (Riley):** 
+When the GUI is instantiated, it needs to get a reference to the Scene to be able to display the View. When the Main class instantiates the View, the View will create the root for the Scene in its constructor. At that point, the GUI will be instantiated and call `View.getScene()` to get the reference. From then on, when the View updates the Scene it will automatically update the graphics within the GUI.
+
+**Use Case 5 (Riley):** 
+When the user wants to change the turtle image, they will click the "Image" menu bar option on the GUI which will open a file browser for the user to find a file. Once a file is chosen, the GUI will call `View.setImage(filename)` which will change the turtle Image in the View.
+
 ###Design Considerations
 * A large design concern was how we would be able to read a line that has embedded operations (sum sum 1 2 6), but we decided that it would be easiest and most effective to dictate that parentheses must be written around embedded operations. 
 * A design choice that we made was to keep all of the main graphical properties in the GUI class with no interactions with the backend. The settings such as “background color” and “image” are going to be housed in a class embedded within the GUI class. The alternative option was to allow these properties to be changed by the command line, but that would’ve meant extra communication with the backend that wasn’t necessary.
