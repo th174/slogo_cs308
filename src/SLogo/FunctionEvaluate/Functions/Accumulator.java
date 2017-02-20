@@ -5,6 +5,7 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 /**
  * Created by th174 on 2/16/2017.
  */
+@FunctionalInterface
 public interface Accumulator extends Invokable {
 
     @Override

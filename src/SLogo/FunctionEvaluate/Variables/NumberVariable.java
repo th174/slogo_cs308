@@ -12,16 +12,16 @@ public final class NumberVariable extends Variable<Number> {
         super(value);
     }
 
+    public NumberVariable(String value) throws NumberFormatException {
+        super(Double.parseDouble(value));
+    }
+
     @Override
     public Variable sum(Variable other) {
-        if (other instanceof NumberVariable) {
-            return super.sum(other);
+        if (other instanceof StringVariable) {
+            return new StringVariable(this.toString() + other.toString());
         } else {
-            try {
-                return super.sum(other);
-            } catch (Exception e) {
-                return new StringVariable(this.toString() + other.toString());
-            }
+            return super.sum(other);
         }
     }
 
@@ -51,6 +51,6 @@ public final class NumberVariable extends Variable<Number> {
 
     @Override
     public String toString() {
-        return super.toString();
+        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.toString();
     }
 }

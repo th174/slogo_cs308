@@ -12,32 +12,31 @@ For the SLogo program, this team is trying to create an IDE where a user can inp
 ###Design Overview
 The project is going to be divided into 5 main API’s: Scope, REPL, Parser, GUI and View. Scope stores all user-defined and default variables and methods that can be used in commands. REPL is the read-evaluate-print loop which does as the name suggests. The Parser maintains a mapping from command strings (in any language) to the particular invokable. GUI houses the graphical components (including the View). View updates, using JavaFX, the turtle and the image it prints. The GUI sends user-input commands to REPL. The command string is sent to the Parser, which returns an “Expression” object that REPL executes (most likely affecting the variables in Scope or View). A map that indicates the how these API’s interact with each other can be seen in the Doc folder as “SLogo_Map.JPG”
 
-**Variable Class:** The Variable object (such as Number, String, boolean, etc.) that is stored in the Variables/Methods class. These Variable objects are executed upon by the Invokables to change its value. The main abstract Variable class has default methods for how the variables react to certain operations, while subclasses of Variable has methods to override the superclass's methods. They are updated by the invokables and displayed in the GUI. 
+**[Variable Class:](SLogo/FunctionEvaluate/Variables/Variable.html)** The Variable object (such as Number, String, boolean, etc.) that is stored in the Variables/Methods class. These Variable objects are executed upon by the Invokables to change its value. The main abstract Variable class has default methods for how the variables react to certain operations, while subclasses of Variable has methods to override the superclass's methods. They are updated by the invokables and displayed in the GUI. 
 
-**Invokable Interface:** The Invokable object is a single operation (forward, plus, divide, etc.) that has instructions for how to execute that operation with given flags and arguments (Variables). The interface defines one method: invoke(), which will be called by Parser to invoke whatever command the Invokable defines. 
+**[Invokable Interface:](SLogo/FunctionEvaluate/Functions/Invokable.html)** The Invokable object is a single operation (forward, plus, divide, etc.) that has instructions for how to execute that operation with given flags and arguments (Variables). The interface defines one method: invoke(), which will be called by Parser to invoke whatever command the Invokable defines. 
 
-**Expression Class:** The Expression class contains an Invokable, a list of “flag” Strings, a list of “argument” Strings, and a list of other Expressions. This class connects the Invokable, which is simply a wrapped method reference with its arguments and parameters. Expressions can be executed, which runs all subexpressions recursively, and returns a variable.
+**[Expression Class:](SLogo/Parse/Expression.html)** The Expression class contains an Invokable, a list of “flag” Strings, a list of “argument” Strings, and a list of other Expressions. This class connects the Invokable, which is simply a wrapped method reference with its arguments and parameters. Expressions can be executed, which runs all subexpressions recursively, and returns a variable.
 
 ###User Interface
-The User Interface consists of several components: the View which is a large box that displays the turtle and the path that it’s drawn. Below that, there is a Command box where commands are typed and previous commands can be seen. The previous command can be clicked on to be pasted in the Command box as a new command. There is another box to the right of the View box that displays currently-defined variables and functions. These functions can be clicked on to be pasted into the Command box as a new command. The menu bar is going to have all the settings functionality, such as Background Color or Change Language. A mock-up of the User Interface can be seen in the Doc folder as “SLogo_GUI.JPG”.
+**[SLogoGUI](SLogo/View/SLogoGUI.html)** The User Interface consists of several components: the View which is a large box that displays the turtle and the path that it’s drawn. Below that, there is a Command box where commands are typed and previous commands can be seen. The previous command can be clicked on to be pasted in the Command box as a new command. There is another box to the right of the View box that displays currently-defined variables and functions. These functions can be clicked on to be pasted into the Command box as a new command. The menu bar is going to have all the settings functionality, such as Background Color or Change Language. A mock-up of the User Interface can be seen in the Doc folder as “SLogo_GUI.JPG”.
 
 ###API Details
-
 Many details, such as specific methods and exception handling, are contained within the linked APIs.
 
-**Scope:**
+**[Scope:](SLogo/FunctionEvaluate/Scope.html)**
 This interface maintains the variables and commands for the entire program. It contains several getters to be able to access Variables and Expressions (mainly for the Invokable class and the GUI class to access. This can be extended to include more default variables, operations, and user-generated functions.
 
-**REPL:**
+**[REPL:](SLogo/Repl.html)**
 This interface maintains the read-evaluate-print loop. It gets commands from the GUI, with which it sends to the Parser to deal with. Currently, this class does not have many ways in which it can be extended, as it is relatively set in its functionality. However, with some adjustment, it could be extended to take in files.
 
-**Parser:**
+**[Parser:](SLogo/Parse/Parser.html)**
 This class converts user command strings into Expressions, identifying matching the arguments of the with their respective commands. It should account for nested commands and control flow. It is open to extension through the addition of new languages, new commands, or new syntax (such as taking in more than two arguments for certain functions, like *SUM*).
 
-**GUI:**
+**[GUI:](SLogo/View/SLogoGUIView.html)**
 A user interface by which the user can interact with the program. It provides windows for viewing the Canvas containing the turtle, a REPL shell, and a list of defined variables and functions. The GUI should also give the user an interface with which they can customize program configurations such as color, or view pertinent information about the program. GUI can be extended by supporting new settings and functions in the Menu bar. To create new visuals, extra boxes can be added or new stage can be made. The GUI can also make any functions that are displayed clickable (to be pasted in the command window).
 
-**View:**
+**[View:](SLogo/View/CanvasView.html)**
 The window that displays the turtle and the lines that the turtle drew. It is constantly updated by the Invokables dictating how the turtle should move and whether or not the pen is down. The view can be extended to have different background colors, pen colors and turtle images. 
 
 ###API Example Code

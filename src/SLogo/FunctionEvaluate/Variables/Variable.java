@@ -17,7 +17,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public Variable sum(Variable other) {
-        return new NumberVariable(toNumber() - other.toNumber());
+        return new NumberVariable(toNumber() + other.toNumber());
     }
 
     public NumberVariable difference(Variable other) {
@@ -40,7 +40,13 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     }
 
-    public abstract Variable negate();
+    public Variable negate() {
+        try {
+            return new NumberVariable(-1 * toNumber());
+        } catch (NumberFormatException e) {
+            return not();
+        }
+    }
 
     public Variable random() {
         return new NumberVariable(Math.random() * toNumber());

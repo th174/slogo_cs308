@@ -1,8 +1,9 @@
 package SLogo;
 
-import SLogo.SLogoRead.Command;
+import SLogo.Parse.Expression;
 
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by th174 on 2/16/2017.
@@ -10,13 +11,10 @@ import java.util.List;
 public interface Repl {
     /**
      * Take in user input
+     *
+     * @param input User input string
      */
-    void read() throws Exception;
-
-    /**
-     * Invoke method based on input
-     */
-    void evaluate();
+    void read(Scanner input) throws Exception;
 
     /**
      * Give feedback to user based on evaluated results
@@ -24,12 +22,7 @@ public interface Repl {
     void print();
 
     /**
-     * Repeat the above
-     */
-    void loop() throws Exception;
-
-    /**
      * @return list of all previous commands run
      */
-    List<Command> getHistory();
+    List<Expression> getHistory();
 }

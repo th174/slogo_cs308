@@ -1,11 +1,11 @@
 import SLogo.ReplImpl;
-import SLogo.SLogoView.SLogoViewImpl;
+import SLogo.View.SLogoGUIImpl;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.util.Scanner;
 
 public class Main extends Application {
 
@@ -18,9 +18,12 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 //        launch(args);
-        ReplImpl repl = new ReplImpl(System.in, new SLogoViewImpl());
-        repl.loop();
+        ReplImpl repl = new ReplImpl(System.in, new SLogoGUIImpl());
+        Scanner input = new Scanner(System.in);
+        while (true) {
+            repl.read(input);
+        }
     }
 }
