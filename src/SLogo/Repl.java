@@ -1,6 +1,6 @@
 package SLogo;
 
-import SLogo.Parse.Expression;
+import SLogo.Parse.SList;
 
 import java.util.List;
 import java.util.Scanner;
@@ -24,5 +24,5 @@ public interface Repl {
     /**
      * @return list of all previous commands run
      */
-    List<Expression> getHistory();
+    List<SList> getHistory();
 }

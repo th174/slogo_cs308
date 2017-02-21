@@ -1,9 +1,12 @@
 package SLogo.FunctionEvaluate.Variables;
 
+import java.util.ResourceBundle;
+
 /**
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
+    public static final ResourceBundle regex = ResourceBundle.getBundle("resources.language/Syntax");
     //IMMUTABLE
     //ALL FIELDS MUST BE FINAL
     private final T value;
@@ -121,6 +124,20 @@ public abstract class Variable<T> implements Comparable<Variable> {
     @Override
     public String toString() {
         return value.toString();
+    }
+
+    public static Variable fromString(String s) {
+        if (s.toUpperCase().equals(BoolVariable.TRUE.toString())) {
+            return BoolVariable.TRUE;
+        } else if (s.toUpperCase().equals(BoolVariable.FALSE.toString())) {
+            return BoolVariable.FALSE;
+        } else if (s.matches(regex.getString("Constant"))) {
+            return new NumberVariable(s);
+        } else if (s.matches(regex.getString("StringLiteral"))) {
+            return new StringVariable(s);
+        } else {
+            throw new UndefinedOperationException();
+        }
     }
 
     static class UndefinedOperationException extends RuntimeException {

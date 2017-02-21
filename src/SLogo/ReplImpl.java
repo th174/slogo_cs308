@@ -1,8 +1,8 @@
 package SLogo;
 
-import SLogo.Parse.Expression;
+import SLogo.Parse.LispSyntaxParser;
+import SLogo.Parse.SList;
 import SLogo.Parse.Parser;
-import SLogo.Parse.ParserImpl;
 import SLogo.View.SLogoGUI;
 
 import java.io.IOException;
@@ -16,12 +16,12 @@ import java.util.Scanner;
  */
 public class ReplImpl implements Repl {
     private Parser parser;
-    private ArrayList<Expression> history;
+    private ArrayList<SList> history;
     private SLogoGUI parentNode;
     private int currentIndex;
 
     public ReplImpl(InputStream input, SLogoGUI view) throws IOException {
-        parser = new ParserImpl();
+        parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
         parentNode = view;
@@ -34,12 +34,12 @@ public class ReplImpl implements Repl {
         if (command.length() > 0) {
             try {
                 history.add(parser.parse(command));
-                try {
-                    System.out.println(history.get(currentIndex).execute());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                print();
+//                try {
+//                    System.out.println(history.get(currentIndex).execute());
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                print();
                 currentIndex++;
             } catch (Exception e){
                 e.printStackTrace();
@@ -54,7 +54,7 @@ public class ReplImpl implements Repl {
     }
 
     @Override
-    public List<Expression> getHistory() {
+    public List<SList> getHistory() {
         return history;
     }
 }
