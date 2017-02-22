@@ -10,11 +10,11 @@ import java.util.Map;
 /**
  * Created by th174 on 2/16/2017.
  */
-public class ScopeImpl implements Scope {
+public class EnvironmentImpl implements Environment {
     private Map<String, Variable> dictionaryVariables;
     private Map<String, Invokable> dictionaryFunctions;
 
-    public ScopeImpl() {
+    public EnvironmentImpl() {
         dictionaryVariables = new HashMap<>();
         dictionaryFunctions = initCommandDictionary();
     }

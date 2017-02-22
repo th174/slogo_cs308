@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by th174 on 2/19/2017.
  */
-public interface Scope {
+public interface Environment {
     /**
      * @return Get all defined user variables
      */

@@ -55,7 +55,7 @@ public final class StringVariable extends Variable<String> {
         try {
             return Double.parseDouble(value());
         } catch (NumberFormatException e) {
-            throw new UndefinedOperationException();
+            throw new UndefinedOperationException(value());
         }
     }
 

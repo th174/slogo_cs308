@@ -1,7 +1,8 @@
 package SLogo;
 
+import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Parse.Expression;
 import SLogo.Parse.LispSyntaxParser;
-import SLogo.Parse.SList;
 import SLogo.Parse.Parser;
 import SLogo.View.SLogoGUI;
 
@@ -16,7 +17,7 @@ import java.util.Scanner;
  */
 public class ReplImpl implements Repl {
     private Parser parser;
-    private ArrayList<SList> history;
+    private ArrayList<String> history;
     private SLogoGUI parentNode;
     private int currentIndex;
 
@@ -30,21 +31,21 @@ public class ReplImpl implements Repl {
     @Override
     public void read(Scanner input) throws Exception {
         System.out.print("SLogo >>");
-        String command = input.nextLine();
-        if (command.length() > 0) {
+        String line = input.nextLine();
+        if (line.length() > 0) {
             try {
-                history.add(parser.parse(command));
-//                try {
-//                    System.out.println(history.get(currentIndex).execute());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                print();
+                Expression currentCommand = parser.parse(line);
+                history.add(currentCommand.toString());
+                System.out.println(eval(currentCommand));
                 currentIndex++;
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
+        return expression.eval();
     }
 
 
@@ -54,7 +55,7 @@ public class ReplImpl implements Repl {
     }
 
     @Override
-    public List<SList> getHistory() {
+    public List<String> getHistory() {
         return history;
     }
 }

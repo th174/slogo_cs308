@@ -35,7 +35,7 @@ public final class NumberVariable extends Variable<Number> {
         if (toNumber() > 0) {
             return (NumberVariable) super.random();
         } else {
-            throw new UndefinedOperationException();
+            throw new UndefinedOperationException(toString());
         }
     }
 

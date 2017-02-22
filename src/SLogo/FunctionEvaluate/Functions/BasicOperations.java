@@ -12,6 +12,7 @@ import java.util.Collection;
  */
 public class BasicOperations {
     public static final Accumulator SUM = Variable::sum;
+    public static final Accumulator DEFAULT_OPERATION = SUM;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
     public static final Accumulator QUOTIENT = Variable::quotient;
@@ -26,11 +27,14 @@ public class BasicOperations {
     public static final Predicate TANGENT = Variable::tangent;
     public static final Predicate ARCTANGENT = Variable::atangent;
     public static final Predicate NATURALLOG = Variable::log;
-    public static final BooleanTest LESS_THAN = Variable::lessThan;
-    public static final BooleanTest GREATER_THAN = Variable::greaterThan;
+    public static final BooleanTest LESSTHAN = Variable::lessThan;
+    public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
 
+    /**
+     * You should never instantiate this class
+     */
     private BasicOperations() {
     }
 

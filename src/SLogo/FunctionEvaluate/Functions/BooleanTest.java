@@ -8,13 +8,14 @@ import SLogo.FunctionEvaluate.Variables.Variable;
  */
 @FunctionalInterface
 public interface BooleanTest extends Invokable {
+    int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
     @Override
-    default BoolVariable invoke(String[] flags, Variable[] args){
-        if (args.length != 2) {
-            throw new UnexpectedArgumentException();
+    default BoolVariable invoke(String[] flags, Variable[] args) {
+        if (args.length != EXPECTED_NUMBER_OF_ARGUMENTS) {
+            throw new UnexpectedArgumentException(EXPECTED_NUMBER_OF_ARGUMENTS, args.length);
         } else {
-            return operation(args[0],args[1]);
+            return operation(args[0], args[1]);
         }
     }
 

@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
-    public static final ResourceBundle regex = ResourceBundle.getBundle("resources.language/Syntax");
+    public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
     //IMMUTABLE
     //ALL FIELDS MUST BE FINAL
     private final T value;
@@ -30,7 +30,6 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public NumberVariable product(Variable other) {
         return new NumberVariable(toNumber() * other.toNumber());
-
     }
 
     public NumberVariable quotient(Variable other) {
@@ -134,19 +133,25 @@ public abstract class Variable<T> implements Comparable<Variable> {
         } else if (s.matches(regex.getString("Constant"))) {
             return new NumberVariable(s);
         } else if (s.matches(regex.getString("StringLiteral"))) {
-            return new StringVariable(s);
+            return new StringVariable(s.substring(1, s.length() - 1));
         } else {
-            throw new UndefinedOperationException();
+            throw new UnrecognizedSymbolException(s);
+        }
+    }
+
+    static class UnrecognizedSymbolException extends RuntimeException {
+        UnrecognizedSymbolException(String s) {
+            super("Unrecognized Symbol: " + s);
         }
     }
 
     static class UndefinedOperationException extends RuntimeException {
         UndefinedOperationException() {
-            super();
+            super("Operation is not defined.");
         }
 
         UndefinedOperationException(String s) {
-            super(s);
+            super("Operation is not defined on " + s);
         }
     }
 }
