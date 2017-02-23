@@ -1,0 +1,65 @@
+#API Review for Team 14
+
+##Part I
+1. We can create a new class for any command the designer wants to have implemented,
+and the command parser just checks all command classes to match the user input
+to a command. Most classes are implemented as interfaces, providing easy implementation
+of classes that implement the GUI (for example) but change its appearance.
+
+2. We have a read-eval-print loop class (Controller) that passes all data between
+the frontend and backend through it. The turtle and command parser do not communicate
+with each other or with the frontend.
+
+3. The only way an error could be thrown in this program is incorrect user input - either 
+choosing a file that is not an image for the Turtle or inputting incorrectly formatted
+input. The command parser will catch these incorrect inputs by failing to match the input
+to a built-in command, and will tell Controller to tell UI to make a pop-up saying 
+"error: invalid input". If a non-image file is selected, the UI will handle the exception
+immediately. For the most part the backend will be dealing with these errors
+
+4. Good APIs are encapsulated, easily extendable, and easily modified.
+Our API fits these criteria because the frontend does not communicate directly with the backend
+and the classes implement the API interfaces. 
+
+##Part II
+1. The MVC design helps run the entire structure and we implement the REPL to deal
+with the user inputs and convert them to commands.
+
+2. Generic commands will help the backend deal with commands that deal with multiple
+type of variables. Observable type will also allow us to create connections between
+the front end and the backend without breaking encapsulation.
+
+3. I am most excited to work on the turtle responses to commands. This should be 
+fairly straight forward and it will be cool once we are able to successfully code 
+commands.
+
+4. I am worried about dealing with passing things around a healthy amount without
+it getting out of hand. Observable objects should make this easier to deal with.
+
+5. Use Cases:
+*User changes the language* 
+When a user clicks on the language menu item, the combobox will drop down and the
+user will be able to click on one of the available languages (determined by available
+property files). Once the user chooses a new language, the language resource bundle
+will be changed by the parser’s `setLanguage()` method and therefore the accepted
+language values in the command line will change.
+
+*User types in command* 
+When a user types in a command, the string entered will be set to the REPL to process
+the command. When the processed command returns the GUI will call the `update()`
+method to update the corresponding history and variables frame to reflect the current
+state of the program.
+
+*User types in invalid command*
+The command will follow the normal command path but will be stopped by the time it
+gets to the parser and return an error. Throwing an error will print out a error
+to the console
+
+*User changes the Turtle image*
+The UI will have a setting to change the Turtle image to a new image. A file reader
+will open for the user to change the image. Safeguards will be put in place to check
+that the file is valid 
+
+*User clicks on past history*
+The history command will load the past command to be ran again. Command can then
+be edited or ran like normal.
