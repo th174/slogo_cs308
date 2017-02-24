@@ -3,7 +3,7 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.BasicOperations;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Turtle.Turtle;
+import SLogo.Turtles.Turtle;
 
 import java.util.HashMap;
 import java.util.Map;

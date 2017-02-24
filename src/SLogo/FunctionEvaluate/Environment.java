@@ -2,7 +2,7 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Turtle.Turtle;
+import SLogo.Turtles.Turtle;
 
 import java.util.Map;
 
