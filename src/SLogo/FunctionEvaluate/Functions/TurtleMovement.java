@@ -3,7 +3,7 @@
  */
 package SLogo.FunctionEvaluate.Functions;
 
-import SLogo.FunctionEvaluate.Functions.Invokable.UnexpectedArgumentException;
+import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
@@ -13,7 +13,13 @@ import SLogo.FunctionEvaluate.Variables.Variable;
  *
  */
 public abstract class TurtleMovement implements Invokable {
+	
+	private Environment myEnvironment;
 
+	public TurtleMovement(Environment env){
+		myEnvironment = env;
+	}
+	
 	int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
 	
 	@Override
@@ -23,6 +29,10 @@ public abstract class TurtleMovement implements Invokable {
         } else {
             return operation(args[0]);
         }
+	}
+	
+	protected Environment getEnvironment(){
+		return myEnvironment;
 	}
 	
 	protected abstract NumberVariable operation(Variable var1);
