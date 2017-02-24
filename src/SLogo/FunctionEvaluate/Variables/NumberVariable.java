@@ -45,7 +45,7 @@ public final class NumberVariable extends Variable<Number> {
     }
 
     @Override
-    double toNumber() {
+    public double toNumber() {
         return value().doubleValue();
     }
 
