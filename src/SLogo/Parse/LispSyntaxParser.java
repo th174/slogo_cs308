@@ -59,7 +59,7 @@ public final class LispSyntaxParser implements Parser {
     public RecursiveExpression parse(String input) {
         LinkedList<String> tokens = tokenSplit("("+input+")");
         SList temp = new SList(readTokens(tokens));
-        System.out.println(temp);
+        System.out.println(temp.toString().substring(1,temp.toString().length()-1));
         return temp;
     }
 
