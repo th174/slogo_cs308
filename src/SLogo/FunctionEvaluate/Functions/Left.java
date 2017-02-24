@@ -1,5 +1,6 @@
 package SLogo.FunctionEvaluate.Functions;
 
+import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
@@ -13,11 +14,15 @@ import SLogo.Turtles.Turtle;
 
 public class Left extends TurtleMovement {
 
+	public Left(Environment env){
+		super(env);
+	}
+	
 	@Override
 	protected NumberVariable operation(Variable var1) {
 		NumberVariable num = (NumberVariable)var1;
-		// TODO Turtle turt = 
-		// TODO turt.turn(num.toNumber());
+		Turtle turt = this.getEnvironment().getTurtle();
+		turt.turn(num.toNumber());
 		return num;
 	}
 

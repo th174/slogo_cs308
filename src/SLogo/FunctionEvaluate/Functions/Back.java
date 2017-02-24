@@ -1,5 +1,6 @@
 package SLogo.FunctionEvaluate.Functions;
 
+import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
@@ -13,10 +14,14 @@ import SLogo.Turtles.Turtle;
 
 public class Back extends TurtleMovement {
 	
+	public Back(Environment env){
+		super(env);
+	}
+	
 	protected NumberVariable operation(Variable var1){
 		NumberVariable num = (NumberVariable)var1;
-		//Turtle turt;  TODO: How are we accessing the Turtle? Passed in?
-		//turt.move(num.negate().toNumber());
+		Turtle turt = this.getEnvironment().getTurtle();
+		turt.move((int)num.negate().toNumber());
 		return num;
 	}
 	
