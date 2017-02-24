@@ -1,7 +1,7 @@
 package SLogo;
 
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Parse.Expression;
+import SLogo.Parse.RecursiveExpression;
 import SLogo.Parse.LispSyntaxParser;
 import SLogo.Parse.Parser;
 import SLogo.View.SLogoGUI;
@@ -34,7 +34,7 @@ public class ReplImpl implements Repl {
         String line = input.nextLine();
         if (line.length() > 0) {
             try {
-                Expression currentCommand = parser.parse(line);
+                RecursiveExpression currentCommand = parser.parse(line);
                 history.add(currentCommand.toString());
                 System.out.println(eval(currentCommand));
                 currentIndex++;
@@ -44,7 +44,7 @@ public class ReplImpl implements Repl {
         }
     }
 
-    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
+    private Variable eval(RecursiveExpression expression) throws RecursiveExpression.EvaluationTargetException {
         return expression.eval();
     }
 

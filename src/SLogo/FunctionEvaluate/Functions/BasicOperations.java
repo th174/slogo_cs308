@@ -12,7 +12,6 @@ import java.util.Collection;
  */
 public class BasicOperations {
     public static final Accumulator SUM = Variable::sum;
-    public static final Accumulator DEFAULT_OPERATION = SUM;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
     public static final Accumulator QUOTIENT = Variable::quotient;
@@ -20,6 +19,7 @@ public class BasicOperations {
     public static final Accumulator POWER = Variable::power;
     public static final Accumulator AND = Variable::and;
     public static final Accumulator OR = Variable::or;
+    public static final Accumulator LIST = Variable::append;
     public static final Predicate NOT = Variable::not;
     public static final Predicate MINUS = Variable::negate;
     public static final Predicate SINE = Variable::sine;
@@ -31,6 +31,8 @@ public class BasicOperations {
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
+
+    public static final Accumulator DEFAULT_OPERATION = LIST;
 
     /**
      * You should never instantiate this class

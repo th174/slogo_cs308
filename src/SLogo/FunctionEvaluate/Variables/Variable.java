@@ -20,7 +20,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public Variable sum(Variable other) {
-        return new NumberVariable(toNumber() + other.toNumber());
+        return new NumberVariable(this.toNumber() + other.toNumber());
     }
 
     public NumberVariable difference(Variable other) {
@@ -43,11 +43,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public Variable negate() {
-        try {
-            return new NumberVariable(-1 * toNumber());
-        } catch (NumberFormatException e) {
-            return not();
-        }
+        return new NumberVariable(-1 * toNumber());
     }
 
     public Variable random() {
@@ -106,9 +102,15 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return this.toBoolean() ? BoolVariable.FALSE : BoolVariable.TRUE;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof Variable && this.compareTo((Variable) o) == 0;
+    public boolean equals(Variable o) {
+        return this.compareTo((Variable) o) == 0;
+    }
+
+    public ListVariable append(Variable other) {
+        if (other instanceof ListVariable) {
+            return new ListVariable(this).append(other);
+        }
+        return new ListVariable(this, other);
     }
 
     @Override
@@ -131,7 +133,11 @@ public abstract class Variable<T> implements Comparable<Variable> {
         } else if (s.toUpperCase().equals(BoolVariable.FALSE.toString())) {
             return BoolVariable.FALSE;
         } else if (s.matches(regex.getString("Constant"))) {
-            return new NumberVariable(s);
+            try {
+                return new NumberVariable(Double.parseDouble(s));
+            } catch (NumberFormatException e){
+                throw new NotANumberException(s);
+            }
         } else if (s.matches(regex.getString("StringLiteral"))) {
             return new StringVariable(s.substring(1, s.length() - 1));
         } else {
@@ -145,13 +151,9 @@ public abstract class Variable<T> implements Comparable<Variable> {
         }
     }
 
-    static class UndefinedOperationException extends RuntimeException {
-        UndefinedOperationException() {
-            super("Operation is not defined.");
-        }
-
-        UndefinedOperationException(String s) {
-            super("Operation is not defined on " + s);
+    static class NotANumberException extends RuntimeException {
+        NotANumberException(String s){
+            super("Not a number: " + s);
         }
     }
 }

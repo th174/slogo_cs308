@@ -12,7 +12,7 @@ public final class NumberVariable extends Variable<Number> {
         super(value);
     }
 
-    public NumberVariable(String value) throws NumberFormatException {
+    public NumberVariable(String value) throws NotANumberException {
         super(Double.parseDouble(value));
     }
 
@@ -32,11 +32,7 @@ public final class NumberVariable extends Variable<Number> {
 
     @Override
     public NumberVariable random() {
-        if (toNumber() > 0) {
             return (NumberVariable) super.random();
-        } else {
-            throw new UndefinedOperationException(toString());
-        }
     }
 
     @Override

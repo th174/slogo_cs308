@@ -31,12 +31,12 @@ public final class LispSyntaxParser implements Parser {
     }
 
     private LinkedList<String> tokenSplit(String s) {
-        Matcher m = Pattern.compile(String.format("(%s|%s|%s|%s)", myRegex.getString("GroupStart"), myRegex.getString("GroupEnd"), myRegex.getString("ListStart"), myRegex.getString("ListEnd"))).matcher("("+s+")");
+        Matcher m = Pattern.compile(String.format("(%s|%s|%s|%s)", myRegex.getString("GroupStart"), myRegex.getString("GroupEnd"), myRegex.getString("ListStart"), myRegex.getString("ListEnd"))).matcher(s);
         return new LinkedList<>(Arrays.asList(m.replaceAll(" $1 ").trim()
                 .split(myRegex.getString("Whitespace") + "|" + myRegex.getString("Newline"))));
     }
 
-    private Expression readTokens(Deque tokens) {
+    private RecursiveExpression readTokens(Deque tokens) {
         if (tokens.size() == 0) {
             throw new UnexpectedEOLException("");
         }
@@ -56,8 +56,8 @@ public final class LispSyntaxParser implements Parser {
     }
 
     @Override
-    public Expression parse(String input) {
-        LinkedList<String> tokens = tokenSplit(input);
+    public RecursiveExpression parse(String input) {
+        LinkedList<String> tokens = tokenSplit("("+input+")");
         SList temp = new SList(readTokens(tokens));
         System.out.println(temp);
         return temp;

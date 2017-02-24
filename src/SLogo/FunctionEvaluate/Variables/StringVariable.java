@@ -14,15 +14,6 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    public NumberVariable negate() {
-        try {
-            return new NumberVariable(-Double.parseDouble(value()));
-        } catch (Exception e) {
-            throw new UndefinedOperationException();
-        }
-    }
-
-    @Override
     public StringVariable random() {
         char[] randomChars = new char[(int) (Math.random() * (value().length() + 1))];
         for (int i = 0; i < randomChars.length; i++) {
@@ -33,7 +24,7 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Variable o) {
         return o instanceof StringVariable ? this.toString().equals(o.toString()) : super.equals(o);
     }
 
@@ -48,14 +39,14 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    double toNumber() throws UndefinedOperationException {
+    double toNumber() throws NotANumberException{
         if (value().length() == 0) {
             return 0;
         }
         try {
             return Double.parseDouble(value());
-        } catch (NumberFormatException e) {
-            throw new UndefinedOperationException(value());
+        } catch (NumberFormatException e){
+            throw new NotANumberException(value());
         }
     }
 

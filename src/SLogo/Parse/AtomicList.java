@@ -10,8 +10,7 @@ import java.util.LinkedList;
 /**
  * Created by th174 on 2/21/2017.
  */
-public final class AtomicList extends LinkedList<String> implements Expression<String> {
-
+public final class AtomicList extends LinkedList<String> implements RecursiveExpression<String> {
     private static Environment env;
     private final boolean isFlag;
 

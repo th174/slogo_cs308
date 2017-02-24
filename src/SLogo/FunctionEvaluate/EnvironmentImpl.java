@@ -78,16 +78,4 @@ public class EnvironmentImpl implements Environment {
         });
         return commands;
     }
-
-    public class VariableNotFoundException extends RuntimeException {
-        VariableNotFoundException(String variableName) {
-            super("Variable \'" + variableName + "\' is unbound.");
-        }
-    }
-
-    public class FunctionNotFoundException extends RuntimeException {
-        FunctionNotFoundException(String functionName) {
-            super("Function \'" + functionName + "\' is undefined.");
-        }
-    }
 }
