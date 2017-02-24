@@ -13,6 +13,7 @@ import java.util.Map;
 public class EnvironmentImpl implements Environment {
     private Map<String, Variable> dictionaryVariables;
     private Map<String, Invokable> dictionaryFunctions;
+    //private Turtle turtle;
 
     public EnvironmentImpl() {
         dictionaryVariables = new HashMap<>();

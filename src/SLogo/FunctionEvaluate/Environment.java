@@ -40,6 +40,9 @@ public interface Environment {
      * @return Named function
      */
     Invokable getFunctionByName(String name);
+    
+    //TODO: Turtle getTurtle();
+
 
     /**
      * @param name Name of variable
@@ -52,4 +55,6 @@ public interface Environment {
      * @param function Function
      */
     void addUserFunction(String name, Invokable function);
+    
+    //TODO: Turtle setTurtle
 }
