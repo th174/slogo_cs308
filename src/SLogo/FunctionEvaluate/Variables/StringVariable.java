@@ -48,7 +48,7 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    double toNumber() throws UndefinedOperationException {
+    public double toNumber() throws UndefinedOperationException {
         if (value().length() == 0) {
             return 0;
         }

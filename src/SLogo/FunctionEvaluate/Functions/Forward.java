@@ -14,10 +14,10 @@ import SLogo.Turtles.Turtle;
 public class Forward extends TurtleMovement{
 	
 	protected NumberVariable operation(Variable var1){
+		NumberVariable num = (NumberVariable)var1;
 		//Turtle turt;  TODO: How are we accessing the Turtle? Passed in?
-		//turt.move(Integer.parseInt(var1.toString())); TODO: Why is there not a cleaner way to get the value of a NumberVariable?
-		//return var1;
-		return null;
+		//turt.move(num.toNumber());
+		return num;
 	}
 
 }

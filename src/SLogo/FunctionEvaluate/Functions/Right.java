@@ -15,10 +15,10 @@ public class Right extends TurtleMovement {
 
 	@Override
 	protected NumberVariable operation(Variable var1) {
+		NumberVariable num = (NumberVariable)var1;
 		// TODO Turtle turt = 
-		// TODO turt.turn(var1.negate().value());
-		//return var1;
-		return null;
+		// TODO turt.turn(num.negate().toNumber());
+		return num;
 	}
 
 }
