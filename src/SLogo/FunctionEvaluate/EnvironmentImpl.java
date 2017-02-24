@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.BasicOperations;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Turtle.Turtle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,22 +13,26 @@ import java.util.Map;
  */
 public class EnvironmentImpl implements Environment {
     private Map<String, Variable> dictionaryVariables;
+    private Map<String, Variable> userVariables;
     private Map<String, Invokable> dictionaryFunctions;
-    //private Turtle turtle;
+    private Map<String, Invokable> userFunctions;
+    private Turtle myTurtle;
 
     public EnvironmentImpl() {
         dictionaryVariables = new HashMap<>();
+        userVariables = new HashMap<String, Variable>();
         dictionaryFunctions = initCommandDictionary();
+        userFunctions = new HashMap<String, Invokable>();
     }
 
     @Override
     public Map<String, Variable> getUserVars() {
-        return null;
+        return userVariables;
     }
 
     @Override
     public Map<String, Invokable> getUserFunctions() {
-        return null;
+        return userFunctions;
     }
 
     @Override
@@ -57,15 +62,28 @@ public class EnvironmentImpl implements Environment {
             throw new FunctionNotFoundException(name);
         }
     }
+    
+	@Override
+	public Turtle getTurtle() {
+		return myTurtle;
+	}
+
+	@Override
+	public void setTurtle(Turtle turt) {
+		myTurtle = turt;
+		
+	}
 
     @Override
     public void addUserVariable(String name, Variable var) {
         dictionaryVariables.put(name, var);
+        userVariables.put(name, var);
     }
 
     @Override
     public void addUserFunction(String name, Invokable function) {
         dictionaryFunctions.put(name, function);
+        userFunctions.put(name, function);
     }
 
     private Map<String, Invokable> initCommandDictionary() {

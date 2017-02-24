@@ -2,11 +2,16 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Turtle.Turtle;
 
 import java.util.Map;
 
 /**
  * Created by th174 on 2/19/2017.
+ */
+/**
+ * @author Stone Mathers
+ *
  */
 public interface Environment {
     /**
@@ -41,7 +46,10 @@ public interface Environment {
      */
     Invokable getFunctionByName(String name);
     
-    //TODO: Turtle getTurtle();
+    /**
+     * @return Turtle
+     */
+    public Turtle getTurtle();
 
 
     /**
@@ -56,5 +64,9 @@ public interface Environment {
      */
     void addUserFunction(String name, Invokable function);
     
-    //TODO: Turtle setTurtle
+    
+    /**
+     * @param turt Turtle to be used
+     */
+    public void setTurtle(Turtle turt);
 }
