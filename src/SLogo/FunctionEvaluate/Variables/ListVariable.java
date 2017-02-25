@@ -20,7 +20,11 @@ public final class ListVariable extends Variable<List<Variable>> {
     @Override
     public ListVariable append(Variable other) {
         List<Variable> temp = new LinkedList<>(value());
-        temp.add(other);
+        if (other instanceof ListVariable) {
+            temp.addAll(((ListVariable) other).value());
+        } else {
+            temp.add(other);
+        }
         return new ListVariable(temp);
     }
 
