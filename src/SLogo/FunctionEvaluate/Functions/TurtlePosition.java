@@ -1,6 +1,3 @@
-/**
- * 
- */
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
@@ -10,28 +7,29 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 
 /**
  * Superclass of all function classes that deal with
- * a Turtle's movement, such as changing the heading or
- * location. These functions all take one argument.
+ * a Turtle's position. This includes changing the position
+ * or performing operations relative to the position. These 
+ * functions all take two arguments.
  * 
  * @author Stone Mathers
- * Created 2/24/17
+ * Created 2/25/17
  */
-public abstract class TurtleMovement extends TurtleCommand {
+public abstract class TurtlePosition extends TurtleCommand{
 	
-	public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
+	public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
-	public TurtleMovement(Environment env){
+	public TurtlePosition(Environment env){
 		super(env);
 	}
 
-	public abstract NumberVariable operation(Variable var1);
+	public abstract NumberVariable operation(Variable var1, Variable var2);
 	
     @Override
     public Variable invoke(String[] flags, Variable[] args) {
         if (args.length != EXPECTED_NUMBER_OF_ARGUMENTS) {
             throw new UnexpectedArgumentException(EXPECTED_NUMBER_OF_ARGUMENTS, args.length);
         } else {
-            return operation(args[0]);
+            return operation(args[0], args[1]);
         }
     }
 }
