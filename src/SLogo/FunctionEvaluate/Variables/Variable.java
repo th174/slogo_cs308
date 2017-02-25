@@ -120,7 +120,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     abstract boolean toBoolean();
 
-    abstract double toNumber() throws NumberFormatException;
+    public abstract double toNumber() throws NumberFormatException;
 
     @Override
     public String toString() {

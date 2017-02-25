@@ -34,7 +34,7 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
-    double toNumber() throws NotANumberException {
+    public double toNumber() throws NotANumberException {
         try {
             if (value().size() == 1) {
                 return value().get(0).toNumber();

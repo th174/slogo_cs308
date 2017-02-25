@@ -39,7 +39,7 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    double toNumber() throws NotANumberException{
+    public double toNumber() throws NotANumberException{
         if (value().length() == 0) {
             return 0;
         }
