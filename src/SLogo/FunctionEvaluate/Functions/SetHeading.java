@@ -19,11 +19,14 @@ public class SetHeading extends TurtleMovement {
 	}
 	
 	@Override
-	protected NumberVariable operation(Variable var1) {
+	public NumberVariable operation(Variable var1) {
 		NumberVariable num = (NumberVariable)var1;
 		Turtle turt = this.getEnvironment().getTurtle();
+		double degMoved = Math.abs(turt.getHeading() - num.toNumber());
+		
 		turt.setHeading(num.toNumber());
-		return num;
+		
+		return new NumberVariable(degMoved);
 	}
 
 }
