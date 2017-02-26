@@ -44,8 +44,8 @@ public class Towards extends TurtlePosition {
 	}
 	
 	private double calculateHeading(Turtle turt, double newX, double newY){
-		double curX = turt.getX();
-		double curY = turt.getY();
+		double curX = turt.getX(); //TODO replace by retrieving x from View
+		double curY = turt.getY(); //TODO replace by retrieving x and y from View
 		double xDist = newX - curX;
 		double yDist = newY - curY;
 		double hypotenuse = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));

@@ -34,6 +34,11 @@ public class GoTo extends TurtlePosition {
 	 * @return Distance the turtle was moved
 	 */
 	private double move(Turtle turt, double newX, double newY){
+		//TODO
+		//Retrieve x and y from Sprite
+		//Calculate vectors (3 lines at bottom)
+		//setChangeX and setChangeY
+		
 		double oldX = turt.getX();
 		double oldY = turt.getY();
 		
