@@ -11,7 +11,7 @@ public interface Parser {
      * @param command User written command
      * @return Expression built from command
      */
-    Expression parse(String command);
+    RecursiveExpression parse(String command);
 
     /**
      * @param locale Desired Locale of commands

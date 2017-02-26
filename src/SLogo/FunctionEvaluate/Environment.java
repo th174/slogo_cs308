@@ -2,11 +2,16 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Turtles.Turtle;
 
 import java.util.Map;
 
 /**
  * Created by th174 on 2/19/2017.
+ */
+/**
+ * @author Stone Mathers
+ *
  */
 public interface Environment {
     /**
@@ -33,13 +38,19 @@ public interface Environment {
      * @param name Name of variable
      * @return Named variable
      */
-    Variable getVariableByName(String name);
+    Variable getVariableByName(String name) throws VariableNotFoundException;
 
     /**
      * @param name Name of function
      * @return Named function
      */
-    Invokable getFunctionByName(String name);
+    Invokable getFunctionByName(String name) throws FunctionNotFoundException;
+
+    
+    /**
+     * @return Turtle
+     */
+    Turtle getTurtle();
 
     /**
      * @param name Name of variable
@@ -52,4 +63,21 @@ public interface Environment {
      * @param function Function
      */
     void addUserFunction(String name, Invokable function);
+
+    class VariableNotFoundException extends RuntimeException {
+        public VariableNotFoundException(String variableName) {
+            super("Variable \'" + variableName + "\' is unbound.");
+        }
+    }
+
+    class FunctionNotFoundException extends RuntimeException {
+        public FunctionNotFoundException(String functionName) {
+            super("Function \'" + functionName + "\' is undefined.");
+        }
+    }
+    
+    /**
+     * @param turt Turtle to be used
+     */
+    void setTurtle(Turtle turt);
 }

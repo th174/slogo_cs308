@@ -32,7 +32,7 @@ public final class BoolVariable extends Variable<Boolean> {
     }
 
     @Override
-    double toNumber() {
+    public double toNumber() {
         return value() ? 1 : 0;
     }
 
