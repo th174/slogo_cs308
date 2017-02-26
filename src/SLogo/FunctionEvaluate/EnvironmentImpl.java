@@ -1,6 +1,6 @@
 package SLogo.FunctionEvaluate;
 
-import SLogo.FunctionEvaluate.Functions.BasicOperations;
+import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
@@ -20,9 +20,9 @@ public class EnvironmentImpl implements Environment {
 
     public EnvironmentImpl() {
         dictionaryVariables = new HashMap<>();
-        userVariables = new HashMap<String, Variable>();
+        userVariables = new HashMap<>();
         dictionaryFunctions = initCommandDictionary();
-        userFunctions = new HashMap<String, Invokable>();
+        userFunctions = new HashMap<>();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class EnvironmentImpl implements Environment {
 
     private Map<String, Invokable> initCommandDictionary() {
         Map<String, Invokable> commands = new HashMap<>();
-        BasicOperations.getAllCommands().forEach(e -> {
+        CommandList.getAllCommands().forEach(e -> {
             try {
                 commands.put(e.getName(), (Invokable) e.get(null));
             } catch (IllegalAccessException e1) {

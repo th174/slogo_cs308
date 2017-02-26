@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Parse.RecursiveExpression;
 import SLogo.Turtles.Turtle;
 
 /**
@@ -26,4 +27,8 @@ public class Left extends TurtleMovement {
 		return num;
 	}
 
+	@Override
+	public Variable invoke(String[] flags, Variable[] args, RecursiveExpression[] expr, RecursiveExpression[] alt) {
+		return null;
+	}
 }

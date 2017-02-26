@@ -1,8 +1,5 @@
 package SLogo.Parse;
 
-import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -17,12 +14,10 @@ public final class LispSyntaxParser implements Parser {
     public static final String REGEX = "Syntax";
     private ResourceBundle myRegex;
     private ResourceBundle myLocale;
-    private Environment currentEnv = new EnvironmentImpl();
     private Map<String, String> translator;
 
     public LispSyntaxParser() throws IOException {
         this(DEFAULT_LOCALE);
-        AtomicList.setEnvironment(currentEnv);
     }
 
     public LispSyntaxParser(String locale) throws SyntaxException, UnexpectedEOLException, IOException {
@@ -42,10 +37,16 @@ public final class LispSyntaxParser implements Parser {
         }
         String token = tokens.removeFirst().toString();
         SList subList = new SList();
-        if (token.matches(myRegex.getString("GroupEnd"))) {
+        if (token.matches(myRegex.getString("GroupEnd")) | token.matches(myRegex.getString("ListEnd"))) {
             throw new SyntaxException("");
         } else if (token.matches(myRegex.getString("GroupStart"))) {
             while (Objects.nonNull(tokens.peek()) && !tokens.peek().toString().matches(myRegex.getString("GroupEnd"))) {
+                subList.add(readTokens(tokens));
+            }
+            tokens.removeFirst();
+            return subList;
+        } else if (token.matches(myRegex.getString("ListStart"))) {
+            while (Objects.nonNull(tokens.peek()) && !tokens.peek().toString().matches(myRegex.getString("ListEnd"))) {
                 subList.add(readTokens(tokens));
             }
             tokens.removeFirst();
@@ -57,9 +58,9 @@ public final class LispSyntaxParser implements Parser {
 
     @Override
     public RecursiveExpression parse(String input) {
-        LinkedList<String> tokens = tokenSplit("("+input+")");
+        LinkedList<String> tokens = tokenSplit("(" + input + ")");
         SList temp = new SList(readTokens(tokens));
-        System.out.println(temp.toString().substring(1,temp.toString().length()-1));
+        System.out.println(temp.toString().substring(1, temp.toString().length() - 1));
         return temp;
     }
 

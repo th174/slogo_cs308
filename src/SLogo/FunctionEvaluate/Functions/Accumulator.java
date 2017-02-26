@@ -2,6 +2,7 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Parse.RecursiveExpression;
 
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ import java.util.Arrays;
 public interface Accumulator extends Invokable {
 
     @Override
-    default Variable invoke(String[] flags, Variable[] args) {
+    default Variable invoke(String[] flags, Variable[] args, RecursiveExpression[] expr, RecursiveExpression[] alt) {
         if (args.length == 0) {
             return new NumberVariable(0);
         }

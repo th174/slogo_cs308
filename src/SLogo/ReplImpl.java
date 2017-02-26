@@ -1,5 +1,7 @@
 package SLogo;
 
+import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.RecursiveExpression;
 import SLogo.Parse.LispSyntaxParser;
@@ -20,6 +22,7 @@ public class ReplImpl implements Repl {
     private ArrayList<String> history;
     private SLogoGUI parentNode;
     private int currentIndex;
+    private Environment globalEnv = new EnvironmentImpl();
 
     public ReplImpl(InputStream input, SLogoGUI view) throws IOException {
         parser = new LispSyntaxParser();
@@ -45,7 +48,7 @@ public class ReplImpl implements Repl {
     }
 
     private Variable eval(RecursiveExpression expression) throws RecursiveExpression.EvaluationTargetException {
-        return expression.eval();
+        return expression.eval(globalEnv);
     }
 
 
