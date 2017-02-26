@@ -20,12 +20,4 @@ public interface CanvasView {
      * @throws InvalidImageFileException 
      */
     void setImage(File imgFile) throws InvalidImageFileException;
-
-    /**
-     * Send move command to turtle
-     *
-     * @param movement The type of movement
-     * @param distance distance to move
-     */
-    int execute(String action, double[] args);
 }
