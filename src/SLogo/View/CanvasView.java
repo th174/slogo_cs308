@@ -1,7 +1,8 @@
 package SLogo.View;
 
+import java.io.File;
+
 import javafx.scene.Node;
-import javafx.scene.layout.Background;
 
 /**
  * Created by th174 on 2/19/2017.
@@ -13,11 +14,12 @@ public interface CanvasView {
     Node getView();
 
     /**
-     * Sets background
+     * Sets Image
      *
      * @param bg background
+     * @throws InvalidImageFileException 
      */
-    void setBackground(Background bg);
+    void setImage(File imgFile) throws InvalidImageFileException;
 
     /**
      * Send move command to turtle
@@ -25,5 +27,5 @@ public interface CanvasView {
      * @param movement The type of movement
      * @param distance distance to move
      */
-    void move(String movement, double distance);
+    int execute(String action, double[] args);
 }
