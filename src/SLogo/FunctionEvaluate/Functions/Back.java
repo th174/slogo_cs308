@@ -18,10 +18,10 @@ public class Back extends TurtleMovement {
 		super(env);
 	}
 	
-	protected NumberVariable operation(Variable var1){
+	public NumberVariable operation(Variable var1){
 		NumberVariable num = (NumberVariable)var1;
 		Turtle turt = this.getEnvironment().getTurtle();
-		turt.move((int)num.negate().toNumber());
+		turt.move(num.negate().toNumber());
 		return num;
 	}
 	

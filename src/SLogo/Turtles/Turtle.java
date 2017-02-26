@@ -14,12 +14,12 @@ public interface Turtle {
 	/**
 	 * @return X-position
 	 */
-	public int getX();
+	public double getX();
 	
 	/**
 	 * @return Y-position
 	 */
-	public int getY();
+	public double getY();
 	
 	/**
 	 * @return Angle at which the Turtle is facing
@@ -73,7 +73,17 @@ public interface Turtle {
 	 * 
 	 * @param pixels Number of pixels to move Turtle
 	 */
-	public void move(int pixels);
+	public void move(double pixels);
+	
+	/**
+	 * Sets Turtle's state to hidden.
+	 */
+	public void hide();
+	
+	/**
+	 * Sets Turtle's state to not hidden.
+	 */
+	public void show();
 	
 	/**
 	 * @return true if Turtle is hidden, false if Turtle is not hidden

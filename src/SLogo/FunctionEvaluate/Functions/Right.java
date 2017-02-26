@@ -19,7 +19,7 @@ public class Right extends TurtleMovement {
 	}
 	
 	@Override
-	protected NumberVariable operation(Variable var1) {
+	public NumberVariable operation(Variable var1) {
 		NumberVariable num = (NumberVariable)var1;
 		Turtle turt = this.getEnvironment().getTurtle();
 		turt.turn(num.negate().toNumber());
