@@ -15,19 +15,18 @@ public class Sprite {
 	private int spriteHeight;
 	private int viewWidth;
 	private int viewHeight;
-	private double direction;
+	private int direction;
 	private int position[];
+	private boolean hidden;
 	
 	public Sprite(File defaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight) throws InvalidImageFileException{
-		spriteWidth = aspriteWidth;
-		spriteHeight = aspriteHeight;
-		viewWidth = aviewWidth;
-		viewHeight = aviewHeight;
 		spriteIV = new ImageView(spriteImg);
 		setImage(defaultSpriteFile);
 		position = new int[] {viewWidth/2 - spriteWidth/2, viewHeight/2 - spriteHeight/2};
 		spriteIV.setX(position[0]);
 		spriteIV.setY(position[1]);
+		setDirection(90);
+		setHidden(false);
 	}
 	
 	public void setImage(File newSpriteFile) throws InvalidImageFileException{
@@ -58,8 +57,22 @@ public class Sprite {
 		spriteIV.setY(position[1]);
 	}
 	
-	public double getDirection(){
+	public int getDirection(){
 		return direction;
+	}
+	
+	public void setDirection(int newDirection){
+		spriteIV.setRotate(newDirection - direction);
+		direction = newDirection;
+	}
+	
+	public boolean getHidden(){
+		return hidden;
+	}
+	
+	public void setHidden(boolean newHidden){
+		hidden = newHidden;
+		spriteIV.setVisible(!hidden);
 	}
 	
 	public int[] getViewSize(){
