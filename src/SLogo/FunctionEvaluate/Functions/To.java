@@ -31,7 +31,14 @@ public class To extends EnvironmentCommand {
 	
 	private Variable operation(Variable[] args, RecursiveExpression[] commands){
 		Environment env = this.getEnvironment();
-		//TODO
-		return null;
+		String funcName = args[0].toString();
+		
+		try{
+			UserFunction uf = new UserFunction(funcName);
+			env.addUserFunction(uf.getName(), uf);
+			return new NumberVariable(1);
+		}catch(Exception e){
+			return new NumberVariable(0);
+		}
 	}
 }
