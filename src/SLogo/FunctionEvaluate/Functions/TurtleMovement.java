@@ -16,7 +16,7 @@ import SLogo.Parse.RecursiveExpression;
  * @author Stone Mathers
  *         Created 2/24/17
  */
-public abstract class TurtleMovement extends TurtleCommand {
+public abstract class TurtleMovement extends EnvironmentCommand {
 
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
 
@@ -25,10 +25,10 @@ public abstract class TurtleMovement extends TurtleCommand {
     }
 
     public abstract NumberVariable operation(Variable var1);
-
-    @Override
-    public Variable invoke(String[] flags, Variable[] args, RecursiveExpression[] expr, RecursiveExpression[] alt) {
-        if (args.length != EXPECTED_NUMBER_OF_ARGUMENTS) {
+    
+    @Override 
+    public Variable invoke(String[] flags, Variable[] args, RecursiveExpression[] expr, RecursiveExpression[] alt){
+    	if (args.length != EXPECTED_NUMBER_OF_ARGUMENTS) {
             throw new UnexpectedArgumentException(EXPECTED_NUMBER_OF_ARGUMENTS, args.length);
         } else {
             return operation(args[0]);

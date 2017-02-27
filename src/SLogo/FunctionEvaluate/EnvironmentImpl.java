@@ -5,6 +5,7 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
+import SLogo.View.Sprite.Sprite;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class EnvironmentImpl implements Environment {
     private Map<String, Invokable> dictionaryFunctions;
     private Map<String, Invokable> userFunctions;
     private Turtle myTurtle;
-    private CanvasView myCanvas;
+    private Sprite mySprite;
 
     public EnvironmentImpl() {
         dictionaryVariables = new HashMap<>();
@@ -71,8 +72,8 @@ public class EnvironmentImpl implements Environment {
 	}
 	
 	@Override
-	public CanvasView getCanvas() {
-		return myCanvas;
+	public Sprite getSprite() {
+		return mySprite;
 	}
 
 	@Override
@@ -82,8 +83,8 @@ public class EnvironmentImpl implements Environment {
 	}
 	
 	@Override
-	public void setCanvas(CanvasView canvas) {
-		myCanvas = canvas;		
+	public void setSprite(Sprite sprite) {
+		mySprite = sprite;		
 	}
 
     @Override
