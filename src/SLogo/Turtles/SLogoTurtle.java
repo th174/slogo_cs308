@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Observer;
 import java.util.Observable;
 
-import javafx.beans.InvalidationListener;
-
 /**
  * Represents the data behind the Turtle in SLogo.
  * Holds position, heading, hidden state, and pen state.
@@ -14,8 +12,9 @@ import javafx.beans.InvalidationListener;
  * @author Stone Mathers
  * Created 2/25/17
  */
-public class SLogoTurtle implements Turtle {
-
+public class SLogoTurtle extends Observable implements Turtle {
+	
+	private ArrayList<Observer> observers;
 	private double myChangeX;
 	private double myChangeY;
 	private double myHeading;
@@ -167,7 +166,7 @@ public class SLogoTurtle implements Turtle {
 	 */
 	public void notifyObservers(){
 		for (Observer o : observers){
-			o.update(this, new Object[] {penDown, myHeading, myX, myY, hidden});
+			o.update(this, new Object[] {penDown, myHeading, myChangeX, myChangeY, hidden});
 		}
 	}
 }

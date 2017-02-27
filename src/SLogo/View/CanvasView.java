@@ -19,18 +19,10 @@ public interface CanvasView {
      * @param bg background
      * @throws InvalidImageFileException 
      */
-    void setImage(File imgFile) throws InvalidImageFileException;
-
-    /**
-     * Send move command to turtle
-     *
-     * @param movement The type of movement
-     * @param distance distance to move
-     */
-    int execute(String action, double[] args);
-    
+    void setImage(File imgFile);
     /**
      * Clears all lines from screen and instantiates a new Turtle.
+     * @throws InvalidImageFileException 
      */
     void clearScreen();
 }
