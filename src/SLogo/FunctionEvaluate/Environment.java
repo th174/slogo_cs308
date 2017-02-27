@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
+import SLogo.View.CanvasView;
 import SLogo.View.Sprite.Sprite;
 
 import java.util.Map;
@@ -56,9 +57,14 @@ public interface Environment {
     Turtle getTurtle();
     
     /**
-     * @return CanvasView
+     * @return Sprite
      */
     Sprite getSprite();
+    
+    /**
+     * @return CanvasView
+     */
+    CanvasView getCanvas();
 
     /**
      * @param name Name of variable
@@ -78,9 +84,14 @@ public interface Environment {
     void setTurtle(Turtle turt);
     
     /**
-     * @param canvas CanvasView to be used
+     * @param sprite Sprite to be used
      */
     void setSprite(Sprite sprite);
+    
+    /**
+     * @param canvas CanvasView to be used
+     */
+    void setCanvas(CanvasView canvas);
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {

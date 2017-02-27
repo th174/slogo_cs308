@@ -69,4 +69,10 @@ public class CanvasViewImpl implements CanvasView{
 		root.getChildren().add(line);
 	}
 
+	@Override
+	public void clearScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
