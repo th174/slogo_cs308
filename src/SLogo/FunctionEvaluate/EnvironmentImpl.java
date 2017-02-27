@@ -20,6 +20,7 @@ public class EnvironmentImpl implements Environment {
     private Map<String, Invokable> userFunctions;
     private Turtle myTurtle;
     private Sprite mySprite;
+    private CanvasView myCanvas;
 
     public EnvironmentImpl() {
         dictionaryVariables = new HashMap<>();
@@ -75,6 +76,11 @@ public class EnvironmentImpl implements Environment {
 	public Sprite getSprite() {
 		return mySprite;
 	}
+	
+	@Override
+	public CanvasView getCanvas() {
+		return myCanvas;
+	}
 
 	@Override
 	public void setTurtle(Turtle turt) {
@@ -85,6 +91,11 @@ public class EnvironmentImpl implements Environment {
 	@Override
 	public void setSprite(Sprite sprite) {
 		mySprite = sprite;		
+	}
+	
+	@Override
+	public void setCanvas(CanvasView canvas) {
+		myCanvas = canvas;		
 	}
 
     @Override

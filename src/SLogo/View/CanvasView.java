@@ -28,4 +28,9 @@ public interface CanvasView {
      * @param distance distance to move
      */
     int execute(String action, double[] args);
+    
+    /**
+     * Clears all lines from screen and instantiates a new Turtle.
+     */
+    void clearScreen();
 }

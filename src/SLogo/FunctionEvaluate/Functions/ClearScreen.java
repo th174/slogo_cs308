@@ -28,8 +28,8 @@ public class ClearScreen extends TurtleSettings {
 		double xPos = sprite.getPosition()[0];
 		double yPos = sprite.getPosition()[1];
 		
-		turt.reset(xPos, yPos);
-		//TODO Somehow inform front end that screen needs to be cleared
+		//turt.reset(xPos, yPos); TODO: Remove if clearScreen() instantiates new Turtle
+		this.getEnvironment().getCanvas().clearScreen();
 		
 		return Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
 	}
