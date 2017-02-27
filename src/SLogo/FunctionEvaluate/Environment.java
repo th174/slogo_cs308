@@ -3,7 +3,7 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
-import SLogo.View.CanvasView;
+import SLogo.View.Sprite.Sprite;
 
 import java.util.Map;
 
@@ -12,6 +12,8 @@ import java.util.Map;
  */
 /**
  * @author Stone Mathers
+ * @author th174
+ * Created 2/19/2017
  *
  */
 public interface Environment {
@@ -56,7 +58,7 @@ public interface Environment {
     /**
      * @return CanvasView
      */
-    CanvasView getCanvas();
+    Sprite getSprite();
 
     /**
      * @param name Name of variable
@@ -78,7 +80,7 @@ public interface Environment {
     /**
      * @param canvas CanvasView to be used
      */
-    void setCanvas(CanvasView canvas);
+    void setSprite(Sprite sprite);
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {

@@ -32,8 +32,8 @@ public class CommandList {
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
     public static final Invokable MAKEVARIABLE = new MakeVariable();
-    public static final Invokable IF = new If();
-    public static final Invokable IFELSE = new IfElse();
+    public static final Invokable IF = new IfVariable();
+    public static final Invokable IFELSE = new IfElseVariable();
 
     public static final Accumulator DEFAULT_OPERATION = LIST;
 
