@@ -27,7 +27,7 @@ public final class BoolVariable extends Variable<Boolean> {
     }
 
     @Override
-    boolean toBoolean() {
+    public boolean toBoolean() {
         return value();
     }
 

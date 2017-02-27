@@ -14,34 +14,34 @@ import javafx.beans.InvalidationListener;
  * @author Stone Mathers
  * Created 2/25/17
  */
-public class SLogoTurtle extends Observable implements Turtle {
-	private ArrayList<Observer> observers;
-	private double myX;
-	private double myY;
+public class SLogoTurtle implements Turtle {
+
+	private double myChangeX;
+	private double myChangeY;
 	private double myHeading;
 	boolean penDown;
 	boolean hidden;
 	
 	public SLogoTurtle(){
-		this(0, 0, 90);
+		this(90);
 	}
 	
-	public SLogoTurtle(int x, int y, double heading){
-		myX = x;
-		myY = y;
+	public SLogoTurtle(double heading){
 		myHeading = adjustAngle(heading);
 		this.dropPen();
 		this.show();
+		myChangeX = 0;
+		myChangeY = 0;
 	}
 	
 	@Override
-	public double getX() {
-		return myX;
+	public double getChangeX() {
+		return myChangeX;
 	}
 
 	@Override
-	public double getY() {
-		return myY;
+	public double getChangeY() {
+		return myChangeY;
 	}
 
 	@Override
@@ -50,15 +50,13 @@ public class SLogoTurtle extends Observable implements Turtle {
 	}
 
 	@Override
-	public void setX(double x) {
-		myX = x;
-		notifyObservers();
+	public void setChangeX(double changeX) {
+		myChangeX = changeX;
 	}
 
 	@Override
-	public void setY(double y) {
-		myY = y;
-		notifyObservers();
+	public void setChangeY(double changeY) {
+		myChangeY = changeY;
 	}
 
 	@Override
@@ -93,9 +91,8 @@ public class SLogoTurtle extends Observable implements Turtle {
 
 	@Override
 	public void move(double pixels) {
-		this.setX(pixels * Math.cos(Math.toRadians(this.getHeading())));
-		this.setY(pixels * Math.sin(Math.toRadians(this.getHeading())));
-		notifyObservers();
+		this.setChangeX(pixels * Math.cos(Math.toRadians(this.getHeading())));
+		this.setChangeY(pixels * Math.sin(Math.toRadians(this.getHeading())));
 	}
 	
 	@Override
@@ -116,9 +113,9 @@ public class SLogoTurtle extends Observable implements Turtle {
 	}
 
 	@Override
-	public void reset() {
-		this.setX(0);
-		this.setY(0);
+	public void reset(double curX, double curY) {
+		this.setChangeX(-curX);
+		this.setChangeY(-curY);
 		this.setHeading(90);
 		this.dropPen();
 		this.show();

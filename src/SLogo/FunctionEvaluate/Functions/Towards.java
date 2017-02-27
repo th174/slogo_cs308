@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
+import SLogo.View.Sprite.Sprite;
 
 /**
  * Implements TOWARDS command.
@@ -36,16 +37,17 @@ public class Towards extends TurtlePosition {
 	 * @return Number of degrees the Turtle was turned
 	 */
 	private double turn(Turtle turt, double newX, double newY){
-		double newHeading = calculateHeading(turt, newX, newY);		
+		Sprite sprite = this.getEnvironment().getSprite();
+		double newHeading = calculateHeading(sprite, newX, newY);		
 		double degMoved = Math.abs(turt.getHeading() - newHeading);		
 		turt.setHeading(newHeading);
 		return degMoved;
 		
 	}
 	
-	private double calculateHeading(Turtle turt, double newX, double newY){
-		double curX = turt.getX();
-		double curY = turt.getY();
+	private double calculateHeading(Sprite sprite, double newX, double newY){
+		double curX = sprite.getPosition()[0];
+		double curY = sprite.getPosition()[1];
 		double xDist = newX - curX;
 		double yDist = newY - curY;
 		double hypotenuse = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));

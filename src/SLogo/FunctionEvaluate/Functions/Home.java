@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.Turtles.Turtle;
+import SLogo.View.Sprite.Sprite;
 
 /**
  * Implements HOME command.
@@ -18,17 +19,18 @@ public class Home extends TurtleSettings {
 
 	@Override
 	public NumberVariable operation() {
+		Sprite sprite = this.getEnvironment().getSprite();
 		Turtle turt = this.getEnvironment().getTurtle();
-		return new NumberVariable(move(turt));
+		return new NumberVariable(move(sprite, turt));
 	}
 	
-	private double move(Turtle turt){
-		double xChange = Math.abs(turt.getX());
-		double yChange = Math.abs(turt.getY());
+	private double move(Sprite sprite, Turtle turt){
+		double xPos = sprite.getPosition()[0];
+		double yPos = sprite.getPosition()[1];
 		
-		turt.reset();
+		turt.reset(xPos, yPos);
 		
-		return Math.sqrt(Math.pow(xChange, 2) + Math.pow(yChange, 2));
+		return Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
 	}
 
 }

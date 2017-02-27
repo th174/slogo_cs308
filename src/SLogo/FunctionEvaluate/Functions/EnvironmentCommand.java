@@ -9,18 +9,15 @@ import SLogo.FunctionEvaluate.Variables.Variable;
  * @author Stone Mathers
  * Created 2/25/17
  */
-public abstract class TurtleCommand implements Invokable {
+public abstract class EnvironmentCommand implements Invokable {
 
 	private Environment myEnvironment;
 	
-	public TurtleCommand(Environment env){
+	public EnvironmentCommand(Environment env){
 		myEnvironment = env;
 	}
 	
 	protected Environment getEnvironment(){
 		return myEnvironment;
 	}
-	
-	public abstract Variable invoke(String[] flags, Variable... args);
-
 }

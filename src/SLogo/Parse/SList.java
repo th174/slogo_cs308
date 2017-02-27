@@ -2,7 +2,7 @@ package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.FunctionEvaluate.Functions.BasicOperations;
+import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
@@ -29,37 +29,53 @@ public class SList extends LinkedList<RecursiveExpression> implements RecursiveE
         super(l);
     }
 
-    public Variable eval() throws EvaluationTargetException {
-        Invokable function;
+    public Variable eval(Environment env) throws EvaluationTargetException {
+        Invokable command;
         try {
-            function = peek().getFunction();
+            command = peek().getCommand(env);
             removeFirst();
         } catch (EnvironmentImpl.FunctionNotFoundException e) {
-            function = BasicOperations.DEFAULT_OPERATION;
+            command = CommandList.DEFAULT_OPERATION;
         }
         List<String> flags = new ArrayList<>();
-        List<Variable> variables = new ArrayList<>();
         for (int i = 0; i < this.size(); i++) {
             if (get(i) instanceof AtomicList && ((AtomicList) get(i)).isFlag()) {
                 flags.add(get(i).toString());
-            } else {
-                variables.add(get(i).eval());
             }
         }
+        if (command.equals(CommandList.MAKEVARIABLE)) {
+            return evalAssignment(command, flags.toArray(new String[0]), env);
+        }
+        return evalProcedure(command, flags.toArray(new String[0]), env);
+    }
+
+    private Variable evalAssignment(Invokable command, String[] flags, Environment env) throws EvaluationTargetException {
+        env.addUserVariable(get(0).toString(), get(1).eval(env));
         try {
-            return function.invoke(flags.toArray(new String[0]), variables.toArray(new Variable[0]));
+            return command.invoke(flags, new Variable[]{get(0).eval(env), get(1).eval(env)});
         } catch (Exception e) {
             throw new EvaluationTargetException(e);
         }
     }
 
+    private Variable evalProcedure(Invokable command, String[] flags, Environment env) throws EvaluationTargetException {
+        List<Variable> variables = new ArrayList<>();
+        for (int i = 0; i < this.size(); i++) {
+            variables.add(get(i).eval(env));
+        }
+        try {
+            return command.invoke(flags, variables.toArray(new Variable[0]));
+        } catch (Exception e) {
+            throw new EvaluationTargetException(e);
+        }
+    }
 
     private boolean addAll(List<String> c) {
         return super.addAll(c.stream().map(AtomicList::new).collect(Collectors.toList()));
     }
 
     @Override
-    public Invokable getFunction() {
+    public Invokable getCommand(Environment env) {
         throw new Environment.FunctionNotFoundException(toString());
     }
 

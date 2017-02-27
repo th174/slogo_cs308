@@ -12,14 +12,14 @@ package SLogo.Turtles;
 public interface Turtle {
 
 	/**
-	 * @return X-position
+	 * @return Change in X-position
 	 */
-	public double getX();
+	public double getChangeX();
 	
 	/**
-	 * @return Y-position
+	 * @return Change in Y-position
 	 */
-	public double getY();
+	public double getChangeY();
 	
 	/**
 	 * @return Angle at which the Turtle is facing
@@ -27,14 +27,18 @@ public interface Turtle {
 	public double getHeading();
 	
 	/**
-	 * @param x X-position to place Turtle
+	 * Set the Turtle's change in X-position.
+	 * 
+	 * @param changeX 
 	 */
-	public void setX(double x);
+	public void setChangeX(double changeX);
 	
 	/**
-	 * @param y Y-position to place Turtle
+	 * Set the Turtle's change in Y-position.
+	 * 
+	 * @param changeY
 	 */
-	public void setY(double y);
+	public void setChangeY(double changeY);
 	
 	/**
 	 * @param angle Angle at which to set heading
@@ -68,8 +72,8 @@ public interface Turtle {
 	public void turn(double degrees);
 	
 	/**
-	 * Moves Turtle the given number of pixels 
-	 * in the direction of its heading.
+	 * Calculates coordinate changes required to move the Turtle 
+	 * the given number of pixels in the direction of its heading.
 	 * 
 	 * @param pixels Number of pixels to move Turtle
 	 */
@@ -92,8 +96,12 @@ public interface Turtle {
 	
 	
 	/**
-	 * Returns Turtle to (0,0) and sets all instance variables to default values
+	 * Calculate coordinate changes required to return Turtle to (0,0)
+	 * from (curX, curY) and sets all instance variables to default values.
+	 * 
+	 * @param curX Current X-coordinate
+	 * @param curY Current Y-coordinate
 	 */
-	public void reset();
+	public void reset(double curX, double curY);
 	
 }

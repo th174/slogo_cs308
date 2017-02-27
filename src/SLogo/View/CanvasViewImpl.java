@@ -96,4 +96,11 @@ public class CanvasViewImpl implements CanvasView, Observer{
 		root.getChildren().clear();
 		
 	}
+
+	@Override
+	public void clearScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

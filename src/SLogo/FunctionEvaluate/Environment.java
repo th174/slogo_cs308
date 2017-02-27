@@ -3,6 +3,8 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
+import SLogo.View.CanvasView;
+import SLogo.View.Sprite.Sprite;
 
 import java.util.Map;
 
@@ -11,6 +13,8 @@ import java.util.Map;
  */
 /**
  * @author Stone Mathers
+ * @author th174
+ * Created 2/19/2017
  *
  */
 public interface Environment {
@@ -51,6 +55,16 @@ public interface Environment {
      * @return Turtle
      */
     Turtle getTurtle();
+    
+    /**
+     * @return Sprite
+     */
+    Sprite getSprite();
+    
+    /**
+     * @return CanvasView
+     */
+    CanvasView getCanvas();
 
     /**
      * @param name Name of variable
@@ -63,6 +77,21 @@ public interface Environment {
      * @param function Function
      */
     void addUserFunction(String name, Invokable function);
+    
+    /**
+     * @param turt Turtle to be used
+     */
+    void setTurtle(Turtle turt);
+    
+    /**
+     * @param sprite Sprite to be used
+     */
+    void setSprite(Sprite sprite);
+    
+    /**
+     * @param canvas CanvasView to be used
+     */
+    void setCanvas(CanvasView canvas);
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {
@@ -75,9 +104,4 @@ public interface Environment {
             super("Function \'" + functionName + "\' is undefined.");
         }
     }
-    
-    /**
-     * @param turt Turtle to be used
-     */
-    void setTurtle(Turtle turt);
 }

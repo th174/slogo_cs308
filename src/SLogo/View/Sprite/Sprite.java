@@ -44,6 +44,9 @@ public class Sprite {
 		return spriteIV;
 	}
 	
+	/**
+	 * @return Array of length 2: First element is the X-coordinate, second element is the Y-coordinate
+	 */
 	public int[] getPosition(){
 		return position;
 	}
