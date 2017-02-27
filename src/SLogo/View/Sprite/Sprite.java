@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import SLogo.View.InvalidImageFileException;
+import javax.swing.JOptionPane;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Sprite {
+	private File defaultSpriteFile;
 	private ImageView spriteIV;
 	private Image spriteImg;
 	private int spriteWidth;
@@ -19,8 +21,9 @@ public class Sprite {
 	private int position[];
 	private boolean hidden;
 	
-	public Sprite(File defaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight) throws InvalidImageFileException{
-		spriteIV = new ImageView(spriteImg);
+	public Sprite(File adefaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+		defaultSpriteFile = adefaultSpriteFile;
+		spriteIV = new ImageView();
 		setImage(defaultSpriteFile);
 		position = new int[] {viewWidth/2 - spriteWidth/2, viewHeight/2 - spriteHeight/2};
 		spriteIV.setX(position[0]);
@@ -29,14 +32,14 @@ public class Sprite {
 		setHidden(false);
 	}
 	
-	public void setImage(File newSpriteFile) throws InvalidImageFileException{
+	public void setImage(File newSpriteFile){
 		try {
 			spriteImg = new Image(new FileInputStream(newSpriteFile));
 			spriteIV.setImage(spriteImg);
 			spriteIV.setFitWidth(spriteWidth);
 			spriteIV.setFitHeight(spriteHeight);
 		} catch (IOException e) {
-			throw new InvalidImageFileException();
+			JOptionPane.showMessageDialog(null, "Invalid File");
 		}
 	}
 	

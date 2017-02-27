@@ -1,6 +1,7 @@
 package SLogo.View;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -26,7 +27,7 @@ public class CanvasViewImpl implements CanvasView, Observer{
 	private boolean penDown;
 	private Color penColor;
 	
-	public CanvasViewImpl(int aviewWidth, int aviewHeight) throws InvalidImageFileException{
+	public CanvasViewImpl(int aviewWidth, int aviewHeight){
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
 		storeViewProperties();
@@ -45,21 +46,126 @@ public class CanvasViewImpl implements CanvasView, Observer{
 	public void setPenColor(Color color) {
 		penColor = color;
 	}
+	
+	private int[] findIntercepts(double x, double y, double xVector, double yVector){
+		if (checkVerticalOrHorizontalSlope(x, y, xVector, yVector) != null){
+			return checkVerticalOrHorizontalSlope(x, y, xVector, yVector);
+		}
+		double vectorSlope = xVector/yVector;
+		double xRef = 0;
+		double yRef = 0;
+		if (xVector > 0){
+			xRef = viewWidth;
+		}
+		if (yVector > 0){
+			yRef = viewHeight;
+		}
+		return interceptMath(x, y, xVector, yVector, vectorSlope, xRef, yRef);
+	}
+
+	public int[] interceptMath(double x, double y, double xVector, double yVector, double vectorSlope, double xRef,
+			double yRef) {
+		double refSlope = (y-yRef)/(x-xRef);
+		double xInt;
+		double yInt;
+		if (Math.abs(vectorSlope) > Math.abs(refSlope)){
+			//bouncing off top or bottom
+			if (yVector > 0){
+				//bottom
+				yInt = viewWidth;
+				xInt = x + (viewHeight - y)/vectorSlope;
+			}
+			else {
+				//top
+				yInt = 0;
+				xInt = x + y/vectorSlope;
+			}
+		}
+		else {
+			//bouncing off right or left
+			if (xVector > 0){
+				//right
+				xInt = viewWidth;
+				yInt = y + (viewWidth - x)*vectorSlope;
+			}
+			else {
+				//left
+				xInt = 0;
+				yInt = y + x*vectorSlope;
+			}
+		}
+		return new int[] {(int) yInt, (int) xInt};
+	}
+
+	private int[] checkVerticalOrHorizontalSlope(double x, double y, double xVector, double yVector) {
+		if (xVector == 0){
+			if (yVector > 0){
+				return new int[] {(int) x, viewWidth};
+			}
+			else{
+				return new int[] {(int) x, 0};
+			}
+		}
+		if (yVector == 0){
+			if (xVector > 0){
+				return new int[] {viewWidth, (int) y};
+			}
+			else{
+				return new int[] {0, (int) y};
+			}
+		}
+		return null;
+	}
 
 	private void move(int[] vector){
+		ArrayList<int[]> linesToMake = new ArrayList<int[]>();
+		addLinesToMake(vector, linesToMake);
+		int[] finalPosition = sprite.getPosition();
 		if (penDown){
-			Line line = new Line();
-			line.setStartX(sprite.getPosition()[0]);
-			line.setStartY(sprite.getPosition()[1]);
-			line.setEndX(vector[0]);
-			line.setEndY(vector[0]);
-			line.setFill(penColor);
-			root.getChildren().add(line);
+			for (int[] coordinates : linesToMake){
+				Line line = new Line();
+				line.setStartX(coordinates[0]);
+				line.setStartY(coordinates[1]);
+				line.setEndX(coordinates[2]);
+				line.setEndY(coordinates[3]);
+				line.setFill(penColor);
+				root.getChildren().add(line);
+				finalPosition = new int[] {coordinates[2], coordinates[3]};
+			}
 		}
-		sprite.setPosition(vector);//check
+		sprite.setPosition(finalPosition);
+	}
+
+	private void addLinesToMake(int[] vector, ArrayList<int[]> linesToMake) {
+		int[] currLocation = sprite.getPosition();
+		int[] nextLocation;
+		while (true){
+			nextLocation = new int[] {currLocation[0] + vector[0], currLocation[1] + vector[1]};
+			if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0){
+				int[] intercepts = findIntercepts(currLocation[0], currLocation[1], vector[0], vector[1]);
+				linesToMake.add(new int[] {currLocation[0], currLocation[1], intercepts[0], intercepts[1]});
+				currLocation = intercepts;
+				if (currLocation[0] == 0){
+					currLocation[0] = viewWidth;
+				}
+				else if (currLocation[0] == viewWidth){
+					currLocation[0] = 0;
+				}
+				if (currLocation[1] == 0){
+					currLocation[1] = viewHeight;
+				}
+				else if (currLocation[1] == viewHeight){
+					currLocation[1] = 0;
+				}
+			}
+			else{
+				linesToMake.add(new int[] {currLocation[0], currLocation[1], nextLocation[0], nextLocation[1]});
+				break;
+			}
+		}
 	}
 	
-	public void setImage(File imgFile) throws InvalidImageFileException{
+	public void setImage(File imgFile){
 		sprite.setImage(imgFile);
 	}
 	
@@ -74,7 +180,7 @@ public class CanvasViewImpl implements CanvasView, Observer{
 		 defaultTurtleFilename = viewResources.getString("defaultTurtleFilename");
 	}
 
-	private void instantializeSprite() throws InvalidImageFileException {
+	private void instantializeSprite(){
 		File defaultSpriteFile = new File(defaultTurtleFilename);
 		sprite = new Sprite(defaultSpriteFile, spriteWidth, spriteHeight, viewWidth, viewHeight);
 		root.getChildren().add(sprite.getImageView());
@@ -91,16 +197,11 @@ public class CanvasViewImpl implements CanvasView, Observer{
 	public int[] getSpritePositon(){
 		return sprite.getPosition();
 	}
-	
-	public void clearScreen(){
-		root.getChildren().clear();
-		
-	}
 
 	@Override
-	public void clearScreen() {
-		// TODO Auto-generated method stub
-		
+	public void clearScreen(){
+		root.getChildren().clear();
+		instantializeSprite();
 	}
 
 }
