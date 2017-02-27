@@ -32,7 +32,6 @@ public class CanvasViewImpl implements CanvasView, Observer{
 		storeViewProperties();
 		root = new Group();
 		instantializeSprite();
-		root.getChildren().add(sprite.getImageView());
 	}
 	
 	public void update(Observable o, Object n){
@@ -47,17 +46,17 @@ public class CanvasViewImpl implements CanvasView, Observer{
 		penColor = color;
 	}
 
-	private void move(int[] newPosition){
+	private void move(int[] vector){
 		if (penDown){
 			Line line = new Line();
 			line.setStartX(sprite.getPosition()[0]);
 			line.setStartY(sprite.getPosition()[1]);
-			line.setEndX(newPosition[0]);
-			line.setEndY(newPosition[0]);
+			line.setEndX(vector[0]);
+			line.setEndY(vector[0]);
 			line.setFill(penColor);
 			root.getChildren().add(line);
 		}
-		sprite.setPosition(newPosition);
+		sprite.setPosition(vector);//check
 	}
 	
 	public void setImage(File imgFile) throws InvalidImageFileException{
@@ -78,9 +77,23 @@ public class CanvasViewImpl implements CanvasView, Observer{
 	private void instantializeSprite() throws InvalidImageFileException {
 		File defaultSpriteFile = new File(defaultTurtleFilename);
 		sprite = new Sprite(defaultSpriteFile, spriteWidth, spriteHeight, viewWidth, viewHeight);
+		root.getChildren().add(sprite.getImageView());
 	}
 
 	public Node getView(){
 		return root;
+	}
+	
+	/**
+	 * 
+	 * @return	Sprite's absolute location
+	 */
+	public int[] getSpritePositon(){
+		return sprite.getPosition();
+	}
+	
+	public void clearScreen(){
+		root.getChildren().clear();
+		
 	}
 }
