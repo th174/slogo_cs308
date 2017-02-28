@@ -1,5 +1,9 @@
 package SLogo.Turtles;
 
+import java.util.ArrayList;
+import java.util.Observer;
+import java.util.Observable;
+
 /**
  * Represents the data behind the Turtle in SLogo.
  * Holds position, heading, hidden state, and pen state.
@@ -8,34 +12,35 @@ package SLogo.Turtles;
  * @author Stone Mathers
  * Created 2/25/17
  */
-public class SLogoTurtle implements Turtle {
-
-	private double myX;
-	private double myY;
+public class SLogoTurtle extends Observable implements Turtle {
+	
+	private ArrayList<Observer> observers;
+	private double myChangeX;
+	private double myChangeY;
 	private double myHeading;
 	boolean penDown;
 	boolean hidden;
 	
 	public SLogoTurtle(){
-		this(0, 0, 90);
+		this(90);
 	}
 	
-	public SLogoTurtle(int x, int y, double heading){
-		myX = x;
-		myY = y;
+	public SLogoTurtle(double heading){
 		myHeading = adjustAngle(heading);
 		this.dropPen();
 		this.show();
+		myChangeX = 0;
+		myChangeY = 0;
 	}
 	
 	@Override
-	public double getX() {
-		return myX;
+	public double getChangeX() {
+		return myChangeX;
 	}
 
 	@Override
-	public double getY() {
-		return myY;
+	public double getChangeY() {
+		return myChangeY;
 	}
 
 	@Override
@@ -44,29 +49,32 @@ public class SLogoTurtle implements Turtle {
 	}
 
 	@Override
-	public void setX(double x) {
-		myX = x;
+	public void setChangeX(double changeX) {
+		myChangeX = changeX;
 	}
 
 	@Override
-	public void setY(double y) {
-		myY = y;
+	public void setChangeY(double changeY) {
+		myChangeY = changeY;
 	}
 
 	@Override
 	public void setHeading(double angle) {
 		angle = adjustAngle(angle);
 		myHeading = angle;
+		notifyObservers();
 	}
 
 	@Override
 	public void liftPen() {
 		penDown = false;
+		notifyObservers();
 	}
 
 	@Override
 	public void dropPen() {
 		penDown = true;
+		notifyObservers();
 	}
 
 	@Override
@@ -82,18 +90,20 @@ public class SLogoTurtle implements Turtle {
 
 	@Override
 	public void move(double pixels) {
-		this.setX(pixels * Math.cos(Math.toRadians(this.getHeading())));
-		this.setY(pixels * Math.sin(Math.toRadians(this.getHeading())));
+		this.setChangeX(pixels * Math.cos(Math.toRadians(this.getHeading())));
+		this.setChangeY(pixels * Math.sin(Math.toRadians(this.getHeading())));
 	}
 	
 	@Override
 	public void hide() {
 		hidden = true;
+		notifyObservers();
 	}
 
 	@Override
 	public void show() {
-		hidden = false;		
+		hidden = false;	
+		notifyObservers();
 	}
 
 	@Override
@@ -102,12 +112,13 @@ public class SLogoTurtle implements Turtle {
 	}
 
 	@Override
-	public void reset() {
-		this.setX(0);
-		this.setY(0);
+	public void reset(double curX, double curY) {
+		this.setChangeX(-curX);
+		this.setChangeY(-curY);
 		this.setHeading(90);
 		this.dropPen();
 		this.show();
+		notifyObservers();
 	}
 	
 	/**
@@ -129,5 +140,33 @@ public class SLogoTurtle implements Turtle {
 			return newAngle;
 		}
 	}
-
+	
+	/**
+	 * Add an object as a listener
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void addObserver(Observer o){
+		observers.add(o);
+	}
+	
+	/**
+	 * Remove a listener
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void removeObserver(Observer o){
+		observers.remove(o);
+	}
+	
+	/**
+	 * Tell all listeners that something has changed
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void notifyObservers(){
+		for (Observer o : observers){
+			o.update(this, new Object[] {penDown, myHeading, myChangeX, myChangeY, hidden});
+		}
+	}
 }

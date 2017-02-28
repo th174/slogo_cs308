@@ -29,7 +29,12 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
-    boolean toBoolean() {
+    public Variable scalar() {
+        return value().get(value().size() - 1);
+    }
+
+    @Override
+    public boolean toBoolean() {
         return !value().isEmpty();
     }
 
@@ -41,13 +46,13 @@ public final class ListVariable extends Variable<List<Variable>> {
             } else {
                 throw new NumberFormatException();
             }
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new NotANumberException(value().toString());
         }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString().replace("[", "(").replace("]", ")").replace(",", " .");
     }
 }

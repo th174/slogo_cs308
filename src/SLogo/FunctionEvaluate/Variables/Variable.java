@@ -113,12 +113,16 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return new ListVariable(this, other);
     }
 
+    public Variable scalar(){
+        return this;
+    }
+
     @Override
     public int compareTo(Variable other) {
         return (int) ((toNumber() - other.toNumber()) * 1000000000);
     }
 
-    abstract boolean toBoolean();
+    public abstract boolean toBoolean();
 
     public abstract double toNumber() throws NumberFormatException;
 

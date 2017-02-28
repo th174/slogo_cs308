@@ -1,15 +1,18 @@
 package SLogo.View;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import SLogo.View.Sprite.Sprite;
-import SLogo.View.Sprite.SpriteAction;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class CanvasViewImpl implements CanvasView{
+public class CanvasViewImpl implements CanvasView, Observer{
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "CanvasView";
 	private ResourceBundle viewResources;
@@ -19,54 +22,186 @@ public class CanvasViewImpl implements CanvasView{
 	private int viewHeight;
 	private int spriteWidth;
 	private int spriteHeight;
+	private String defaultTurtleFilename;
 	
-	public CanvasViewImpl(int aviewWidth, int aviewHeight) throws InvalidImageFileException{
+	private boolean penDown;
+	private Color penColor;
+	
+	public CanvasViewImpl(int aviewWidth, int aviewHeight){
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
 		storeViewProperties();
 		root = new Group();
 		instantializeSprite();
-		root.getChildren().add(sprite.getImageView());
 	}
 	
-	public void setImage(File imgFile) throws InvalidImageFileException{
+	public void update(Observable o, Object n){
+		Object[] newProperties = (Object[]) n;
+		setPen((boolean) newProperties[0]);
+		setPenColor(Color.BLACK);
+		sprite.setDirection((int) newProperties[2]);
+		move(new int[] {(int) newProperties[2], (int) newProperties[3]});
+	}
+	
+	public void setPenColor(Color color) {
+		penColor = color;
+	}
+	
+	private int[] findIntercepts(double x, double y, double xVector, double yVector){
+		if (checkVerticalOrHorizontalSlope(x, y, xVector, yVector) != null){
+			return checkVerticalOrHorizontalSlope(x, y, xVector, yVector);
+		}
+		double vectorSlope = xVector/yVector;
+		double xRef = 0;
+		double yRef = 0;
+		if (xVector > 0){
+			xRef = viewWidth;
+		}
+		if (yVector > 0){
+			yRef = viewHeight;
+		}
+		return interceptMath(x, y, xVector, yVector, vectorSlope, xRef, yRef);
+	}
+
+	public int[] interceptMath(double x, double y, double xVector, double yVector, double vectorSlope, double xRef,
+			double yRef) {
+		double refSlope = (y-yRef)/(x-xRef);
+		double xInt;
+		double yInt;
+		if (Math.abs(vectorSlope) > Math.abs(refSlope)){
+			//bouncing off top or bottom
+			if (yVector > 0){
+				//bottom
+				yInt = viewWidth;
+				xInt = x + (viewHeight - y)/vectorSlope;
+			}
+			else {
+				//top
+				yInt = 0;
+				xInt = x + y/vectorSlope;
+			}
+		}
+		else {
+			//bouncing off right or left
+			if (xVector > 0){
+				//right
+				xInt = viewWidth;
+				yInt = y + (viewWidth - x)*vectorSlope;
+			}
+			else {
+				//left
+				xInt = 0;
+				yInt = y + x*vectorSlope;
+			}
+		}
+		return new int[] {(int) yInt, (int) xInt};
+	}
+
+	private int[] checkVerticalOrHorizontalSlope(double x, double y, double xVector, double yVector) {
+		if (xVector == 0){
+			if (yVector > 0){
+				return new int[] {(int) x, viewWidth};
+			}
+			else{
+				return new int[] {(int) x, 0};
+			}
+		}
+		if (yVector == 0){
+			if (xVector > 0){
+				return new int[] {viewWidth, (int) y};
+			}
+			else{
+				return new int[] {0, (int) y};
+			}
+		}
+		return null;
+	}
+
+	private void move(int[] vector){
+		ArrayList<int[]> linesToMake = new ArrayList<int[]>();
+		addLinesToMake(vector, linesToMake);
+		int[] finalPosition = sprite.getPosition();
+		if (penDown){
+			for (int[] coordinates : linesToMake){
+				Line line = new Line();
+				line.setStartX(coordinates[0]);
+				line.setStartY(coordinates[1]);
+				line.setEndX(coordinates[2]);
+				line.setEndY(coordinates[3]);
+				line.setFill(penColor);
+				root.getChildren().add(line);
+				finalPosition = new int[] {coordinates[2], coordinates[3]};
+			}
+		}
+		sprite.setPosition(finalPosition);
+	}
+
+	private void addLinesToMake(int[] vector, ArrayList<int[]> linesToMake) {
+		int[] currLocation = sprite.getPosition();
+		int[] nextLocation;
+		while (true){
+			nextLocation = new int[] {currLocation[0] + vector[0], currLocation[1] + vector[1]};
+			if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0){
+				int[] intercepts = findIntercepts(currLocation[0], currLocation[1], vector[0], vector[1]);
+				linesToMake.add(new int[] {currLocation[0], currLocation[1], intercepts[0], intercepts[1]});
+				currLocation = intercepts;
+				if (currLocation[0] == 0){
+					currLocation[0] = viewWidth;
+				}
+				else if (currLocation[0] == viewWidth){
+					currLocation[0] = 0;
+				}
+				if (currLocation[1] == 0){
+					currLocation[1] = viewHeight;
+				}
+				else if (currLocation[1] == viewHeight){
+					currLocation[1] = 0;
+				}
+			}
+			else{
+				linesToMake.add(new int[] {currLocation[0], currLocation[1], nextLocation[0], nextLocation[1]});
+				break;
+			}
+		}
+	}
+	
+	public void setImage(File imgFile){
 		sprite.setImage(imgFile);
+	}
+	
+	public void setPen(boolean newPen){
+		penDown = newPen;
 	}
 
 	private void storeViewProperties() {
 		viewResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
 		 spriteWidth = Integer.parseInt(viewResources.getString("spriteWidth"));
 		 spriteHeight = Integer.parseInt(viewResources.getString("spriteHeight"));
+		 defaultTurtleFilename = viewResources.getString("defaultTurtleFilename");
 	}
 
-	private void instantializeSprite() throws InvalidImageFileException {
-		File defaultSpriteFile = new File(viewResources.getString("defaultTurtleFilename"));
+	private void instantializeSprite(){
+		File defaultSpriteFile = new File(defaultTurtleFilename);
 		sprite = new Sprite(defaultSpriteFile, spriteWidth, spriteHeight, viewWidth, viewHeight);
+		root.getChildren().add(sprite.getImageView());
 	}
 
 	public Node getView(){
 		return root;
 	}
-
-	public int execute(String action, double... args){
-		try {
-			System.out.println("SpriteAction_" + action);
-			SpriteAction currAction = (SpriteAction) Class.forName("SLogo.View.Sprite.SpriteAction_" + action).newInstance();
-			return currAction.invoke(this, sprite, args);
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		}
-	}
 	
-	public void drawLine(int[] initPos, int[] endPos){
-		Line line = new Line();
-		line.setStartX(initPos[0]);
-		line.setStartY(initPos[1]);
-		line.setEndX(endPos[0]);
-		line.setEndY(endPos[1]);
-		root.getChildren().add(line);
+	/**
+	 * 
+	 * @return	Sprite's absolute location
+	 */
+	public int[] getSpritePosition(){
+		return sprite.getPosition();
+	}
+
+	@Override
+	public void clearScreen(){
+		root.getChildren().clear();
+		instantializeSprite();
 	}
 
 }

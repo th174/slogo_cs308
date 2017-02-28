@@ -34,7 +34,7 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    boolean toBoolean() {
+    public boolean toBoolean() {
         return value().length() > 0;
     }
 

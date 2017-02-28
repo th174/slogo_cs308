@@ -19,13 +19,19 @@ public interface CanvasView {
      * @param bg background
      * @throws InvalidImageFileException 
      */
-    void setImage(File imgFile) throws InvalidImageFileException;
-
+    void setImage(File imgFile);
     /**
-     * Send move command to turtle
-     *
-     * @param movement The type of movement
-     * @param distance distance to move
+     * Clears all lines from screen and instantiates a new Turtle.
+     * @throws InvalidImageFileException 
      */
-    int execute(String action, double[] args);
+    void clearScreen();
+    /**
+	 * Return the absolute position of the CanvasView's Sprite.
+	 * The position is represented as a 2d-array, with the
+	 * x-coordinate being the first element and the
+	 * y-coordinate being the second element.
+	 * 
+	 * @return	Sprite's absolute location
+	 */
+	public int[] getSpritePosition();
 }

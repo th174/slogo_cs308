@@ -36,7 +36,7 @@ public final class NumberVariable extends Variable<Number> {
     }
 
     @Override
-    boolean toBoolean() {
+    public boolean toBoolean() {
         return value().intValue() != 0;
     }
 

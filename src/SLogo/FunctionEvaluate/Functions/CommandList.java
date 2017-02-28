@@ -10,7 +10,7 @@ import java.util.Collection;
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
  * Created by th174 on 2/16/2017.
  */
-public class BasicOperations {
+public class CommandList {
     public static final Accumulator SUM = Variable::sum;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
@@ -31,16 +31,19 @@ public class BasicOperations {
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
+    public static final Invokable MAKEVARIABLE = new MakeVariable(); //TODO talk to Timmy about this one
+    public static final Invokable IF = new IfVariable();
+    public static final Invokable IFELSE = new IfElseVariable();
 
     public static final Accumulator DEFAULT_OPERATION = LIST;
 
     /**
      * You should never instantiate this class
      */
-    private BasicOperations() {
+    private CommandList() {
     }
 
     public static Collection<Field> getAllCommands() {
-        return Arrays.asList(BasicOperations.class.getDeclaredFields());
+        return Arrays.asList(CommandList.class.getDeclaredFields());
     }
 }

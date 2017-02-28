@@ -2,7 +2,7 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
-import SLogo.Turtles.Turtle;
+import SLogo.View.CanvasView;
 
 /**
  * Implements XCOR command.
@@ -18,8 +18,8 @@ public class XCor extends TurtleSettings {
 
 	@Override
 	public NumberVariable operation() {
-		Turtle turt = this.getEnvironment().getTurtle();
-		return new NumberVariable(turt.getX());
+		CanvasView canvas = this.getEnvironment().getCanvas();
+		return new NumberVariable(canvas.getSpritePosition()[0]);
 	}
 
 }
