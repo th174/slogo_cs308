@@ -12,7 +12,7 @@ public class CanvasViewTester extends Application{
 	private CanvasView CV;
 	private Scene scene;
 	
-	public void start (Stage primaryStage) throws InvalidImageFileException{
+	public void start (Stage primaryStage){
 		CV = new CanvasViewImpl(600, 600);
 		scene = new Scene((Parent) CV.getView(), 600, 600, Color.WHITE);
         primaryStage.setTitle("Hello World");
