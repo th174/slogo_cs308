@@ -4,7 +4,6 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
-import SLogo.View.Sprite.Sprite;
 
 import java.util.Map;
 
@@ -57,11 +56,6 @@ public interface Environment {
     Turtle getTurtle();
     
     /**
-     * @return Sprite
-     */
-    Sprite getSprite();
-    
-    /**
      * @return CanvasView
      */
     CanvasView getCanvas();
@@ -82,11 +76,6 @@ public interface Environment {
      * @param turt Turtle to be used
      */
     void setTurtle(Turtle turt);
-    
-    /**
-     * @param sprite Sprite to be used
-     */
-    void setSprite(Sprite sprite);
     
     /**
      * @param canvas CanvasView to be used

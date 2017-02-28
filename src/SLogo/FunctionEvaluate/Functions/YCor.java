@@ -2,8 +2,7 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
-import SLogo.Turtles.Turtle;
-import SLogo.View.Sprite.Sprite;
+import SLogo.View.CanvasView;
 
 /**
  * Implements YCOR command.
@@ -19,8 +18,8 @@ public class YCor extends TurtleSettings {
 
 	@Override
 	public NumberVariable operation() {
-		Sprite sprite = this.getEnvironment().getSprite();
-		return new NumberVariable(sprite.getPosition()[1]);
+		CanvasView canvas = this.getEnvironment().getCanvas();
+		return new NumberVariable(canvas.getSpritePosition()[1]);
 	}
 
 }

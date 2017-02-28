@@ -194,7 +194,7 @@ public class CanvasViewImpl implements CanvasView, Observer{
 	 * 
 	 * @return	Sprite's absolute location
 	 */
-	public int[] getSpritePositon(){
+	public int[] getSpritePosition(){
 		return sprite.getPosition();
 	}
 

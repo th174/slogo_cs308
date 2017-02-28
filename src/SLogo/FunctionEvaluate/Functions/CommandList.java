@@ -31,7 +31,7 @@ public class CommandList {
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
-    public static final Invokable MAKEVARIABLE = new MakeVariable();
+    public static final Invokable MAKEVARIABLE = new MakeVariable(); //TODO talk to Timmy about this one
     public static final Invokable IF = new IfVariable();
     public static final Invokable IFELSE = new IfElseVariable();
 
