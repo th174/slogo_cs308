@@ -10,4 +10,5 @@ public interface VariableListView{
 
 	public Node getView();
 
+	public void setSize(double width, double height);
 }
