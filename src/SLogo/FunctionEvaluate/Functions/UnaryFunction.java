@@ -7,7 +7,7 @@ import SLogo.Parse.Expression;
 /**
  * Created by th174 on 2/16/2017.
  */
-public interface Predicate extends Invokable {
+public interface UnaryFunction extends Invokable {
     int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
 
     @Override
