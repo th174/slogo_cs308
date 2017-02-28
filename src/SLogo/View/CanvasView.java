@@ -25,4 +25,13 @@ public interface CanvasView {
      * @throws InvalidImageFileException 
      */
     void clearScreen();
+    /**
+	 * Return the absolute position of the CanvasView's Sprite.
+	 * The position is represented as a 2d-array, with the
+	 * x-coordinate being the first element and the
+	 * y-coordinate being the second element.
+	 * 
+	 * @return	Sprite's absolute location
+	 */
+	public int[] getSpritePosition();
 }

@@ -3,7 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.Turtles.Turtle;
-import SLogo.View.Sprite.Sprite;
+import SLogo.View.CanvasView;
 
 /**
  * Implements CLEARSCREEN/CS command.
@@ -20,16 +20,15 @@ public class ClearScreen extends TurtleSettings {
 	@Override
 	public NumberVariable operation() {
 		Turtle turt = this.getEnvironment().getTurtle();
-		Sprite sprite = this.getEnvironment().getSprite();
-		return new NumberVariable(move(turt, sprite));
+		CanvasView canvas = this.getEnvironment().getCanvas();
+		return new NumberVariable(move(turt, canvas));
 	}
 	
-	private double move(Turtle turt, Sprite sprite){
-		double xPos = sprite.getPosition()[0];
-		double yPos = sprite.getPosition()[1];
+	private double move(Turtle turt, CanvasView canvas){
+		double xPos = canvas.getSpritePosition()[0];
+		double yPos = canvas.getSpritePosition()[1];
 		
-		//turt.reset(xPos, yPos); TODO: Remove if clearScreen() instantiates new Turtle
-		this.getEnvironment().getCanvas().clearScreen();
+		canvas.clearScreen();
 		
 		return Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2));
 	}

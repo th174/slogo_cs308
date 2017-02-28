@@ -4,7 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
-import SLogo.View.Sprite.Sprite;
+import SLogo.View.CanvasView;
 
 /**
  * Implements SETXY/GOTO command.
@@ -23,8 +23,8 @@ public class GoTo extends TurtlePosition {
 		double x = var1.toNumber();
 		double y = var2.toNumber();
 		Turtle turt = this.getEnvironment().getTurtle();
-		Sprite sprite = this.getEnvironment().getSprite();
-		return new NumberVariable(calculateVectors(turt, sprite, x, y));
+		CanvasView canvas = this.getEnvironment().getCanvas();
+		return new NumberVariable(calculateVectors(turt, canvas, x, y));
 	}
 	
 	/**
@@ -35,9 +35,9 @@ public class GoTo extends TurtlePosition {
 	 * @param newY Y-coordinate to be moved to
 	 * @return Distance the turtle was moved
 	 */
-	private double calculateVectors(Turtle turt, Sprite sprite, double newX, double newY){
-		double oldX = sprite.getPosition()[0];
-		double oldY = sprite.getPosition()[1];
+	private double calculateVectors(Turtle turt, CanvasView canvas, double newX, double newY){
+		double oldX = canvas.getSpritePosition()[0];
+		double oldY = canvas.getSpritePosition()[1];
 		
 		double xChange = newX - oldX;
 		double yChange = newY - oldY;
