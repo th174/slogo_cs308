@@ -11,4 +11,10 @@ public class VariableListViewBasic implements VariableListView {
 		return vBox;
 	}
 
+	@Override
+	public void setSize(double width, double height) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

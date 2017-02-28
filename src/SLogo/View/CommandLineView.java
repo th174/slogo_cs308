@@ -9,4 +9,5 @@ import javafx.scene.Node;
 public interface CommandLineView {
 
 		public Node getView();
+		public void setSize(double width, double height);
 }

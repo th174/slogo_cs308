@@ -48,8 +48,6 @@ public class SLogoGUIImpl implements SLogoGUI {
     	Rectangle rectangleCanvasView = new Rectangle(SIZE * canvasWidthRatio,SIZE * canvasHeightRatio);
     	GridPane.setConstraints(rectangleCanvasView, 0, 0, 1, 2);
     	rectangleCanvasView.setFill(Color.AQUAMARINE);
-		RowConstraints menuRow = new RowConstraints();
-		menuRow.setPercentHeight(10);
     	
     	CommandLineView commandLine = new CommandLineViewBasic();
     	Node commandLineNode = commandLine.getView();
@@ -62,7 +60,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	GridPane.setConstraints(rectangleVariableView, 1, 0);
     	rectangleVariableView.setFill(Color.GREENYELLOW);
     	
-    	SLogoGUI functionListView = new FunctionListView();
+    	FunctionListView functionListView = new FunctionListViewBasic();
     	Node functionListViewNode = functionListView.getView();
     	GridPane.setConstraints(functionListViewNode, 1, 1);
     	Rectangle rectangleFunctionView = new Rectangle(SIZE * displayWidthRatio,SIZE * functionListHeightRatio);
@@ -82,12 +80,12 @@ public class SLogoGUIImpl implements SLogoGUI {
     	functionRow.setPercentHeight(functionListHeightRatio);
     	RowConstraints commandLineRow = new RowConstraints();
     	commandLineRow.setPercentHeight(commandLineHeightRatio);
-
-    	gridPane.getRowConstraints().addAll(variableRow,functionRow,commandLineRow);ColumnConstraints canvasColumn = new ColumnConstraints();
+    	gridPane.getRowConstraints().addAll(variableRow,functionRow,commandLineRow);
+    	
+    	ColumnConstraints canvasColumn = new ColumnConstraints();
     	canvasColumn.setPercentWidth(canvasWidthRatio);
     	ColumnConstraints displayColumn = new ColumnConstraints();
     	displayColumn.setPercentWidth(displayWidthRatio);
-    	
     	gridPane.getColumnConstraints().addAll(canvasColumn,displayColumn);
 	}
 }
