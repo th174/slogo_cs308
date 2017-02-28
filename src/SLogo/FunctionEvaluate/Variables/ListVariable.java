@@ -29,7 +29,7 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
-    public Variable scalar() {
+    public Variable finalElement() {
         return value().get(value().size() - 1);
     }
 

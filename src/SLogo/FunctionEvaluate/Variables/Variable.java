@@ -103,7 +103,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public boolean equals(Variable o) {
-        return this.compareTo((Variable) o) == 0;
+        return this.compareTo(o) == 0;
     }
 
     public ListVariable append(Variable other) {
@@ -113,8 +113,12 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return new ListVariable(this, other);
     }
 
-    public Variable scalar(){
+    public Variable finalElement() {
         return this;
+    }
+
+    public int size() {
+        return 1;
     }
 
     @Override
@@ -139,7 +143,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
         } else if (s.matches(regex.getString("Constant"))) {
             try {
                 return new NumberVariable(Double.parseDouble(s));
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 throw new NotANumberException(s);
             }
         } else if (s.matches(regex.getString("StringLiteral"))) {
@@ -156,7 +160,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     static class NotANumberException extends RuntimeException {
-        NotANumberException(String s){
+        NotANumberException(String s) {
             super("Not a number: " + s);
         }
     }
