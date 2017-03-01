@@ -7,16 +7,21 @@ import SLogo.Parse.Expression;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Observer;
+import java.util.Observable;
 
 /**
  * Created by th174 on 2/16/2017.
  */
-public class EnvironmentImpl implements Environment {
-    private Environment outer;
+public class EnvironmentImpl extends Observable implements Environment {
+    
+	private ArrayList<Observer> observers;
+	private Environment outer;
     private Map<String, Variable> dictionaryVariables;
     private Map<String, Variable> userVariables;
     private Map<String, Invokable> dictionaryFunctions;
@@ -29,6 +34,7 @@ public class EnvironmentImpl implements Environment {
         userVariables = new HashMap<>();
         dictionaryFunctions = initCommandDictionary();
         userFunctions = new HashMap<>();
+        observers = new ArrayList<Observer>();
     }
 
     public EnvironmentImpl(Environment outer, List<String> params, Expression[] expr) throws Expression.EvaluationTargetException {
@@ -128,5 +134,34 @@ public class EnvironmentImpl implements Environment {
             }
         });
         return commands;
+    }
+    
+    /**
+     * Add an object as a listener
+     *
+     * @author Riley Nisbet
+     */
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    /**
+     * Remove a listener
+     *
+     * @author Riley Nisbet
+     */
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+
+    /**
+     * Tell all listeners that something has changed
+     *
+     * @author Riley Nisbet
+     */
+    public void notifyObservers() {
+        for (Observer o : observers) {
+            o.update(this, new Object[]{dictionaryVariables, userFunctions});
+        }
     }
 }

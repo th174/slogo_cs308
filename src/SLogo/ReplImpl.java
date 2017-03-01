@@ -48,7 +48,7 @@ public class ReplImpl implements Repl {
                 System.out.println(eval(currentCommand));
                 currentIndex++;
             } catch (Exception e) {
-                e.printStackTrace();
+                e.printStackTrace(); //TODO Improve this handling
             }
         }
     }
