@@ -24,4 +24,4 @@ public class CanvasViewTester extends Application{
 		launch(args);
 	}
 
-}
+}
