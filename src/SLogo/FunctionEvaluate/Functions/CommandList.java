@@ -66,7 +66,7 @@ public class CommandList {
         return new NumberVariable(Math.hypot(xChange, yChange));
     };
     public static final TurtlePos SETTOWARDS = (t, c, vx, vy) -> {
-        double newHeading = Math.atan2(vy.toNumber() - c.getSpritePosition()[1], vx.toNumber() - c.getSpritePosition()[0]);
+        double newHeading = Math.toDegrees(Math.atan2(vy.toNumber() - c.getSpritePosition()[1], vx.toNumber() - c.getSpritePosition()[0]));
         double degMoved = Math.abs(t.getHeading() - newHeading);
         t.setHeading(newHeading);
         return new NumberVariable(degMoved);
