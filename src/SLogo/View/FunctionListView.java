@@ -1,8 +1,9 @@
 package SLogo.View;
 
+import java.util.Observer;
 import javafx.scene.Node;
 
-public interface FunctionListView {
+public interface FunctionListView extends Observer{
 	
 	public Node getView();
 	

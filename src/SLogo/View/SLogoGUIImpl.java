@@ -1,6 +1,7 @@
 package SLogo.View;
 
 import SLogo.Repl;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -15,9 +16,11 @@ public class SLogoGUIImpl implements SLogoGUI {
 	
 	private Repl myRepl;
 	private CanvasView myCanvasView;
+	private EnvironmentImpl myEnv;
 	
 	public SLogoGUIImpl(Repl repl){
 		myRepl = repl;
+		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
 	}
 	
     @Override
@@ -62,6 +65,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1);
     	
     	VariableListView variableListView = new VariableListViewBasic();
+    	myEnv.addObserver(variableListView);
     	Node variableListViewNode = variableListView.getView();
     	GridPane.setConstraints(variableListViewNode, 1, 0);
     	Rectangle rectangleVariableView = new Rectangle(SIZE * displayWidthRatio,SIZE * variableListHeightRatio);
@@ -69,6 +73,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	rectangleVariableView.setFill(Color.GREENYELLOW);
     	
     	FunctionListView functionListView = new FunctionListViewBasic();
+    	myEnv.addObserver(functionListView);
     	Node functionListViewNode = functionListView.getView();
     	GridPane.setConstraints(functionListViewNode, 1, 1);
     	Rectangle rectangleFunctionView = new Rectangle(SIZE * displayWidthRatio,SIZE * functionListHeightRatio);

@@ -44,6 +44,9 @@ public class SLogoTurtle extends Observable implements Turtle {
         return myChangeY;
     }
 
+    /**
+	 * @return Angle at which the Turtle is facing, always falls between -180 and 180 (inclusive)
+	 */
     @Override
     public double getHeading() {
         return myHeading;
@@ -134,7 +137,7 @@ public class SLogoTurtle extends Observable implements Turtle {
      * @return
      */
     private double adjustAngle(double angle) {
-        double newAngle = angle - ((angle / 360) * 360); //puts angle into range from -360 to 360
+        double newAngle = angle - (((int)angle / 360) * 360); //puts angle into range from -360 to 360
         if (newAngle > 180) {
             return (newAngle - 360);
         } else if (newAngle < -180) {

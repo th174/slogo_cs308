@@ -116,12 +116,14 @@ public class EnvironmentImpl extends Observable implements Environment {
     public void addUserVariable(String name, Variable var) {
         dictionaryVariables.put(name, var);
         userVariables.put(name, var);
+        notifyObservers();
     }
 
     @Override
     public void addUserFunction(String name, Invokable function) {
         dictionaryFunctions.put(name, function);
         userFunctions.put(name, function);
+        notifyObservers();
     }
 
     private Map<String, Invokable> initCommandDictionary() {
