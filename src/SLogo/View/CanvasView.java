@@ -1,13 +1,14 @@
 package SLogo.View;
 
 import java.io.File;
+import java.util.Observer;
 
 import javafx.scene.Node;
 
 /**
  * Created by th174 on 2/19/2017.
  */
-public interface CanvasView {
+public interface CanvasView extends Observer {
     /**
      * @return Graphical JavaFX representation of the GUI
      */

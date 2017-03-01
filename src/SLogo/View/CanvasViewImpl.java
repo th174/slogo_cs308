@@ -3,7 +3,6 @@ package SLogo.View;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
 import SLogo.View.Sprite.Sprite;
@@ -12,7 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class CanvasViewImpl implements CanvasView, Observer{
+public class CanvasViewImpl implements CanvasView {
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "CanvasView";
 	private ResourceBundle viewResources;

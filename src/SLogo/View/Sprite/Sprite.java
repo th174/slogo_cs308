@@ -22,6 +22,10 @@ public class Sprite {
 	private boolean hidden;
 	
 	public Sprite(File adefaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+		spriteWidth = aspriteWidth;
+		spriteHeight = aspriteHeight;
+		viewWidth = aviewWidth;
+		viewHeight = aviewHeight;
 		defaultSpriteFile = adefaultSpriteFile;
 		spriteIV = new ImageView();
 		setImage(defaultSpriteFile);
@@ -39,7 +43,8 @@ public class Sprite {
 			spriteIV.setFitWidth(spriteWidth);
 			spriteIV.setFitHeight(spriteHeight);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Invalid File");
+	    	System.out.println("Image Error");
+			//JOptionPane.showMessageDialog(null, "Invalid File");
 		}
 	}
 	

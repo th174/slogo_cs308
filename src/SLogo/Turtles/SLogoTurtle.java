@@ -27,6 +27,7 @@ public class SLogoTurtle extends Observable implements Turtle {
 
     public SLogoTurtle(double heading) {
         myHeading = adjustAngle(heading);
+        observers = new ArrayList<Observer>();
         this.dropPen();
         this.show();
         myChangeX = 0;
