@@ -51,19 +51,19 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public NumberVariable sine() {
-        return new NumberVariable(Math.sin(toNumber()));
+        return new NumberVariable(Math.sin(Math.toRadians(toNumber())));
     }
 
     public NumberVariable cosine() {
-        return new NumberVariable(Math.cos(toNumber()));
+        return new NumberVariable(Math.cos(Math.toRadians(toNumber())));
     }
 
     public NumberVariable tangent() {
-        return new NumberVariable(Math.tan(toNumber()));
+        return new NumberVariable(Math.tan(Math.toRadians(toNumber())));
     }
 
     public NumberVariable atangent() {
-        return new NumberVariable(Math.atan(toNumber()));
+        return new NumberVariable(Math.toDegrees(Math.atan(toNumber())));
     }
 
     public NumberVariable log() {
@@ -91,11 +91,11 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public Variable and(Variable other) {
-        return this.toBoolean() ? other : this;
+        return (!(this.toNumber() == 0) && !(other.toNumber() == 0)) ? BoolVariable.TRUE : BoolVariable.FALSE;
     }
 
     public Variable or(Variable other) {
-        return this.toBoolean() ? this : other;
+        return (!(this.toNumber() == 0) || !(other.toNumber() == 0)) ? BoolVariable.TRUE : BoolVariable.FALSE;
     }
 
     public BoolVariable not() {
