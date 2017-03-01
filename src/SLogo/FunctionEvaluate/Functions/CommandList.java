@@ -51,8 +51,9 @@ public class CommandList {
         return new NumberVariable(v.toNumber());
     };
     public static final TurtleMove SETHEADING = (t, v) -> {
-        t.setHeading(v.toNumber());
-        return new NumberVariable(Math.abs(t.getHeading() - v.toNumber()));
+        double oldAngle = t.getHeading();
+    	t.setHeading(v.toNumber());
+        return new NumberVariable(Math.abs(oldAngle - v.toNumber()));
     };
     public static final TurtlePos GOTO = (t, c, vx, vy) -> {
         double xChange = vx.toNumber() - c.getSpritePosition()[0];
