@@ -18,7 +18,7 @@ public class CanvasViewTester extends Application{
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(scene);
         primaryStage.show();
-        CV.setImage(new File("data/Images/SampleTurtle.png"));
+        //CV.setImage(new File("data/Images/SampleTurtle.png"));
 	}
 	public static void main(String[] args){
 		launch(args);
