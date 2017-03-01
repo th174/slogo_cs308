@@ -1,32 +1,19 @@
 package SLogo.FunctionEvaluate.Functions;
 
+import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Parse.RecursiveExpression;
+import SLogo.Parse.Expression;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 @FunctionalInterface
 public interface Invokable {
-
-    default Variable invoke(Variable... args) {
-        return invoke(new String[0], args);
-    }
-
-    default Variable invoke(String[] flags, Variable[] args) {
-        return invoke(flags, args, new RecursiveExpression[0], new RecursiveExpression[0]);
-    }
-
-    default Variable invoke(String[] flags, Variable[] args, RecursiveExpression[] expr) {
-        return invoke(flags, args, expr, new RecursiveExpression[0]);
-    }
-
     /**
-     * @param flags Optional command line flags
-     * @param args  Command line arguments
+     * @param env  Current runtime environment
      * @return Result of the command as a variable
      */
-    Variable invoke(String[] flags, Variable[] args, RecursiveExpression[] expr, RecursiveExpression[] alt);
+    Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException;
 
 
     final class UnexpectedArgumentException extends RuntimeException {

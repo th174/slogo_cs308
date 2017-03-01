@@ -26,9 +26,10 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         launch(args);
-        /*Scanner input = new Scanner(System.in);
+        ReplImpl repl = new ReplImpl(System.in);
+        Scanner input = new Scanner(System.in);
         while (true) {
             repl.read(input);
-        }*/
+        }
     }
 }

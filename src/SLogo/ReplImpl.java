@@ -43,7 +43,7 @@ public class ReplImpl implements Repl {
         String line = input.nextLine();
         if (line.length() > 0) {
             try {
-                RecursiveExpression currentCommand = parser.parse(line);
+                Expression currentCommand = parser.parse(line);
                 history.add(currentCommand.toString());
                 System.out.println(eval(currentCommand));
                 currentIndex++;
@@ -53,7 +53,7 @@ public class ReplImpl implements Repl {
         }
     }
 
-    private Variable eval(RecursiveExpression expression) throws RecursiveExpression.EvaluationTargetException {
+    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
         return expression.eval(globalEnv);
     }
 

@@ -1,5 +1,7 @@
 package SLogo.Parse;
 
+import SLogo.FunctionEvaluate.Variables.Variable;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -31,12 +33,12 @@ public final class LispSyntaxParser implements Parser {
                 .split(myRegex.getString("Whitespace") + "|" + myRegex.getString("Newline"))));
     }
 
-    private RecursiveExpression readTokens(Deque tokens) {
+    private Expression readTokens(Deque tokens) {
         if (tokens.size() == 0) {
             throw new UnexpectedEOLException("");
         }
         String token = tokens.removeFirst().toString();
-        SList subList = new SList();
+        SExpression subList = new SExpression();
         if (token.matches(myRegex.getString("GroupEnd")) | token.matches(myRegex.getString("ListEnd"))) {
             throw new SyntaxException("");
         } else if (token.matches(myRegex.getString("GroupStart"))) {
@@ -57,10 +59,10 @@ public final class LispSyntaxParser implements Parser {
     }
 
     @Override
-    public RecursiveExpression parse(String input) {
+    public Expression parse(String input) {
         LinkedList<String> tokens = tokenSplit("(" + input + ")");
-        SList temp = new SList(readTokens(tokens));
-        System.out.println(temp.toString().substring(1, temp.toString().length() - 1));
+        Expression temp = readTokens(tokens);
+        System.out.println(temp.toString());
         return temp;
     }
 

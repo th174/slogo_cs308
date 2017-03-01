@@ -5,13 +5,14 @@ import java.util.Observer;
 /**
  * Handles all data behind the Turtle that will be
  * displayed in the GUI.
- * 
+ *
  * @author Stone Mathers
- * Created 2/23/17
+ *         Created 2/23/17
  */
 
 public interface Turtle {
 
+<<<<<<< src/SLogo/Turtles/Turtle.java
 	/**
 	 * @return Change in X-position
 	 */
@@ -48,15 +49,15 @@ public interface Turtle {
 	
 	/**
 	 * Sets pen to up position.
-	 * 
+	 * @return 0
 	 */
-	public void liftPen();
+	public int liftPen();
 	
 	/**
 	 * Sets pen to down position.
-	 * 
+	 * @return 1
 	 */
-	public void dropPen();
+	public int dropPen();
 	
 	/**
 	 * @return true if pen is down, false if pen is up
@@ -82,13 +83,15 @@ public interface Turtle {
 	
 	/**
 	 * Sets Turtle's state to hidden.
+	 * @return 0
 	 */
-	public void hide();
+	public int hide();
 	
 	/**
 	 * Sets Turtle's state to not hidden.
+	 * @return 1
 	 */
-	public void show();
+	public int show();
 	
 	/**
 	 * @return true if Turtle is hidden, false if Turtle is not hidden
@@ -125,5 +128,4 @@ public interface Turtle {
 	 * @author Riley Nisbet
 	 */
 	public void notifyObservers();
-	
 }

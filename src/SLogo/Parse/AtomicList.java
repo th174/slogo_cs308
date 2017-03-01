@@ -10,13 +10,11 @@ import java.util.LinkedList;
 /**
  * Created by th174 on 2/21/2017.
  */
-public final class AtomicList extends LinkedList<String> implements RecursiveExpression<String> {
-    private final boolean isFlag;
+public final class AtomicList extends LinkedList<String> implements Expression {
 
     public AtomicList(String s) {
         super();
-        isFlag = s.matches(Variable.regex.getString("Flag"));
-        add(isFlag ? s.substring(1) : s);
+        add(s);
     }
 
     @Override
@@ -37,16 +35,17 @@ public final class AtomicList extends LinkedList<String> implements RecursiveExp
         return env.getFunctionByName(get());
     }
 
+    @Override
+    public Expression[] getBody() {
+        return new Expression[]{this};
+    }
+
     public boolean add(String o) {
         if (super.size() > 0) {
             throw new AtomicException();
         } else {
             return super.add(o);
         }
-    }
-
-    boolean isFlag() {
-        return isFlag;
     }
 
     private String get() {

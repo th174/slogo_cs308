@@ -98,4 +98,3 @@ public class SLogoGUIImpl implements SLogoGUI {
     	gridPane.getColumnConstraints().addAll(canvasColumn,displayColumn);
 	}
 }
-
