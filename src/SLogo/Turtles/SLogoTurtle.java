@@ -98,6 +98,7 @@ public class SLogoTurtle extends Observable implements Turtle {
     public void move(double pixels) {
         this.setChangeX(pixels * Math.cos(Math.toRadians(this.getHeading())));
         this.setChangeY(pixels * Math.sin(Math.toRadians(this.getHeading())));
+        notifyObservers();
     }
 
     @Override

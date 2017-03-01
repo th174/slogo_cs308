@@ -2,6 +2,7 @@ package SLogo.View;
 
 import SLogo.Repl;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -17,8 +18,11 @@ public class SLogoGUIImpl implements SLogoGUI {
 	private Repl myRepl;
 	private CanvasView myCanvasView;
 	private EnvironmentImpl myEnv;
+	private Group myRoot;
+	private double myWidth;
+	private double myHeight;
 	
-	public SLogoGUIImpl(Repl repl){
+	public SLogoGUIImpl(Repl repl,double width,double height){
 		myRepl = repl;
 		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
 	}
@@ -30,6 +34,10 @@ public class SLogoGUIImpl implements SLogoGUI {
     	System.out.println("1");
 
     	System.out.println("1");
+		myRoot = new Group();
+		myWidth = width;
+		myHeight = height;
+    	GridPane gridPane = new GridPane();
     	double variableListHeightWeight = 4;
     	double functionListHeightWeight = 4;
     	double canvasHeightWeight = 8;
@@ -46,21 +54,17 @@ public class SLogoGUIImpl implements SLogoGUI {
     	double displayWidthRatio = displayWidthWeight/(canvasWidthWeight + displayWidthWeight);
     	setGridConstraints(gridPane, commandLineHeightRatio, variableListHeightRatio, functionListHeightRatio,
 				canvasWidthRatio, displayWidthRatio);
-    	
-    	
-    	myCanvasView = new CanvasViewImpl((int)(SIZE * canvasWidthRatio),(int)(SIZE * canvasHeightRatio));
+    	System.out.println((int)(myWidth * canvasWidthRatio));
+    	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio));
 
     	myRepl.setCanvas(myCanvasView);
     	Node canvasViewNode = myCanvasView.getView();
-    	GridPane.setConstraints(canvasViewNode, 0, 0);
     	
-    	
-    	
-    	Rectangle rectangleCanvasView = new Rectangle(SIZE * canvasWidthRatio,SIZE * canvasHeightRatio);
+    	Rectangle rectangleCanvasView = new Rectangle(myWidth * canvasWidthRatio,myHeight * canvasHeightRatio);
     	GridPane.setConstraints(rectangleCanvasView, 0, 0, 1, 2);
     	rectangleCanvasView.setFill(Color.AQUAMARINE);
     	
-    	CommandLineView commandLine = new CommandLineViewBasic(myRepl);
+    	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myWidth,myHeight*.2);
     	Node commandLineNode = commandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1);
     	
@@ -68,7 +72,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	myEnv.addObserver(variableListView);
     	Node variableListViewNode = variableListView.getView();
     	GridPane.setConstraints(variableListViewNode, 1, 0);
-    	Rectangle rectangleVariableView = new Rectangle(SIZE * displayWidthRatio,SIZE * variableListHeightRatio);
+    	Rectangle rectangleVariableView = new Rectangle(myWidth * displayWidthRatio,myHeight * variableListHeightRatio);
     	GridPane.setConstraints(rectangleVariableView, 1, 0);
     	rectangleVariableView.setFill(Color.GREENYELLOW);
     	
@@ -76,13 +80,19 @@ public class SLogoGUIImpl implements SLogoGUI {
     	myEnv.addObserver(functionListView);
     	Node functionListViewNode = functionListView.getView();
     	GridPane.setConstraints(functionListViewNode, 1, 1);
-    	Rectangle rectangleFunctionView = new Rectangle(SIZE * displayWidthRatio,SIZE * functionListHeightRatio);
+    	Rectangle rectangleFunctionView = new Rectangle(myWidth * displayWidthRatio,myHeight * functionListHeightRatio);
     	GridPane.setConstraints(rectangleFunctionView, 1, 1);
     	rectangleFunctionView.setFill(Color.BLANCHEDALMOND);
     	
     	gridPane.getChildren().addAll(rectangleCanvasView,commandLineNode,
     			variableListViewNode,rectangleVariableView,functionListViewNode,rectangleFunctionView,canvasViewNode);
-        return gridPane;
+        myRoot.getChildren().addAll(gridPane,canvasViewNode);
+        
+	}
+	
+    @Override
+    public Node getView() {
+    	return myRoot;
     }
 
 	private void setGridConstraints(GridPane gridPane, double commandLineHeightRatio, double variableListHeightRatio,

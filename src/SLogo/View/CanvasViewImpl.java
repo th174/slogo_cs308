@@ -38,12 +38,13 @@ public class CanvasViewImpl implements CanvasView {
 		Object[] newProperties = (Object[]) n;
 		setPen((boolean) newProperties[0]);
 		setPenColor(Color.BLACK);
-		sprite.setDirection((int) newProperties[2]);
-		move(new int[] {(int) newProperties[2], (int) newProperties[3]});
+		sprite.setDirection(((Double) newProperties[1]).intValue());
+		move(new int[] {((Double)newProperties[2]).intValue(), ((Double) newProperties[3]).intValue()});
 	}
 	
 	public void setPenColor(Color color) {
 		penColor = color;
+		
 	}
 	
 	private int[] findIntercepts(double x, double y, double xVector, double yVector){
@@ -117,6 +118,8 @@ public class CanvasViewImpl implements CanvasView {
 	}
 
 	private void move(int[] vector){
+		vector[0] = Math.round(vector[0]);
+		vector[1] = Math.round(vector[1]);
 		ArrayList<int[]> linesToMake = new ArrayList<int[]>();
 		addLinesToMake(vector, linesToMake);
 		int[] finalPosition = sprite.getPosition();
@@ -133,6 +136,7 @@ public class CanvasViewImpl implements CanvasView {
 			}
 		}
 		sprite.setPosition(finalPosition);
+		System.out.println("pos" + finalPosition[0] + " " + finalPosition[1]);
 	}
 
 	private void addLinesToMake(int[] vector, ArrayList<int[]> linesToMake) {

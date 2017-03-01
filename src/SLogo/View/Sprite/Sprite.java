@@ -33,7 +33,6 @@ public class Sprite {
 		position = new int[] {viewWidth/2 - spriteWidth/2, viewHeight/2 - spriteHeight/2};
 		spriteIV.setX(position[0]);
 		spriteIV.setY(position[1]);
-		setDirection(0);
 		setHidden(false);
 	}
 	
@@ -73,12 +72,12 @@ public class Sprite {
 	}
 	
 	public int getDirection(){
-		return direction;
+		return direction - 90;
 	}
 	
-	public void setDirection(int newDirection){
-		spriteIV.setRotate(newDirection - direction);
-		direction = newDirection;
+	public void setDirection(int degrees){
+		direction = degrees;
+		spriteIV.setRotate(direction-90);
 	}
 	
 	public boolean getHidden(){
