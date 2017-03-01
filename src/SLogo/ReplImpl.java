@@ -20,15 +20,13 @@ import java.util.Scanner;
 public class ReplImpl implements Repl {
     private Parser parser;
     private ArrayList<String> history;
-    private SLogoGUI parentNode;
     private int currentIndex;
     private Environment globalEnv = new EnvironmentImpl();
 
-    public ReplImpl(InputStream input, SLogoGUI view) throws IOException {
+    public ReplImpl(InputStream input) throws IOException {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        parentNode = view;
     }
 
     @Override

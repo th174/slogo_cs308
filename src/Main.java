@@ -20,7 +20,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
 //        launch(args);
-        ReplImpl repl = new ReplImpl(System.in, new SLogoGUIImpl());
+        ReplImpl repl = new ReplImpl(System.in);
         Scanner input = new Scanner(System.in);
         while (true) {
             repl.read(input);

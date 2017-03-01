@@ -87,7 +87,7 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public Turtle getTurtle() {
-        return myTurtle;
+        return Objects.isNull(myTurtle) ? outer.getTurtle() : myTurtle;
     }
 
     @Override

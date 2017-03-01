@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * Created by th174 on 2/17/2017.
  */
 public class SExpression extends LinkedList<Expression> implements Expression {
+    private int isOp = 0;
 
     public SExpression() {
         super();
@@ -28,18 +29,19 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         Invokable command;
         try {
             command = peek().getCommand(env);
+            isOp = 1;
         } catch (EnvironmentImpl.FunctionNotFoundException e) {
             command = CommandList.DEFAULT_OPERATION;
-            push(new AtomicList("LIST"));
+            isOp = 0;
         }
         return command.invoke(env, getBody());
     }
 
     @Override
     public Expression[] getBody() {
-        Expression[] args = new Expression[this.size() - 1];
+        Expression[] args = new Expression[this.size() - isOp];
         for (int i = 0; i < args.length; i++) {
-            args[i] = get(i + 1);
+            args[i] = get(i + isOp);
         }
         return args;
     }

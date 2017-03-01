@@ -11,6 +11,7 @@ import java.util.Collection;
 /**
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
  * Created by th174 on 2/16/2017.
+ * @author Stone Mathers
  */
 public class CommandList {
     public static final Accumulator SUM = Variable::sum;
@@ -33,11 +34,6 @@ public class CommandList {
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
-    public static final Invokable MAKEVARIABLE = new DefineVariable();
-    public static final Invokable MAKEUSERINSTRUCTION = new DefineFunction();
-    public static final Invokable IF = new IfVariable();
-    public static final Invokable IFELSE = new IfElseVariable();
-    public static final Invokable REPEAT = new Loop();
     public static final TurtleMove FORWARD = (t, v) -> {
         t.move(v.toNumber());
         return new NumberVariable(v.toNumber());
@@ -57,6 +53,19 @@ public class CommandList {
     public static final TurtleMove SETHEADING = (t, v) -> {
         t.setHeading(v.toNumber());
         return new NumberVariable(Math.abs(t.getHeading() - v.toNumber()));
+    };
+    public static final TurtlePos GOTO = (t, c, vx, vy) -> {
+        double xChange = vx.toNumber() - c.getSpritePosition()[0];
+        double yChange = vy.toNumber() - c.getSpritePosition()[1];
+        t.setChangeX(xChange);
+        t.setChangeY(yChange);
+        return new NumberVariable(Math.hypot(xChange,yChange));
+    };
+    public static final TurtlePos TOWARDS = (t,c,vx,vy) -> {
+        double newHeading = Math.atan2(vy.toNumber() - c.getSpritePosition()[1],vx.toNumber() - c.getSpritePosition()[0]);
+        double degMoved = Math.abs(t.getHeading() - newHeading);
+        t.setHeading(newHeading);
+        return new NumberVariable(degMoved);
     };
     public static final TurtleSet CLEARSCREEN = (t, c) -> {
         double xPos = c.getSpritePosition()[0];
@@ -79,6 +88,74 @@ public class CommandList {
     public static final TurtleSet ISPENDOWN = (t, c) -> t.penDown() ? BoolVariable.TRUE : BoolVariable.FALSE;
     public static final TurtleSet XCOORDINATE = (t, c) -> new NumberVariable(c.getSpritePosition()[0]);
     public static final TurtleSet YCOORDINATE = (t, c) -> new NumberVariable(c.getSpritePosition()[1]);
+    public static final Invokable MAKEVARIABLE = (env, expr) -> {
+        if (expr.length != 2) {
+            throw new Invokable.UnexpectedArgumentException(2, expr.length);
+        } else {
+            env.addUserVariable(expr[0].toString(), expr[1].eval(env));
+            return expr[0].eval(env);
+        }
+    };
+    public static final Invokable MAKEUSERINSTRUCTION = (env, expr) -> {
+        if (expr.length != 3) {
+            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+        }
+        env.addUserFunction(expr[0].toString(), new Procedure(expr[1], expr[2]));
+        return BoolVariable.TRUE;
+    };
+    public static final Invokable IF = (env, expr) -> {
+        if (expr.length != 2) {
+            throw new Invokable.UnexpectedArgumentException(2, expr.length);
+        }
+        if (expr[0].eval(env).toBoolean()) {
+            return expr[1].eval(env);
+        } else {
+            return new NumberVariable(0);
+        }
+    };
+    public static final Invokable IFELSE = (env, expr) -> {
+        if (expr.length != 3) {
+            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+        }
+        if (expr[0].eval(env).toBoolean()) {
+            return expr[1].eval(env);
+        } else {
+            return expr[2].eval(env);
+        }
+    };
+    public static final Invokable REPEAT = (env, expr) -> {
+        double count = expr[0].eval(env).toNumber();
+        Variable last = new NumberVariable(0);
+        while (count-- > 0) {
+            last = expr[1].eval(env);
+        }
+        return last.finalElement();
+    };
+    public static final Invokable DOTIMES = (env, expr) -> {
+        System.out.println(Arrays.toString(expr[0].getBody()));
+        String loopVar = expr[0].getBody()[0].toString();
+        env.addUserVariable(loopVar, new NumberVariable(1));
+        Variable limit = expr[0].getBody()[1].eval(env);
+        Variable last = new NumberVariable(0);
+        while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
+            last = expr[1].eval(env);
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(new NumberVariable(1)));
+        }
+        return last.finalElement();
+    };
+    public static final Invokable FOR = (env, expr) -> {
+        System.out.println(Arrays.toString(expr[0].getBody()));
+        String loopVar = expr[0].getBody()[0].toString();
+        env.addUserVariable(loopVar, expr[0].getBody()[1].eval(env));
+        Variable limit = expr[0].getBody()[2].eval(env);
+        Variable last = new NumberVariable(0);
+        while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
+            last = expr[1].eval(env);
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody()[3].eval(env)));
+        }
+        return last.finalElement();
+    };
+
 
     public static final Accumulator DEFAULT_OPERATION = LIST;
 
