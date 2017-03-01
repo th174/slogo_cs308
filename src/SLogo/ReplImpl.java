@@ -3,7 +3,7 @@ package SLogo;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Parse.RecursiveExpression;
+import SLogo.Parse.Expression;
 import SLogo.Parse.LispSyntaxParser;
 import SLogo.Parse.Parser;
 import SLogo.View.SLogoGUI;
@@ -20,15 +20,13 @@ import java.util.Scanner;
 public class ReplImpl implements Repl {
     private Parser parser;
     private ArrayList<String> history;
-    private SLogoGUI parentNode;
     private int currentIndex;
     private Environment globalEnv = new EnvironmentImpl();
 
-    public ReplImpl(InputStream input, SLogoGUI view) throws IOException {
+    public ReplImpl(InputStream input) throws IOException {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        parentNode = view;
     }
 
     @Override
@@ -37,7 +35,7 @@ public class ReplImpl implements Repl {
         String line = input.nextLine();
         if (line.length() > 0) {
             try {
-                RecursiveExpression currentCommand = parser.parse(line);
+                Expression currentCommand = parser.parse(line);
                 history.add(currentCommand.toString());
                 System.out.println(eval(currentCommand));
                 currentIndex++;
@@ -47,7 +45,7 @@ public class ReplImpl implements Repl {
         }
     }
 
-    private Variable eval(RecursiveExpression expression) throws RecursiveExpression.EvaluationTargetException {
+    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
         return expression.eval(globalEnv);
     }
 
