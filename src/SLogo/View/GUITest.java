@@ -11,7 +11,7 @@ public class GUITest extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-    	SLogoGUI guitest = new SLogoGUIImpl();
+    	SLogoGUI guitest = new SLogoGUIImpl(null);
         Node root = guitest.getView();
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(root);

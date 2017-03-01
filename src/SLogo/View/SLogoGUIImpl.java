@@ -15,6 +15,7 @@ public class SLogoGUIImpl implements SLogoGUI {
 	
 	private Repl myRepl;
 	private CanvasView myCanvasView;
+	
 	public SLogoGUIImpl(Repl repl){
 		myRepl = repl;
 	}
@@ -46,9 +47,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	
     	myCanvasView = new CanvasViewImpl((int)(SIZE * canvasWidthRatio),(int)(SIZE * canvasHeightRatio));
 
-    	System.out.println("1");
     	myRepl.setCanvas(myCanvasView);
-    	System.out.println("1");
     	Node canvasViewNode = myCanvasView.getView();
     	GridPane.setConstraints(canvasViewNode, 0, 0);
     	
@@ -58,7 +57,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	GridPane.setConstraints(rectangleCanvasView, 0, 0, 1, 2);
     	rectangleCanvasView.setFill(Color.AQUAMARINE);
     	
-    	CommandLineView commandLine = new CommandLineViewBasic();
+    	CommandLineView commandLine = new CommandLineViewBasic(myRepl);
     	Node commandLineNode = commandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1);
     	
