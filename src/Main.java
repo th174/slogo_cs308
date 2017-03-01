@@ -14,11 +14,12 @@ public class Main extends Application {
 
         
         ReplImpl repl = new ReplImpl(System.in);
-        SLogoGUIImpl gui = new SLogoGUIImpl(repl);
+        int SIZE = 800;
+        SLogoGUIImpl gui = new SLogoGUIImpl(repl,SIZE,SIZE);
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(gui.getView());
         System.out.println("Ayylmao");
-        Scene scene = new Scene(GUIPane, 900, 900);
+        Scene scene = new Scene(GUIPane, SIZE, SIZE);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
