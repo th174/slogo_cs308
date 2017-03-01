@@ -1,5 +1,7 @@
 package SLogo.View;
 
+import java.util.Observable;
+
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
@@ -40,6 +42,11 @@ public class FunctionListViewBasic implements FunctionListView{
 	}
 	@Override
 	public void setSize(double width, double height) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		
 	}
