@@ -12,7 +12,6 @@ import java.util.Observer;
 
 public interface Turtle {
 
-<<<<<<< src/SLogo/Turtles/Turtle.java
 	/**
 	 * @return Change in X-position
 	 */
