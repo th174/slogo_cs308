@@ -4,8 +4,11 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.RecursiveExpression;
+import SLogo.Turtles.SLogoTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.Parse.LispSyntaxParser;
 import SLogo.Parse.Parser;
+import SLogo.View.CanvasView;
 import SLogo.View.SLogoGUI;
 
 import java.io.IOException;
@@ -20,15 +23,18 @@ import java.util.Scanner;
 public class ReplImpl implements Repl {
     private Parser parser;
     private ArrayList<String> history;
-    private SLogoGUI parentNode;
     private int currentIndex;
-    private Environment globalEnv = new EnvironmentImpl();
+    private Environment globalEnv;
+    private Turtle myTurtle;
+    private CanvasView myCanvas;
 
-    public ReplImpl(InputStream input, SLogoGUI view) throws IOException {
+    public ReplImpl(InputStream input) throws IOException {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        parentNode = view;
+        globalEnv = new EnvironmentImpl();
+        myTurtle = new SLogoTurtle();
+        globalEnv.setTurtle(myTurtle);
     }
 
     @Override
@@ -52,13 +58,25 @@ public class ReplImpl implements Repl {
     }
 
 
-    @Override
+/*    @Override
     public void print() {
         //TODO:
-    }
+    }*/
 
     @Override
     public List<String> getHistory() {
         return history;
     }
+    
+    @Override
+    public void setCanvas(CanvasView canvas){
+    	myCanvas = canvas;
+    	globalEnv.setCanvas(myCanvas);
+    	myTurtle.addObserver(myCanvas);
+    }
+
+	@Override
+	public Environment getEnvironment() {
+		return globalEnv;
+	}
 }

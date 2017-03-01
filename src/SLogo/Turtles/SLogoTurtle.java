@@ -27,6 +27,7 @@ public class SLogoTurtle extends Observable implements Turtle {
 	
 	public SLogoTurtle(double heading){
 		myHeading = adjustAngle(heading);
+		observers = new ArrayList<Observer>();
 		this.dropPen();
 		this.show();
 		myChangeX = 0;
@@ -140,30 +141,15 @@ public class SLogoTurtle extends Observable implements Turtle {
 			return newAngle;
 		}
 	}
-	
-	/**
-	 * Add an object as a listener
-	 * 
-	 * @author Riley Nisbet
-	 */
+
 	public void addObserver(Observer o){
 		observers.add(o);
 	}
-	
-	/**
-	 * Remove a listener
-	 * 
-	 * @author Riley Nisbet
-	 */
+
 	public void removeObserver(Observer o){
 		observers.remove(o);
 	}
-	
-	/**
-	 * Tell all listeners that something has changed
-	 * 
-	 * @author Riley Nisbet
-	 */
+
 	public void notifyObservers(){
 		for (Observer o : observers){
 			o.update(this, new Object[] {penDown, myHeading, myChangeX, myChangeY, hidden});

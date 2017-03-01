@@ -1,5 +1,6 @@
 package SLogo.Turtles;
 
+import java.util.Observer;
 
 /**
  * Handles all data behind the Turtle that will be
@@ -103,5 +104,26 @@ public interface Turtle {
 	 * @param curY Current Y-coordinate
 	 */
 	public void reset(double curX, double curY);
+	
+	/**
+	 * Add an object as a listener
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void addObserver(Observer o);
+	
+	/**
+	 * Remove a listener
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void removeObserver(Observer o);
+	
+	/**
+	 * Tell all listeners that something has changed
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void notifyObservers();
 	
 }

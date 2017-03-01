@@ -1,5 +1,6 @@
 package SLogo.View;
 
+import SLogo.Repl;
 import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -11,19 +12,20 @@ import javafx.scene.shape.Rectangle;
  * Created by th174 on 2/17/2017.
  */
 public class SLogoGUIImpl implements SLogoGUI {
+	
+	private Repl myRepl;
+	private CanvasView myCanvasView;
+	public SLogoGUIImpl(Repl repl){
+		myRepl = repl;
+	}
+	
     @Override
     public Node getView() {
-    	GridPane gridPane = new GridPane();
-//    	CanvasView canvasView = null;
-//    	try {
-//			canvasView = new CanvasViewImpl(300, 300);
-//		} catch (InvalidImageFileException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}//TODO: Change values
-//    	Node canvasViewNode = canvasView.getView(); //Could be null - fix
-//    	GridPane.setConstraints(canvasViewNode, 0, 1);
-    	int SIZE = 1000;
+    	GridPane gridPane = new GridPane(); 
+    	int SIZE = 900;
+    	System.out.println("1");
+
+    	System.out.println("1");
     	double variableListHeightWeight = 4;
     	double functionListHeightWeight = 4;
     	double canvasHeightWeight = 8;
@@ -42,6 +44,13 @@ public class SLogoGUIImpl implements SLogoGUI {
 				canvasWidthRatio, displayWidthRatio);
     	
     	
+    	myCanvasView = new CanvasViewImpl((int)(SIZE * canvasWidthRatio),(int)(SIZE * canvasHeightRatio));
+
+    	System.out.println("1");
+    	myRepl.setCanvas(myCanvasView);
+    	System.out.println("1");
+    	Node canvasViewNode = myCanvasView.getView();
+    	GridPane.setConstraints(canvasViewNode, 0, 0);
     	
     	
     	
@@ -68,7 +77,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	rectangleFunctionView.setFill(Color.BLANCHEDALMOND);
     	
     	gridPane.getChildren().addAll(rectangleCanvasView,commandLineNode,
-    			variableListViewNode,rectangleVariableView,functionListViewNode,rectangleFunctionView);
+    			variableListViewNode,rectangleVariableView,functionListViewNode,rectangleFunctionView,canvasViewNode);
         return gridPane;
     }
 
