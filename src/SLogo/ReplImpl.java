@@ -21,16 +21,13 @@ public class ReplImpl implements Repl {
     private Parser parser;
     private ArrayList<String> history;
     private int currentIndex;
-    private Environment globalEnv;
-    private Turtle myTurtle;
+    private Environment userEnv;
 
     public ReplImpl() throws IOException {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        globalEnv = new EnvironmentImpl();
-        myTurtle = new SLogoTurtle();
-        globalEnv.setTurtle(myTurtle);
+        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, new SLogoTurtle());
     }
 
     @Override
@@ -43,7 +40,7 @@ public class ReplImpl implements Repl {
     }
 
     private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
-        return expression.eval(globalEnv);
+        return expression.eval(userEnv);
     }
 
 
@@ -59,12 +56,12 @@ public class ReplImpl implements Repl {
 
     @Override
     public void setCanvas(CanvasView canvas) {
-        globalEnv.setCanvas(canvas);
-        myTurtle.addObserver(canvas);
+        userEnv.setCanvas(canvas);
+        userEnv.getTurtle().addObserver(canvas);
     }
 
     @Override
     public Environment getEnvironment() {
-        return globalEnv;
+        return userEnv;
     }
 }

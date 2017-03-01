@@ -6,8 +6,6 @@ package SLogo.FunctionEvaluate.Variables;
 public final class NumberVariable extends Variable<Number> {
     //IMMUTABLE CLASS
     //ALL VARIABLES MUST BE FINAL
-    public static final NumberVariable PI = new NumberVariable(Math.PI);
-
     public NumberVariable(Number value) {
         super(value);
     }

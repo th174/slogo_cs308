@@ -1,11 +1,17 @@
 package SLogo.FunctionEvaluate.Variables;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
+    public static final Variable PI = new NumberVariable(Math.PI);
+    public static final Variable E = new NumberVariable(Math.E);
 
     public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
     //IMMUTABLE
@@ -149,6 +155,10 @@ public abstract class Variable<T> implements Comparable<Variable> {
         } else {
             throw new UnrecognizedSymbolException(s);
         }
+    }
+
+    public static Collection<Field> getPredefinedVariables() {
+        return Arrays.stream(Variable.class.getDeclaredFields()).filter(e -> e.getType().equals(Variable.class)).collect(Collectors.toSet());
     }
 
     static class UnrecognizedSymbolException extends RuntimeException {

@@ -19,9 +19,9 @@ public final class AtomicList extends LinkedList<String> implements Expression {
 
     @Override
     public Variable eval(Environment env) throws EvaluationTargetException, Environment.VariableNotFoundException {
-        if (get().matches(Variable.regex.getString("Variable"))) {
+        try {
             return env.getVariableByName(get());
-        } else {
+        } catch (Environment.VariableNotFoundException vnfe) {
             try {
                 return Variable.fromString(get());
             } catch (Exception e) {
