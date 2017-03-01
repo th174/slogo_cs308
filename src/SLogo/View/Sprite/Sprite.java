@@ -30,9 +30,9 @@ public class Sprite {
 		defaultSpriteFile = adefaultSpriteFile;
 		spriteIV = new ImageView();
 		setImage(defaultSpriteFile);
-		position = new int[] {viewWidth/2 - spriteWidth/2, viewHeight/2 - spriteHeight/2};
-		spriteIV.setX(position[0]);
-		spriteIV.setY(position[1]);
+		position = new int[] {viewWidth/2, viewHeight/2};
+		setPosition(position);
+		setDirection(90);
 		setHidden(false);
 	}
 	
@@ -59,16 +59,20 @@ public class Sprite {
 	}
 	
 	/**
-	 * @return Array of length 2: First element is the X-coordinate, second element is the Y-coordinate
+	 * @return Array of length 2: First element is the X-coordinate, second element is the Y-coordinate. Center is (0,0)
 	 */
-	public int[] getPosition(){
+	public int[] getAbsolutePosition(){
 		return position;
+	}
+	
+	public int[] getZeroIndexedPosition(){
+		return new int[] {position[0]-viewWidth/2, -1*(position[1]-viewHeight/2)};
 	}
 	
 	public void setPosition(int[] newPos){
 		position = newPos;
-		spriteIV.setX(position[0]);
-		spriteIV.setY(position[1]);
+		spriteIV.setX(position[0] - spriteWidth/2);
+		spriteIV.setY(position[1] - spriteHeight/2);
 	}
 	
 	public int getDirection(){
@@ -76,8 +80,8 @@ public class Sprite {
 	}
 	
 	public void setDirection(int degrees){
-		direction = degrees;
-		spriteIV.setRotate(direction-90);
+		direction = 90 - degrees;
+		spriteIV.setRotate(direction);
 	}
 	
 	public boolean getHidden(){

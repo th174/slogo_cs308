@@ -119,12 +119,13 @@ public class SLogoTurtle extends Observable implements Turtle {
 
     @Override
     public void reset(double curX, double curY) {
+    	System.out.println("currPos " + curX + " " + curY);
+    	this.liftPen();
         this.setChangeX(-curX);
         this.setChangeY(-curY);
         this.setHeading(90);
         this.dropPen();
         this.show();
-        notifyObservers();
     }
 
     /**
@@ -171,6 +172,9 @@ public class SLogoTurtle extends Observable implements Turtle {
     public void notifyObservers() {
         for (Observer o : observers) {
             o.update(this, new Object[]{penDown, myHeading, myChangeX, myChangeY, hidden});
+            System.out.print("call: " + myChangeX + " " + myChangeY);
+            myChangeX = 0;
+            myChangeY = 0;
         }
     }
 }

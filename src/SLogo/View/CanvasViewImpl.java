@@ -23,6 +23,7 @@ public class CanvasViewImpl implements CanvasView {
 	private int spriteHeight;
 	private String defaultTurtleFilename;
 	
+	private boolean hidden;
 	private boolean penDown;
 	private Color penColor;
 	
@@ -39,9 +40,15 @@ public class CanvasViewImpl implements CanvasView {
 		setPen((boolean) newProperties[0]);
 		setPenColor(Color.BLACK);
 		sprite.setDirection(((Double) newProperties[1]).intValue());
-		move(new int[] {((Double)newProperties[2]).intValue(), ((Double) newProperties[3]).intValue()});
+		System.out.println("move: " + newProperties[2] +" " +  newProperties[3]);
+		move(new int[] {((Double)newProperties[2]).intValue(), ((Double) newProperties[3]).intValue() * -1});
+		setHidden((boolean)newProperties[4]);
 	}
 	
+	private void setHidden(boolean hidden) {
+		sprite.setHidden(hidden);
+	}
+
 	public void setPenColor(Color color) {
 		penColor = color;
 		
@@ -122,9 +129,9 @@ public class CanvasViewImpl implements CanvasView {
 		vector[1] = Math.round(vector[1]);
 		ArrayList<int[]> linesToMake = new ArrayList<int[]>();
 		addLinesToMake(vector, linesToMake);
-		int[] finalPosition = sprite.getPosition();
-		if (penDown){
-			for (int[] coordinates : linesToMake){
+		int[] finalPosition = sprite.getAbsolutePosition();
+		for (int[] coordinates : linesToMake){
+			if (penDown){
 				Line line = new Line();
 				line.setStartX(coordinates[0]);
 				line.setStartY(coordinates[1]);
@@ -132,15 +139,15 @@ public class CanvasViewImpl implements CanvasView {
 				line.setEndY(coordinates[3]);
 				line.setFill(penColor);
 				root.getChildren().add(line);
-				finalPosition = new int[] {coordinates[2], coordinates[3]};
 			}
+			finalPosition = new int[] {coordinates[2], coordinates[3]};
 		}
 		sprite.setPosition(finalPosition);
 		System.out.println("pos" + finalPosition[0] + " " + finalPosition[1]);
 	}
 
 	private void addLinesToMake(int[] vector, ArrayList<int[]> linesToMake) {
-		int[] currLocation = sprite.getPosition();
+		int[] currLocation = sprite.getAbsolutePosition();
 		int[] nextLocation;
 		while (true){
 			nextLocation = new int[] {currLocation[0] + vector[0], currLocation[1] + vector[1]};
@@ -198,7 +205,7 @@ public class CanvasViewImpl implements CanvasView {
 	 * @return	Sprite's absolute location
 	 */
 	public int[] getSpritePosition(){
-		return sprite.getPosition();
+		return sprite.getZeroIndexedPosition();
 	}
 
 	@Override
