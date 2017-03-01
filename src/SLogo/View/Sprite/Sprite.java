@@ -33,7 +33,7 @@ public class Sprite {
 		position = new int[] {viewWidth/2 - spriteWidth/2, viewHeight/2 - spriteHeight/2};
 		spriteIV.setX(position[0]);
 		spriteIV.setY(position[1]);
-		setDirection(90);
+		setDirection(0);
 		setHidden(false);
 	}
 	
@@ -50,7 +50,7 @@ public class Sprite {
 	
 	private void showError (String message) {
         Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("XML File Error");
+        alert.setTitle("Image File Error");
         alert.setContentText(message);
         alert.showAndWait();
     }
