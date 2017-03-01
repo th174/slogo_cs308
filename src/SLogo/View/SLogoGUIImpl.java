@@ -25,6 +25,9 @@ public class SLogoGUIImpl implements SLogoGUI {
 	public SLogoGUIImpl(Repl repl,double width,double height){
 		myRepl = repl;
 		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
+		myRoot = new Group();
+		myWidth = width;
+		myHeight = height;
 	}
 	
     @Override
@@ -32,12 +35,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	GridPane gridPane = new GridPane(); 
     	int SIZE = 900;
     	System.out.println("1");
-
-    	System.out.println("1");
-		myRoot = new Group();
-		myWidth = width;
-		myHeight = height;
-    	GridPane gridPane = new GridPane();
+	
     	double variableListHeightWeight = 4;
     	double functionListHeightWeight = 4;
     	double canvasHeightWeight = 8;
@@ -88,10 +86,6 @@ public class SLogoGUIImpl implements SLogoGUI {
     			variableListViewNode,rectangleVariableView,functionListViewNode,rectangleFunctionView,canvasViewNode);
         myRoot.getChildren().addAll(gridPane,canvasViewNode);
         
-	}
-	
-    @Override
-    public Node getView() {
     	return myRoot;
     }
 
