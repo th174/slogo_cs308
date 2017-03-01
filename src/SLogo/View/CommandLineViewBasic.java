@@ -1,5 +1,8 @@
 package SLogo.View;
 
+import java.util.Scanner;
+
+import SLogo.Repl;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -15,10 +18,11 @@ public class CommandLineViewBasic implements CommandLineView{
 	private Button myRunButton;
 	private Button myClearButton;
 	private TextArea myCommandText;
+	private Repl myRepl;
 	
 	
-	
-	public CommandLineViewBasic() {
+	public CommandLineViewBasic(Repl repl) {
+		myRepl = repl;
 		initializeGridPane();
     	initializeCommandPrompt();
     	initializeRunButton();
@@ -31,12 +35,23 @@ public class CommandLineViewBasic implements CommandLineView{
 		myClearButton.setPrefSize((87 - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * (1-.8));
     	GridPane.setConstraints(myClearButton, 1, 1);
 	}
+	
 	private void initializeRunButton() {
 		myRunButton = new Button("PLACEHOLDER RUN");
     	myRunButton.setPrefSize((87 - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
     	GridPane.setConstraints(myRunButton, 1, 0);
+    	myRunButton.setOnAction(e -> sendCommand());
 	}
-
+	
+	private void sendCommand() {
+		String command = myCommandText.getText();
+		myCommandText.clear();
+		try {
+			myRepl.read(new Scanner(command));
+		} catch (Exception e) {
+			// TODO Make Alert
+		}
+	}
 
 	private void initializeCommandPrompt() {
 		myCommandText = new TextArea();
