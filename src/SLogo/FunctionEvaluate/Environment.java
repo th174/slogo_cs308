@@ -6,6 +6,8 @@ import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.util.Map;
+import java.util.Observer;
+import java.util.Observable;
 
 /**
  * Created by th174 on 2/19/2017.
@@ -16,7 +18,7 @@ import java.util.Map;
  * Created 2/19/2017
  *
  */
-public interface Environment {
+public interface Environment{
     /**
      * @return Get all defined user variables
      */
