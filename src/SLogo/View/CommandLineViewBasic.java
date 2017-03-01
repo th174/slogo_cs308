@@ -19,10 +19,14 @@ public class CommandLineViewBasic implements CommandLineView{
 	private Button myClearButton;
 	private TextArea myCommandText;
 	private Repl myRepl;
+	private double myWidth;
+	private double myHeight;
 	
 	
-	public CommandLineViewBasic(Repl repl) {
+	public CommandLineViewBasic(Repl repl,double width,double height) {
 		myRepl = repl;
+		myWidth = width;
+		myHeight = height;
 		initializeGridPane();
     	initializeCommandPrompt();
     	initializeRunButton();
@@ -32,13 +36,13 @@ public class CommandLineViewBasic implements CommandLineView{
 
 	private void initializeClearButton() {
 		myClearButton = new Button("PLACEHOLDER CLEAR");
-		myClearButton.setPrefSize((87 - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * (1-.8));
+		myClearButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * (1-.8));
     	GridPane.setConstraints(myClearButton, 1, 1);
 	}
 	
 	private void initializeRunButton() {
 		myRunButton = new Button("PLACEHOLDER RUN");
-    	myRunButton.setPrefSize((87 - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
+    	myRunButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
     	GridPane.setConstraints(myRunButton, 1, 0);
     	myRunButton.setOnAction(e -> sendCommand());
 	}
@@ -55,6 +59,8 @@ public class CommandLineViewBasic implements CommandLineView{
 
 	private void initializeCommandPrompt() {
 		myCommandText = new TextArea();
+		myCommandText.setPrefColumnCount((int)(myCommandText.getPrefColumnCount()*(1.72*myWidth/1000)));
+		myCommandText.setPrefRowCount((int)(myCommandText.getPrefRowCount()*(myHeight/200)));
     	myCommandText.setPromptText("Enter a command...");
     	GridPane.setConstraints(myCommandText, 0, 0, 1, 2);
 	}
@@ -62,11 +68,6 @@ public class CommandLineViewBasic implements CommandLineView{
 
 	private void initializeGridPane() {
 		myCommandLine = new GridPane();
-		ColumnConstraints commandTextColumn = new ColumnConstraints();
-		commandTextColumn.setPercentWidth(80);
-		ColumnConstraints runButtonColumn = new ColumnConstraints();
-		runButtonColumn.setPercentWidth(20);
-		myCommandLine.getColumnConstraints().addAll(commandTextColumn,runButtonColumn);
 	}
 	
 	
