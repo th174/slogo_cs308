@@ -3,7 +3,7 @@ package SLogo;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Parse.RecursiveExpression;
+import SLogo.Parse.Expression;
 import SLogo.Turtles.SLogoTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.Parse.LispSyntaxParser;
