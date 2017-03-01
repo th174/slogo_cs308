@@ -4,18 +4,15 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
-import SLogo.Turtles.SLogoTurtle;
-import SLogo.Turtles.Turtle;
 import SLogo.Parse.LispSyntaxParser;
 import SLogo.Parse.Parser;
+import SLogo.Turtles.SLogoTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
-import SLogo.View.SLogoGUI;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Created by th174 on 2/16/2017.
@@ -26,9 +23,8 @@ public class ReplImpl implements Repl {
     private int currentIndex;
     private Environment globalEnv;
     private Turtle myTurtle;
-    private CanvasView myCanvas;
 
-    public ReplImpl(InputStream input) throws IOException {
+    public ReplImpl() throws IOException {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
@@ -38,19 +34,12 @@ public class ReplImpl implements Repl {
     }
 
     @Override
-    public void read(Scanner input) throws Exception {
+    public void read(String input) throws Exception {
         System.out.print("SLogo >>");
-        String line = input.nextLine();
-        if (line.length() > 0) {
-            try {
-                Expression currentCommand = parser.parse(line);
-                history.add(currentCommand.toString());
-                System.out.println(eval(currentCommand));
-                currentIndex++;
-            } catch (Exception e) {
-                e.printStackTrace(); //TODO Improve this handling
-            }
-        }
+        Expression currentCommand = parser.parse(input);
+        history.add(currentCommand.toString());
+        System.out.println(eval(currentCommand));
+        currentIndex++;
     }
 
     private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
@@ -67,16 +56,15 @@ public class ReplImpl implements Repl {
     public List<String> getHistory() {
         return history;
     }
-    
+
     @Override
-    public void setCanvas(CanvasView canvas){
-    	myCanvas = canvas;
-    	globalEnv.setCanvas(myCanvas);
-    	myTurtle.addObserver(myCanvas);
+    public void setCanvas(CanvasView canvas) {
+        globalEnv.setCanvas(canvas);
+        myTurtle.addObserver(canvas);
     }
 
-	@Override
-	public Environment getEnvironment() {
-		return globalEnv;
-	}
+    @Override
+    public Environment getEnvironment() {
+        return globalEnv;
+    }
 }

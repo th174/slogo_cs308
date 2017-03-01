@@ -1,10 +1,8 @@
 package SLogo;
 
 import java.util.List;
-import java.util.Scanner;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 /**
@@ -16,7 +14,7 @@ public interface Repl {
      *
      * @param input User input string
      */
-    void read(Scanner input) throws Exception;
+    void read(String input) throws Exception;
 
    /* *//**
      * Give feedback to user based on evaluated results

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
+
     public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
     //IMMUTABLE
     //ALL FIELDS MUST BE FINAL
@@ -25,7 +26,6 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public NumberVariable difference(Variable other) {
         return new NumberVariable(toNumber() - other.toNumber());
-
     }
 
     public NumberVariable product(Variable other) {
@@ -34,12 +34,10 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public NumberVariable quotient(Variable other) {
         return new NumberVariable(toNumber() / other.toNumber());
-
     }
 
     public NumberVariable remainder(Variable other) {
         return new NumberVariable(toNumber() % other.toNumber());
-
     }
 
     public Variable negate() {
@@ -91,11 +89,11 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public Variable and(Variable other) {
-        return (!(this.toNumber() == 0) && !(other.toNumber() == 0)) ? BoolVariable.TRUE : BoolVariable.FALSE;
+        return this.toBoolean() ? other : this;
     }
 
     public Variable or(Variable other) {
-        return (!(this.toNumber() == 0) || !(other.toNumber() == 0)) ? BoolVariable.TRUE : BoolVariable.FALSE;
+        return this.toBoolean() ? this : other;
     }
 
     public BoolVariable not() {

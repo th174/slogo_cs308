@@ -1,7 +1,5 @@
 package SLogo.Parse;
 
-import SLogo.FunctionEvaluate.Variables.Variable;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -60,7 +58,7 @@ public final class LispSyntaxParser implements Parser {
 
     @Override
     public Expression parse(String input) {
-        LinkedList<String> tokens = tokenSplit("(" + input + ")");
+        LinkedList<String> tokens = tokenSplit("(" + input.replaceAll(myRegex.getString("Comment"), "") + ")");
         Expression temp = readTokens(tokens);
         System.out.println(temp.toString());
         return temp;
@@ -71,7 +69,7 @@ public final class LispSyntaxParser implements Parser {
         translator = new HashMap<>();
         myLocale.keySet().forEach(e -> {
             for (String key : myLocale.getString(e).split("\\|")) {
-                translator.putIfAbsent(key.toUpperCase(), e.toUpperCase());
+                translator.putIfAbsent(key.toUpperCase().replace("\\", ""), e.toUpperCase());
             }
         });
     }

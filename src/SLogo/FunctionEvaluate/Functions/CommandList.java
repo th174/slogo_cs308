@@ -11,9 +11,11 @@ import java.util.Collection;
 /**
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
  * Created by th174 on 2/16/2017.
+ *
  * @author Stone Mathers
  */
 public class CommandList {
+    public static final Invokable PI = ((env, expr) -> NumberVariable.PI);
     public static final Accumulator SUM = Variable::sum;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
@@ -23,6 +25,7 @@ public class CommandList {
     public static final Accumulator AND = Variable::and;
     public static final Accumulator OR = Variable::or;
     public static final Accumulator LIST = Variable::append;
+    public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
     public static final UnaryFunction MINUS = Variable::negate;
     public static final UnaryFunction SINE = Variable::sine;
@@ -52,18 +55,18 @@ public class CommandList {
     };
     public static final TurtleMove SETHEADING = (t, v) -> {
         double oldAngle = t.getHeading();
-    	t.setHeading(v.toNumber());
+        t.setHeading(v.toNumber());
         return new NumberVariable(Math.abs(oldAngle - v.toNumber()));
     };
-    public static final TurtlePos GOTO = (t, c, vx, vy) -> {
+    public static final TurtlePos SETPOSITION = (t, c, vx, vy) -> {
         double xChange = vx.toNumber() - c.getSpritePosition()[0];
         double yChange = vy.toNumber() - c.getSpritePosition()[1];
         t.setChangeX(xChange);
         t.setChangeY(yChange);
-        return new NumberVariable(Math.hypot(xChange,yChange));
+        return new NumberVariable(Math.hypot(xChange, yChange));
     };
-    public static final TurtlePos TOWARDS = (t,c,vx,vy) -> {
-        double newHeading = Math.atan2(vy.toNumber() - c.getSpritePosition()[1],vx.toNumber() - c.getSpritePosition()[0]);
+    public static final TurtlePos SETTOWARDS = (t, c, vx, vy) -> {
+        double newHeading = Math.atan2(vy.toNumber() - c.getSpritePosition()[1], vx.toNumber() - c.getSpritePosition()[0]);
         double degMoved = Math.abs(t.getHeading() - newHeading);
         t.setHeading(newHeading);
         return new NumberVariable(degMoved);
@@ -125,15 +128,20 @@ public class CommandList {
         }
     };
     public static final Invokable REPEAT = (env, expr) -> {
+        if (expr.length != 3) {
+            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+        }
         double count = expr[0].eval(env).toNumber();
         Variable last = new NumberVariable(0);
         while (count-- > 0) {
             last = expr[1].eval(env);
         }
-        return last.finalElement();
+        return last;
     };
     public static final Invokable DOTIMES = (env, expr) -> {
-        System.out.println(Arrays.toString(expr[0].getBody()));
+        if (expr.length != 3) {
+            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+        }
         String loopVar = expr[0].getBody()[0].toString();
         env.addUserVariable(loopVar, new NumberVariable(1));
         Variable limit = expr[0].getBody()[1].eval(env);
@@ -142,10 +150,12 @@ public class CommandList {
             last = expr[1].eval(env);
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(new NumberVariable(1)));
         }
-        return last.finalElement();
+        return last;
     };
     public static final Invokable FOR = (env, expr) -> {
-        System.out.println(Arrays.toString(expr[0].getBody()));
+        if (expr.length != 3) {
+            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+        }
         String loopVar = expr[0].getBody()[0].toString();
         env.addUserVariable(loopVar, expr[0].getBody()[1].eval(env));
         Variable limit = expr[0].getBody()[2].eval(env);
@@ -154,7 +164,7 @@ public class CommandList {
             last = expr[1].eval(env);
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody()[3].eval(env)));
         }
-        return last.finalElement();
+        return last;
     };
 
 

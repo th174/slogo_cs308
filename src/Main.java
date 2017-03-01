@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         
-        ReplImpl repl = new ReplImpl(System.in);
+        ReplImpl repl = new ReplImpl();
         int SIZE = 800;
         SLogoGUIImpl gui = new SLogoGUIImpl(repl,SIZE,SIZE);
         BorderPane GUIPane = new BorderPane();
@@ -27,10 +27,10 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         launch(args);
-        ReplImpl repl = new ReplImpl(System.in);
-        Scanner input = new Scanner(System.in);
-        while (true) {
-            repl.read(input);
-        }
+//        ReplImpl repl = new ReplImpl();
+//        Scanner input = new Scanner(System.in);
+//        while (true) {
+//            repl.read(input.next("\0000"));
+//        }
     }
 }

@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
+import SLogo.FunctionEvaluate.Variables.BoolVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
 import java.util.LinkedList;
@@ -26,6 +27,9 @@ public class SExpression extends LinkedList<Expression> implements Expression {
     }
 
     public Variable eval(Environment env) throws EvaluationTargetException {
+        if (size() == 0){
+            return BoolVariable.FALSE;
+        }
         Invokable command;
         try {
             command = peek().getCommand(env);
