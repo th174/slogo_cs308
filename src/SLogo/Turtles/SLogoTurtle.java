@@ -95,6 +95,7 @@ public class SLogoTurtle extends Observable implements Turtle {
     public void move(double pixels) {
         this.setChangeX(pixels * Math.cos(Math.toRadians(this.getHeading())));
         this.setChangeY(pixels * Math.sin(Math.toRadians(this.getHeading())));
+        notifyObservers();
     }
 
     @Override
@@ -134,7 +135,7 @@ public class SLogoTurtle extends Observable implements Turtle {
      * @return
      */
     private double adjustAngle(double angle) {
-        double newAngle = angle - ((angle / 360) * 360); //puts angle into range from -360 to 360
+        double newAngle = angle - (((int)angle / 360) * 360); //puts angle into range from -360 to 360
         if (newAngle > 180) {
             return (newAngle - 360);
         } else if (newAngle < -180) {
