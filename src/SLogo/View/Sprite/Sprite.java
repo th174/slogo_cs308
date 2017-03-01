@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,7 +33,7 @@ public class Sprite {
 		position = new int[] {viewWidth/2 - spriteWidth/2, viewHeight/2 - spriteHeight/2};
 		spriteIV.setX(position[0]);
 		spriteIV.setY(position[1]);
-		setDirection(90);
+		setDirection(0);
 		setHidden(false);
 	}
 	
@@ -43,10 +44,16 @@ public class Sprite {
 			spriteIV.setFitWidth(spriteWidth);
 			spriteIV.setFitHeight(spriteHeight);
 		} catch (IOException e) {
-	    	System.out.println("Image Error");
-			//JOptionPane.showMessageDialog(null, "Invalid File");
+	    	showError("Invalid File Type");
 		}
 	}
+	
+	private void showError (String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Image File Error");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 	
 	public ImageView getImageView(){
 		return spriteIV;
