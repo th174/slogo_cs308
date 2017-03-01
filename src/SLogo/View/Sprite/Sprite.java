@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -43,10 +44,16 @@ public class Sprite {
 			spriteIV.setFitWidth(spriteWidth);
 			spriteIV.setFitHeight(spriteHeight);
 		} catch (IOException e) {
-	    	System.out.println("Image Error");
-			//JOptionPane.showMessageDialog(null, "Invalid File");
+	    	showError("Invalid File Type");
 		}
 	}
+	
+	private void showError (String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("XML File Error");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 	
 	public ImageView getImageView(){
 		return spriteIV;
