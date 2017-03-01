@@ -11,16 +11,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane root = new BorderPane();
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+
+        
+        ReplImpl repl = new ReplImpl(System.in);
+        SLogoGUIImpl gui = new SLogoGUIImpl(repl);
+        BorderPane GUIPane = new BorderPane();
+        GUIPane.setCenter(gui.getView());
+        System.out.println("Ayylmao");
+        Scene scene = new Scene(GUIPane, 900, 900);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
 
     public static void main(String[] args) throws Exception {
-//        launch(args);
-        ReplImpl repl = new ReplImpl(System.in, new SLogoGUIImpl());
+        launch(args);
+        ReplImpl repl = new ReplImpl(System.in);
         Scanner input = new Scanner(System.in);
         while (true) {
             repl.read(input);

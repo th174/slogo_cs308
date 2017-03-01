@@ -9,10 +9,12 @@ import java.util.Deque;
 /**
  * Created by th174 on 2/21/2017.
  */
-public interface RecursiveExpression<T> extends Deque<T> {
+public interface Expression {
     Variable eval(Environment env) throws EvaluationTargetException;
 
     Invokable getCommand(Environment env);
+
+    Expression[] getBody();
 
     int size();
 
