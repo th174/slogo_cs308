@@ -111,21 +111,13 @@ public class CommandList {
         if (expr.length != 2) {
             throw new Invokable.UnexpectedArgumentException(2, expr.length);
         }
-        if (expr[0].eval(env).toBoolean()) {
-            return expr[1].eval(env);
-        } else {
-            return new NumberVariable(0);
-        }
+        return AND.invoke(env,expr[0],expr[1]);
     };
     public static final Invokable IFELSE = (env, expr) -> {
         if (expr.length != 3) {
             throw new Invokable.UnexpectedArgumentException(3, expr.length);
         }
-        if (expr[0].eval(env).toBoolean()) {
-            return expr[1].eval(env);
-        } else {
-            return expr[2].eval(env);
-        }
+        return OR.invoke(env,AND.invoke(env,expr[0],expr[1]),expr[2]);
     };
     public static final Invokable REPEAT = (env, expr) -> {
         if (expr.length != 3) {
