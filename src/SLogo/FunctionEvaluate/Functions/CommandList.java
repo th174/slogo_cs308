@@ -15,7 +15,6 @@ import java.util.Collection;
  * @author Stone Mathers
  */
 public class CommandList {
-    public static final Invokable PI = (env, expr) -> NumberVariable.PI;
     public static final Accumulator SUM = Variable::sum;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
