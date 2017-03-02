@@ -1,8 +1,10 @@
 package SLogo.FunctionEvaluate.Functions;
 
-import SLogo.FunctionEvaluate.Variables.BoolVariable;
-import SLogo.FunctionEvaluate.Variables.NumberVariable;
+import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Parse.Expression;
+import SLogo.Turtles.NewTurtle;
+import SLogo.View.CanvasView;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -42,17 +44,17 @@ public class CommandList {
     };
     public static final Invokable DOTIMES = (env, expr) -> {
         String loopVar = expr[0].getBody().remove(0).toString();
-        env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : new NumberVariable(1));
+        env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : Variable.newInstance(1));
         Variable limit = expr[0].getBody().remove(0).eval(env);
-        Variable last = new NumberVariable(0);
+        Variable last = Variable.newInstance(0);
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
             last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : new NumberVariable(1)));
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : Variable.newInstance(1)));
         }
         return last;
     };
     public static final Invokable FOR = DOTIMES;
-    //Fixed argument length
+    //Fixed argument length (Accepts multiple arguments, but please, don't do it)
     public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
     public static final UnaryFunction MINUS = Variable::negate;
@@ -65,84 +67,68 @@ public class CommandList {
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
-    public static final TurtleMove FORWARD = (t, v) -> {
-        t.move(v.toNumber());
-        return new NumberVariable(v.toNumber());
-    };
-    public static final TurtleMove BACKWARD = (t, v) -> {
-        t.move(v.negate().toNumber());
-        return new NumberVariable(v.toNumber());
-    };
-    public static final TurtleMove LEFT = (t, v) -> {
-        t.turn(v.toNumber());
-        return new NumberVariable(v.toNumber());
-    };
-    public static final TurtleMove RIGHT = (t, v) -> {
-        t.turn(v.negate().toNumber());
-        return new NumberVariable(v.toNumber());
-    };
-    public static final TurtleMove SETHEADING = (t, v) -> {
-        double oldAngle = t.getHeading();
-        t.setHeading(v.toNumber());
-        return new NumberVariable(Math.abs(oldAngle - v.toNumber()));
-    };
-    public static final TurtlePos SETPOSITION = (t, c, vx, vy) -> {
-        double xChange = vx.toNumber() - c.getSpritePosition()[0];
-        double yChange = vy.toNumber() - c.getSpritePosition()[1];
-        t.setChangeX(xChange);
-        t.setChangeY(yChange);
-        return new NumberVariable(Math.hypot(xChange, yChange));
-    };
-    public static final TurtlePos SETTOWARDS = (t, c, vx, vy) -> {
-        double newHeading = Math.toDegrees(Math.atan2(vy.toNumber() - c.getSpritePosition()[1], vx.toNumber() - c.getSpritePosition()[0]));
-        double degMoved = Math.abs(t.getHeading() - newHeading);
-        t.setHeading(newHeading);
-        return new NumberVariable(degMoved);
-    };
-    public static final TurtleSet CLEARSCREEN = (t, c) -> {
-        double xPos = c.getSpritePosition()[0];
-        double yPos = c.getSpritePosition()[1];
-        c.clearScreen();
-        return new NumberVariable(Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2)));
-    };
-    public static final TurtleSet HOME = (t, c) -> {
-        double xPos = c.getSpritePosition()[0];
-        double yPos = c.getSpritePosition()[1];
-        t.reset(xPos, yPos);
-        return new NumberVariable(Math.sqrt(Math.pow(xPos, 2) + Math.pow(yPos, 2)));
-    };
-    public static final TurtleSet HEADING = (t, c) -> new NumberVariable(t.getHeading());
-    public static final TurtleSet HIDETURTLE = (t, c) -> new NumberVariable(t.hide());
-    public static final TurtleSet SHOWTURTLE = (t, c) -> new NumberVariable(t.show());
-    public static final TurtleSet PENDOWN = (t, c) -> new NumberVariable(t.dropPen());
-    public static final TurtleSet PENUP = (t, c) -> new NumberVariable(t.liftPen());
-    public static final TurtleSet ISSHOWING = (t, c) -> !t.hidden() ? Variable.TRUE : Variable.FALSE;
-    public static final TurtleSet ISPENDOWN = (t, c) -> t.penDown() ? Variable.TRUE : Variable.FALSE;
-    public static final TurtleSet XCOORDINATE = (t, c) -> new NumberVariable(c.getSpritePosition()[0]);
-    public static final TurtleSet YCOORDINATE = (t, c) -> new NumberVariable(c.getSpritePosition()[1]);
-    public static final Invokable MAKEVARIABLE = (env, expr) -> {
-        if (expr.length != 2) {
-            throw new Invokable.UnexpectedArgumentException(2, expr.length);
-        } else {
-            env.addUserVariable(expr[0].toString(), expr[1].eval(env));
-            return expr[0].eval(env);
+    public static final TurtleMovement FORWARD = (t, v) -> t.moveForward(v.toNumber());
+    public static final TurtleMovement BACKWARD = (t, v) -> t.moveBackward(v.toNumber());
+    public static final TurtleMovement LEFT = (t, v) -> t.rotateCCW(v.toNumber());
+    public static final TurtleMovement RIGHT = (t, v) -> t.rotateCW(v.negate().toNumber());
+    public static final TurtleMovement SETHEADING = (t, v) -> t.setHeading(v.toNumber());
+    public static final TurtlePosition SETPOSITION = (t, vx, vy) -> t.setXY(vx.toNumber(), vy.toNumber());
+    public static final TurtlePosition SETTOWARDS = (t, vx, vy) -> t.setHeadingTowards(vx.toNumber(), vy.toNumber());
+    public static final CanvasProperties CLEARSCREEN = CanvasView::clearScreen;
+    public static final TurtleProperties HOME = NewTurtle::reset;
+    public static final TurtleProperties HEADING = NewTurtle::getHeading;
+    public static final TurtleProperties HIDETURTLE = NewTurtle::hideTurtle;
+    public static final TurtleProperties SHOWTURTLE = NewTurtle::showTurtle;
+    public static final TurtleProperties PENDOWN = NewTurtle::penDown;
+    public static final TurtleProperties PENUP = NewTurtle::penUp;
+    public static final TurtleProperties ISSHOWING = NewTurtle::isTurtleShow;
+    public static final TurtleProperties ISPENDOWN = NewTurtle::penDown;
+    public static final TurtleProperties XCOORDINATE = NewTurtle::getX;
+    public static final TurtleProperties YCOORDINATE = NewTurtle::getY;
+    public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
+        @Override
+        public int expectedArity() {
+            return 2;
+        }
+
+        @Override
+        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+            if (vargs.length != 2) {
+                throw new Invokable.UnexpectedArgumentException(2, vargs.length);
+            } else {
+                env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
+                return vargs[0].eval(env);
+            }
         }
     };
-    public static final Invokable MAKEUSERINSTRUCTION = (env, expr) -> {
-        if (expr.length != 3) {
-            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+    public static final IterableInvokable MAKEUSERINSTRUCTION = new IterableInvokable() {
+        @Override
+        public int expectedArity() {
+            return 3;
         }
-        env.addUserFunction(expr[0].toString(), new Procedure(expr[1], expr[2]));
-        return Variable.TRUE;
+
+        @Override
+        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+            env.addUserFunction(vargs[0].toString(), new Procedure(vargs[1], vargs[2]));
+            return Variable.TRUE;
+        }
     };
-    public static final Invokable IFELSE = (env, expr) -> {
-        if (expr.length != 3) {
-            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+    public static final Invokable IFELSE = new IterableInvokable() {
+        @Override
+        public int expectedArity() {
+            return 3;
         }
-        if (expr[0].eval(env).toBoolean()) {
-            return expr[1].eval(env);
-        } else {
-            return expr[2].eval(env);
+
+        @Override
+        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+            if (vargs.length != 3) {
+                throw new UnexpectedArgumentException(3, vargs.length);
+            }
+            if (vargs[0].eval(env).toBoolean()) {
+                return vargs[1].eval(env);
+            } else {
+                return vargs[2].eval(env);
+            }
         }
     };
 

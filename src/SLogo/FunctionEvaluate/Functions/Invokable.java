@@ -21,6 +21,4 @@ public interface Invokable {
             super("Unexpected Number of arguments: Expected: " + expected + " Received: " + actual);
         }
     }
-
-
 }

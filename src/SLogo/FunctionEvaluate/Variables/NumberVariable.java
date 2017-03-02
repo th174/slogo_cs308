@@ -6,11 +6,11 @@ package SLogo.FunctionEvaluate.Variables;
 public final class NumberVariable extends Variable<Number> {
     //IMMUTABLE CLASS
     //ALL VARIABLES MUST BE FINAL
-    public NumberVariable(Number value) {
+    NumberVariable(Number value) {
         super(value);
     }
 
-    public NumberVariable(String value) throws NotANumberException {
+    NumberVariable(String value) throws NotANumberException {
         super(Double.parseDouble(value));
     }
 

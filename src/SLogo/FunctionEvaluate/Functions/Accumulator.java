@@ -1,7 +1,6 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.Variables.BoolVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 

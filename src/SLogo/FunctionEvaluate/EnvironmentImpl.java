@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Turtles.NewTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
@@ -19,7 +20,7 @@ public class EnvironmentImpl extends Observable implements Environment {
     private Environment outer;
     private Map<String, Variable> userVariables;
     private Map<String, Invokable> userFunctions;
-    private Turtle myTurtle;
+    private NewTurtle myTurtle;
     private CanvasView myCanvas;
 
     private EnvironmentImpl() {
@@ -29,16 +30,17 @@ public class EnvironmentImpl extends Observable implements Environment {
         observers = new ArrayList<>();
     }
 
-    public EnvironmentImpl(Environment outer, Turtle myTurtle) {
+    public EnvironmentImpl(Environment outer, NewTurtle myTurtle, CanvasView myCanvas) {
         this.outer = outer;
         userFunctions = new HashMap<>();
         userVariables = new HashMap<>();
         observers = new ArrayList<>();
         this.myTurtle = myTurtle;
+        this.myCanvas = myCanvas;
     }
 
     public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
-        this(outer,outer.getTurtle());
+        this(outer, outer.getTurtle(), outer.getCanvas());
         for (int i = 0; i < expr.length; i++) {
             userVariables.put(params.get(i), expr[i].eval(outer));
         }
@@ -51,33 +53,33 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Variable> getLocalVars() {
-        return userVariables;
+        return Collections.unmodifiableMap(userVariables);
     }
 
     @Override
     public Map<String, Invokable> getLocalFunctions() {
-        return userFunctions;
+        return Collections.unmodifiableMap(userFunctions);
     }
 
     @Override
     public Map<String, Variable> getAllVars() {
         if (Objects.isNull(outer)) {
-            return getLocalVars();
+            return Collections.unmodifiableMap(getLocalVars());
         } else {
             HashMap<String, Variable> vars = new HashMap<>(getLocalVars());
             vars.putAll(outer.getLocalVars());
-            return vars;
+            return Collections.unmodifiableMap(vars);
         }
     }
 
     @Override
     public Map<String, Invokable> getAllFunctions() {
         if (Objects.isNull(outer)) {
-            return getLocalFunctions();
+            return Collections.unmodifiableMap(getLocalFunctions());
         } else {
             HashMap<String, Invokable> funcs = new HashMap<>(getLocalFunctions());
             funcs.putAll(outer.getLocalFunctions());
-            return funcs;
+            return Collections.unmodifiableMap(funcs);
         }
     }
 
@@ -108,7 +110,7 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public Turtle getTurtle() {
+    public NewTurtle getTurtle() {
         return Objects.isNull(myTurtle) ? outer.getTurtle() : myTurtle;
     }
 
@@ -118,13 +120,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public void setTurtle(Turtle turt) {
-        myTurtle = turt;
-    }
-
-    @Override
-    public void setCanvas(CanvasView canvas) {
-        myCanvas = canvas;
+    public void setTurtle(NewTurtle turtle) {
+        myTurtle = turtle;
     }
 
     @Override

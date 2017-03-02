@@ -4,7 +4,6 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
-import SLogo.FunctionEvaluate.Variables.BoolVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
 import java.util.ArrayList;
@@ -20,11 +19,6 @@ public class SExpression extends LinkedList<Expression> implements Expression {
 
     public SExpression() {
         super();
-    }
-
-    public SExpression(List<String> l) {
-        super();
-        addAll(l);
     }
 
     public Variable eval(Environment env) throws EvaluationTargetException {

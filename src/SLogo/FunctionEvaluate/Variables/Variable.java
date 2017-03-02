@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Variables;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -10,16 +11,30 @@ import java.util.stream.Collectors;
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
-    public static final Variable PI = new NumberVariable(Math.PI);
-    public static final Variable E = new NumberVariable(Math.E);
-    public static final Variable TRUE = new BoolVariable(true);
-    public static final Variable FALSE = new BoolVariable(false);
+    public static final Variable<Number> PI = new NumberVariable(Math.PI);
+    public static final Variable<Number> E = new NumberVariable(Math.E);
+    public static final Variable<Boolean> TRUE = new BoolVariable(true);
+    public static final Variable<Boolean> FALSE = new BoolVariable(false);
     public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
 
     private final T value;
 
     Variable(T value) {
         this.value = value;
+    }
+
+    public static Variable newInstance(Object o) {
+        if (o instanceof Boolean) {
+            return ((Boolean) o).booleanValue() ? TRUE : FALSE;
+        } else if (o instanceof Number) {
+            return new NumberVariable((Number) o);
+        } else if (o instanceof String) {
+            return new StringVariable((String) o);
+        } else if (o instanceof List) {
+            return new ListVariable((List<Variable>) o);
+        } else {
+            throw new UnrecognizedSymbolException(o.toString());
+        }
     }
 
     final T value() {
@@ -39,8 +54,8 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public NumberVariable quotient(Variable other) {
-        if (other.toNumber() == 0){
-            throw new NotANumberException(this.toString()+"/"+other.toString());
+        if (other.toNumber() == 0) {
+            throw new NotANumberException(this.toString() + "/" + other.toString());
         }
         return new NumberVariable(toNumber() / other.toNumber());
     }
@@ -139,7 +154,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return value.toString();
     }
 
-    public static Variable fromString(String s) {
+    public static Variable<? extends java.io.Serializable> fromString(String s) {
         if (s.matches(regex.getString("Constant"))) {
             try {
                 return new NumberVariable(Double.parseDouble(s));

@@ -2,44 +2,44 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Turtles.NewTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.util.Map;
-import java.util.Observer;
-import java.util.Observable;
 
 /**
  * Created by th174 on 2/19/2017.
  */
+
 /**
  * @author Stone Mathers
  * @author th174
- * Created 2/19/2017
- *
+ *         Created 2/19/2017
  */
-public interface Environment{
+public interface Environment {
     /**
      * @return Get parent environment surrounding this one. Returns null if this environment is global.
      */
     Environment outer();
+
     /**
-     * @return Get all defined user variables
+     * @return Get unmodifiable view of all defined user variables
      */
     Map<String, Variable> getLocalVars();
 
     /**
-     * @return Get all defined user functions
+     * @return Get unmodifiable view of all defined user functions
      */
     Map<String, Invokable> getLocalFunctions();
 
     /**
-     * @return Get all variables
+     * @return Get unmodifiable view of all variables
      */
     Map<String, Variable> getAllVars();
 
     /**
-     * @return Get all functions
+     * @return Get unmodifiable view of all functions
      */
     Map<String, Invokable> getAllFunctions();
 
@@ -55,12 +55,12 @@ public interface Environment{
      */
     Invokable getFunctionByName(String name) throws FunctionNotFoundException;
 
-    
+
     /**
      * @return Turtle
      */
-    Turtle getTurtle();
-    
+    NewTurtle getTurtle();
+
     /**
      * @return CanvasView
      */
@@ -77,16 +77,12 @@ public interface Environment{
      * @param function Function
      */
     void addUserFunction(String name, Invokable function);
-    
+
     /**
-     * @param turt Turtle to be used
+     * @param turtle Turtle to be used
      */
-    void setTurtle(Turtle turt);
-    
-    /**
-     * @param canvas CanvasView to be used
-     */
-    void setCanvas(CanvasView canvas);
+    void setTurtle(NewTurtle turtle);
+
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {

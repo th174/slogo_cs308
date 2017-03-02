@@ -9,11 +9,11 @@ import java.util.List;
  */
 public final class ListVariable extends Variable<List<Variable>> {
 
-    public ListVariable(Variable... vars) {
+    ListVariable(Variable... vars) {
         super(new LinkedList<>(Arrays.asList(vars)));
     }
 
-    private ListVariable(List<Variable> list) {
+    ListVariable(List<Variable> list) {
         super(list);
     }
 
