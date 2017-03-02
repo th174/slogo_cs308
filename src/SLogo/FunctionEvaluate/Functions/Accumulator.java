@@ -22,7 +22,6 @@ public interface Accumulator extends Invokable {
         if (expr.length == 1) {
             return total.eval(env);
         } else {
-//            return accumulate(total, invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
             return accumulate(invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
         }
     }

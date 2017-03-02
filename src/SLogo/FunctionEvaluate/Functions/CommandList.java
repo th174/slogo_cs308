@@ -15,6 +15,7 @@ import java.util.Collection;
  * @author Stone Mathers
  */
 public class CommandList {
+    //Variable argument Length
     public static final Accumulator SUM = Variable::sum;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
@@ -24,6 +25,34 @@ public class CommandList {
     public static final Accumulator LIST = Variable::list;
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
+    public static final Invokable IF = (env, expr) -> {
+        if (expr[0].eval(env).toBoolean()) {
+            return LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+        } else {
+            return BoolVariable.FALSE;
+        }
+    };
+    public static final Invokable REPEAT = (env, expr) -> {
+        double count = expr[0].eval(env).toNumber();
+        Variable last = BoolVariable.FALSE;
+        while (count-- > 0) {
+            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+        }
+        return last;
+    };
+    public static final Invokable DOTIMES = (env, expr) -> {
+        String loopVar = expr[0].getBody().remove(0).toString();
+        env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : new NumberVariable(1));
+        Variable limit = expr[0].getBody().remove(0).eval(env);
+        Variable last = new NumberVariable(0);
+        while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
+            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : new NumberVariable(1)));
+        }
+        return last;
+    };
+    public static final Invokable FOR = DOTIMES;
+    //Fixed argument length
     public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
     public static final UnaryFunction MINUS = Variable::negate;
@@ -116,33 +145,7 @@ public class CommandList {
             return expr[2].eval(env);
         }
     };
-    public static final Invokable IF = (env, expr) -> {
-        if (expr[0].eval(env).toBoolean()) {
-            return LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-        } else {
-            return BoolVariable.FALSE;
-        }
-    };
-    public static final Invokable REPEAT = (env, expr) -> {
-        double count = expr[0].eval(env).toNumber();
-        Variable last = BoolVariable.FALSE;
-        while (count-- > 0) {
-            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-        }
-        return last;
-    };
-    public static final Invokable DOTIMES = (env, expr) -> {
-        String loopVar = expr[0].getBody().remove(0).toString();
-        env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : new NumberVariable(1));
-        Variable limit = expr[0].getBody().remove(0).eval(env);
-        Variable last = new NumberVariable(0);
-        while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
-            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : new NumberVariable(1)));
-        }
-        return last;
-    };
-    public static final Invokable FOR = DOTIMES;
+
 
     public static final Accumulator DEFAULT_OPERATION = LIST;
 
