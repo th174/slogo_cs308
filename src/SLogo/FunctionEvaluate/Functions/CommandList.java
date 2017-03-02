@@ -106,16 +106,6 @@ public class CommandList {
         env.addUserFunction(expr[0].toString(), new Procedure(expr[1], expr[2]));
         return BoolVariable.TRUE;
     };
-    public static final Invokable IF = (env, expr) -> {
-        if (expr.length != 2) {
-            throw new Invokable.UnexpectedArgumentException(2, expr.length);
-        }
-        if (expr[0].eval(env).toBoolean()) {
-            return expr[1].eval(env);
-        } else {
-            return new NumberVariable(0);
-        }
-    };
     public static final Invokable IFELSE = (env, expr) -> {
         if (expr.length != 3) {
             throw new Invokable.UnexpectedArgumentException(3, expr.length);
@@ -126,46 +116,33 @@ public class CommandList {
             return expr[2].eval(env);
         }
     };
-    public static final Invokable REPEAT = (env, expr) -> {
-        if (expr.length != 3) {
-            throw new Invokable.UnexpectedArgumentException(3, expr.length);
+    public static final Invokable IF = (env, expr) -> {
+        if (expr[0].eval(env).toBoolean()) {
+            return LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+        } else {
+            return BoolVariable.FALSE;
         }
+    };
+    public static final Invokable REPEAT = (env, expr) -> {
         double count = expr[0].eval(env).toNumber();
-        Variable last = new NumberVariable(0);
+        Variable last = BoolVariable.FALSE;
         while (count-- > 0) {
-            last = expr[1].eval(env);
+            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         }
         return last;
     };
     public static final Invokable DOTIMES = (env, expr) -> {
-        if (expr.length != 3) {
-            throw new Invokable.UnexpectedArgumentException(3, expr.length);
-        }
-        String loopVar = expr[0].getBody()[0].toString();
-        env.addUserVariable(loopVar, new NumberVariable(1));
-        Variable limit = expr[0].getBody()[1].eval(env);
+        String loopVar = expr[0].getBody().remove(0).toString();
+        env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : new NumberVariable(1));
+        Variable limit = expr[0].getBody().remove(0).eval(env);
         Variable last = new NumberVariable(0);
         while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
-            last = expr[1].eval(env);
-            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(new NumberVariable(1)));
+            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : new NumberVariable(1)));
         }
         return last;
     };
-    public static final Invokable FOR = (env, expr) -> {
-        if (expr.length != 3) {
-            throw new Invokable.UnexpectedArgumentException(3, expr.length);
-        }
-        String loopVar = expr[0].getBody()[0].toString();
-        env.addUserVariable(loopVar, expr[0].getBody()[1].eval(env));
-        Variable limit = expr[0].getBody()[2].eval(env);
-        Variable last = new NumberVariable(0);
-        while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
-            last = expr[1].eval(env);
-            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody()[3].eval(env)));
-        }
-        return last;
-    };
-
+    public static final Invokable FOR = DOTIMES;
 
     public static final Accumulator DEFAULT_OPERATION = LIST;
 

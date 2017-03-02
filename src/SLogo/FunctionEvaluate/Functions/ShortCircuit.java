@@ -2,7 +2,6 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.BoolVariable;
-import SLogo.FunctionEvaluate.Variables.NumberVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 
@@ -15,13 +14,15 @@ public interface ShortCircuit extends Invokable {
     @Override
     default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         if (expr.length == 0) {
-            return new NumberVariable(0);
+            return BoolVariable.FALSE;
         }
-        Variable total = expr[0].eval(env);
+        Expression total = expr[expr.length - 1];
         if (expr.length == 1) {
-            return total;
+            return total.eval(env);
         } else {
-            return (total.toBoolean() == test(BoolVariable.TRUE, BoolVariable.FALSE).toBoolean()) ? total : test(total, invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
+            Variable eval = invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1));
+            return (eval.toBoolean() == test(BoolVariable.TRUE, BoolVariable.FALSE).toBoolean()) ? eval :
+                    test(eval, total.eval(env));
         }
     }
 
