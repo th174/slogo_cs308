@@ -12,10 +12,8 @@ import java.util.stream.Collectors;
 public abstract class Variable<T> implements Comparable<Variable> {
     public static final Variable PI = new NumberVariable(Math.PI);
     public static final Variable E = new NumberVariable(Math.E);
-
     public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
-    //IMMUTABLE
-    //ALL FIELDS MUST BE FINAL
+
     private final T value;
 
     Variable(T value) {
@@ -39,6 +37,9 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public NumberVariable quotient(Variable other) {
+        if (other.toNumber() == 0){
+            throw new NotANumberException(this.toString()+"/"+other.toString());
+        }
         return new NumberVariable(toNumber() / other.toNumber());
     }
 
@@ -110,10 +111,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return this.compareTo(o) == 0;
     }
 
-    public ListVariable append(Variable other) {
-        if (other instanceof ListVariable) {
-            return new ListVariable(this).append(other);
-        }
+    public ListVariable list(Variable other) {
         return new ListVariable(this, other);
     }
 
@@ -132,7 +130,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public abstract boolean toBoolean();
 
-    public abstract double toNumber() throws NumberFormatException;
+    public abstract double toNumber() throws NotANumberException;
 
     @Override
     public String toString() {

@@ -22,9 +22,9 @@ public class CommandList {
     public static final Accumulator QUOTIENT = Variable::quotient;
     public static final Accumulator REMAINDER = Variable::remainder;
     public static final Accumulator POWER = Variable::power;
-    public static final Accumulator AND = Variable::and;
-    public static final Accumulator OR = Variable::or;
-    public static final Accumulator LIST = Variable::append;
+    public static final Accumulator LIST = Variable::list;
+    public static final ShortCircuit AND = Variable::and;
+    public static final ShortCircuit OR = Variable::or;
     public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
     public static final UnaryFunction MINUS = Variable::negate;
