@@ -8,10 +8,9 @@ import SLogo.Parse.Expression;
 import java.util.Arrays;
 
 /**
- * Created by th174 on 2/16/2017.
+ * Created by th174 on 3/1/2017.
  */
-@FunctionalInterface
-public interface Accumulator extends Invokable {
+public interface ShortCircuit extends Invokable {
     @Override
     default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         if (expr.length == 0) {
@@ -21,9 +20,11 @@ public interface Accumulator extends Invokable {
         if (expr.length == 1) {
             return total.eval(env);
         } else {
-            return accumulate(invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
+            Variable eval = invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1));
+            return (eval.toBoolean() == test(Variable.TRUE, Variable.FALSE).toBoolean()) ? eval :
+                    test(eval, total.eval(env));
         }
     }
 
-    Variable accumulate(Variable var1, Variable var2);
+    Variable test(Variable var1, Variable var2);
 }

@@ -7,70 +7,86 @@ import SLogo.Parse.Expression;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Observer;
-import java.util.Observable;
+import java.util.*;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 public class EnvironmentImpl extends Observable implements Environment {
-    
-	private ArrayList<Observer> observers;
-	private Environment outer;
-    private Map<String, Variable> dictionaryVariables;
+    public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
+
+    private Collection<Observer> observers;
+    private Environment outer;
     private Map<String, Variable> userVariables;
-    private Map<String, Invokable> dictionaryFunctions;
     private Map<String, Invokable> userFunctions;
     private Turtle myTurtle;
     private CanvasView myCanvas;
 
-    public EnvironmentImpl() {
-        dictionaryVariables = new HashMap<>();
-        userVariables = new HashMap<>();
-        dictionaryFunctions = initCommandDictionary();
-        userFunctions = new HashMap<>();
-        observers = new ArrayList<Observer>();
+    private EnvironmentImpl() {
+        userVariables = initVariableDictonary();
+        userFunctions = initCommandDictionary();
+        outer = null;
+        observers = new ArrayList<>();
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Expression[] expr) throws Expression.EvaluationTargetException {
-        this();
+    public EnvironmentImpl(Environment outer, Turtle myTurtle) {
         this.outer = outer;
+        userFunctions = new HashMap<>();
+        userVariables = new HashMap<>();
+        observers = new ArrayList<>();
+        this.myTurtle = myTurtle;
+    }
+
+    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
+        this(outer,outer.getTurtle());
         for (int i = 0; i < expr.length; i++) {
             userVariables.put(params.get(i), expr[i].eval(outer));
         }
     }
 
     @Override
-    public Map<String, Variable> getUserVars() {
+    public Environment outer() {
+        return outer;
+    }
+
+    @Override
+    public Map<String, Variable> getLocalVars() {
         return userVariables;
     }
 
     @Override
-    public Map<String, Invokable> getUserFunctions() {
+    public Map<String, Invokable> getLocalFunctions() {
         return userFunctions;
     }
 
     @Override
     public Map<String, Variable> getAllVars() {
-        return dictionaryVariables;
+        if (Objects.isNull(outer)) {
+            return getLocalVars();
+        } else {
+            HashMap<String, Variable> vars = new HashMap<>(getLocalVars());
+            vars.putAll(outer.getLocalVars());
+            return vars;
+        }
     }
 
     @Override
     public Map<String, Invokable> getAllFunctions() {
-        return dictionaryFunctions;
+        if (Objects.isNull(outer)) {
+            return getLocalFunctions();
+        } else {
+            HashMap<String, Invokable> funcs = new HashMap<>(getLocalFunctions());
+            funcs.putAll(outer.getLocalFunctions());
+            return funcs;
+        }
     }
 
     @Override
     public Variable getVariableByName(String name) throws VariableNotFoundException {
         if (userVariables.containsKey(name)) {
             return userVariables.get(name);
-        } else if (dictionaryVariables.containsKey(name)) {
-            return dictionaryVariables.get(name);
+        } else if (userVariables.containsKey(name)) {
+            return userVariables.get(name);
         } else if (Objects.isNull(outer)) {
             throw new VariableNotFoundException(name);
         } else {
@@ -82,8 +98,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     public Invokable getFunctionByName(String name) throws FunctionNotFoundException {
         if (userFunctions.containsKey(name)) {
             return userFunctions.get(name);
-        } else if (dictionaryFunctions.containsKey(name)) {
-            return dictionaryFunctions.get(name);
+        } else if (userFunctions.containsKey(name)) {
+            return userFunctions.get(name);
         } else if (Objects.isNull(outer)) {
             throw new FunctionNotFoundException(name);
         } else {
@@ -104,7 +120,6 @@ public class EnvironmentImpl extends Observable implements Environment {
     @Override
     public void setTurtle(Turtle turt) {
         myTurtle = turt;
-
     }
 
     @Override
@@ -114,14 +129,16 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public void addUserVariable(String name, Variable var) {
-        dictionaryVariables.put(name, var);
         userVariables.put(name, var);
+        userVariables.put(name, var);
+        notifyObservers();
     }
 
     @Override
     public void addUserFunction(String name, Invokable function) {
-        dictionaryFunctions.put(name, function);
         userFunctions.put(name, function);
+        userFunctions.put(name, function);
+        notifyObservers();
     }
 
     private Map<String, Invokable> initCommandDictionary() {
@@ -135,7 +152,19 @@ public class EnvironmentImpl extends Observable implements Environment {
         });
         return commands;
     }
-    
+
+    private Map<String, Variable> initVariableDictonary() {
+        Map<String, Variable> variables = new HashMap<>();
+        Variable.getPredefinedVariables().forEach(e -> {
+            try {
+                variables.put(e.getName(), (Variable) e.get(null));
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+        });
+        return variables;
+    }
+
     /**
      * Add an object as a listener
      *
@@ -161,7 +190,7 @@ public class EnvironmentImpl extends Observable implements Environment {
      */
     public void notifyObservers() {
         for (Observer o : observers) {
-            o.update(this, new Object[]{dictionaryVariables, userFunctions});
+            o.update(this, new Object[]{userVariables, userFunctions});
         }
     }
 }

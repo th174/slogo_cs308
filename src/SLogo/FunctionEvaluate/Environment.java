@@ -20,14 +20,18 @@ import java.util.Observable;
  */
 public interface Environment{
     /**
+     * @return Get parent environment surrounding this one. Returns null if this environment is global.
+     */
+    Environment outer();
+    /**
      * @return Get all defined user variables
      */
-    Map<String, Variable> getUserVars();
+    Map<String, Variable> getLocalVars();
 
     /**
      * @return Get all defined user functions
      */
-    Map<String, Invokable> getUserFunctions();
+    Map<String, Invokable> getLocalFunctions();
 
     /**
      * @return Get all variables

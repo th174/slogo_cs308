@@ -1,14 +1,21 @@
 package SLogo.FunctionEvaluate.Variables;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
+    public static final Variable PI = new NumberVariable(Math.PI);
+    public static final Variable E = new NumberVariable(Math.E);
+    public static final Variable TRUE = new BoolVariable(true);
+    public static final Variable FALSE = new BoolVariable(false);
     public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
-    //IMMUTABLE
-    //ALL FIELDS MUST BE FINAL
+
     private final T value;
 
     Variable(T value) {
@@ -25,7 +32,6 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public NumberVariable difference(Variable other) {
         return new NumberVariable(toNumber() - other.toNumber());
-
     }
 
     public NumberVariable product(Variable other) {
@@ -33,13 +39,14 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public NumberVariable quotient(Variable other) {
+        if (other.toNumber() == 0){
+            throw new NotANumberException(this.toString()+"/"+other.toString());
+        }
         return new NumberVariable(toNumber() / other.toNumber());
-
     }
 
     public NumberVariable remainder(Variable other) {
         return new NumberVariable(toNumber() % other.toNumber());
-
     }
 
     public Variable negate() {
@@ -51,19 +58,19 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public NumberVariable sine() {
-        return new NumberVariable(Math.sin(toNumber()));
+        return new NumberVariable(Math.sin(Math.toRadians(toNumber())));
     }
 
     public NumberVariable cosine() {
-        return new NumberVariable(Math.cos(toNumber()));
+        return new NumberVariable(Math.cos(Math.toRadians(toNumber())));
     }
 
     public NumberVariable tangent() {
-        return new NumberVariable(Math.tan(toNumber()));
+        return new NumberVariable(Math.tan(Math.toRadians(toNumber())));
     }
 
     public NumberVariable atangent() {
-        return new NumberVariable(Math.atan(toNumber()));
+        return new NumberVariable(Math.toDegrees(Math.atan(toNumber())));
     }
 
     public NumberVariable log() {
@@ -74,19 +81,19 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return new NumberVariable(Math.pow(toNumber(), other.toNumber()));
     }
 
-    public BoolVariable lessThan(Variable other) {
-        return this.compareTo(other) < 0 ? BoolVariable.TRUE : BoolVariable.FALSE;
+    public Variable lessThan(Variable other) {
+        return this.compareTo(other) < 0 ? Variable.TRUE : Variable.FALSE;
     }
 
-    public BoolVariable greaterThan(Variable other) {
-        return this.compareTo(other) > 0 ? BoolVariable.TRUE : BoolVariable.FALSE;
+    public Variable greaterThan(Variable other) {
+        return this.compareTo(other) > 0 ? Variable.TRUE : Variable.FALSE;
     }
 
-    public BoolVariable equalTo(Variable other) {
-        return this.equals(other) ? BoolVariable.TRUE : BoolVariable.FALSE;
+    public Variable equalTo(Variable other) {
+        return this.equals(other) ? Variable.TRUE : Variable.FALSE;
     }
 
-    public BoolVariable notEqualTo(Variable other) {
+    public Variable notEqualTo(Variable other) {
         return equalTo(other).negate();
     }
 
@@ -98,18 +105,15 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return this.toBoolean() ? this : other;
     }
 
-    public BoolVariable not() {
-        return this.toBoolean() ? BoolVariable.FALSE : BoolVariable.TRUE;
+    public Variable not() {
+        return this.toBoolean() ? Variable.FALSE : Variable.TRUE;
     }
 
     public boolean equals(Variable o) {
         return this.compareTo(o) == 0;
     }
 
-    public ListVariable append(Variable other) {
-        if (other instanceof ListVariable) {
-            return new ListVariable(this).append(other);
-        }
+    public ListVariable list(Variable other) {
         return new ListVariable(this, other);
     }
 
@@ -128,7 +132,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public abstract boolean toBoolean();
 
-    public abstract double toNumber() throws NumberFormatException;
+    public abstract double toNumber() throws NotANumberException;
 
     @Override
     public String toString() {
@@ -136,11 +140,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     public static Variable fromString(String s) {
-        if (s.toUpperCase().equals(BoolVariable.TRUE.toString())) {
-            return BoolVariable.TRUE;
-        } else if (s.toUpperCase().equals(BoolVariable.FALSE.toString())) {
-            return BoolVariable.FALSE;
-        } else if (s.matches(regex.getString("Constant"))) {
+        if (s.matches(regex.getString("Constant"))) {
             try {
                 return new NumberVariable(Double.parseDouble(s));
             } catch (NumberFormatException e) {
@@ -151,6 +151,10 @@ public abstract class Variable<T> implements Comparable<Variable> {
         } else {
             throw new UnrecognizedSymbolException(s);
         }
+    }
+
+    public static Collection<Field> getPredefinedVariables() {
+        return Arrays.stream(Variable.class.getDeclaredFields()).filter(e -> e.getType().equals(Variable.class)).collect(Collectors.toSet());
     }
 
     static class UnrecognizedSymbolException extends RuntimeException {

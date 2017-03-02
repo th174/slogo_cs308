@@ -6,8 +6,6 @@ package SLogo.FunctionEvaluate.Variables;
 public final class NumberVariable extends Variable<Number> {
     //IMMUTABLE CLASS
     //ALL VARIABLES MUST BE FINAL
-    public static final NumberVariable PI = new NumberVariable(Math.PI);
-
     public NumberVariable(Number value) {
         super(value);
     }
@@ -19,7 +17,7 @@ public final class NumberVariable extends Variable<Number> {
     @Override
     public Variable sum(Variable other) {
         if (other instanceof StringVariable) {
-            return new StringVariable(this.toString() + other.toString());
+            return new StringVariable(this.toString() + ((StringVariable) other).value());
         } else {
             return super.sum(other);
         }

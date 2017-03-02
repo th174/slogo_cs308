@@ -18,13 +18,9 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
-    public ListVariable append(Variable other) {
+    public ListVariable list(Variable other) {
         List<Variable> temp = new LinkedList<>(value());
-        if (other instanceof ListVariable) {
-            temp.addAll(((ListVariable) other).value());
-        } else {
-            temp.add(other);
-        }
+        temp.add(other);
         return new ListVariable(temp);
     }
 
@@ -35,17 +31,13 @@ public final class ListVariable extends Variable<List<Variable>> {
 
     @Override
     public boolean toBoolean() {
-        return !value().isEmpty();
+        return value().get(value().size() - 1).toBoolean();
     }
 
     @Override
     public double toNumber() throws NotANumberException {
         try {
-            if (value().size() == 1) {
-                return value().get(0).toNumber();
-            } else {
-                throw new NumberFormatException();
-            }
+            return value().get(value().size() - 1).toNumber();
         } catch (NumberFormatException e) {
             throw new NotANumberException(value().toString());
         }

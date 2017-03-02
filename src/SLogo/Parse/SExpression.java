@@ -4,8 +4,10 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
+import SLogo.FunctionEvaluate.Variables.BoolVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,9 @@ public class SExpression extends LinkedList<Expression> implements Expression {
     }
 
     public Variable eval(Environment env) throws EvaluationTargetException {
+        if (size() == 0) {
+            return Variable.FALSE;
+        }
         Invokable command;
         try {
             command = peek().getCommand(env);
@@ -34,14 +39,14 @@ public class SExpression extends LinkedList<Expression> implements Expression {
             command = CommandList.DEFAULT_OPERATION;
             isOp = 0;
         }
-        return command.invoke(env, getBody());
+        return command.invoke(env, getBody().toArray(new Expression[0]));
     }
 
     @Override
-    public Expression[] getBody() {
-        Expression[] args = new Expression[this.size() - isOp];
-        for (int i = 0; i < args.length; i++) {
-            args[i] = get(i + isOp);
+    public List<Expression> getBody() {
+        List<Expression> args = new ArrayList<>();
+        for (int i = 0; i < this.size() - isOp; i++) {
+            args.add(get(i + isOp));
         }
         return args;
     }

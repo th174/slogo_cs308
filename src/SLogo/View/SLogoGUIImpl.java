@@ -1,6 +1,7 @@
 package SLogo.View;
 
 import SLogo.Repl;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
@@ -16,16 +17,25 @@ public class SLogoGUIImpl implements SLogoGUI {
 	
 	private Repl myRepl;
 	private CanvasView myCanvasView;
+	private EnvironmentImpl myEnv;
 	private Group myRoot;
 	private double myWidth;
 	private double myHeight;
 	
 	public SLogoGUIImpl(Repl repl,double width,double height){
 		myRepl = repl;
+		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
 		myRoot = new Group();
 		myWidth = width;
 		myHeight = height;
-    	GridPane gridPane = new GridPane();
+	}
+	
+    @Override
+    public Node getView() {
+    	GridPane gridPane = new GridPane(); 
+    	int SIZE = 900;
+    	System.out.println("1");
+	
     	double variableListHeightWeight = 4;
     	double functionListHeightWeight = 4;
     	double canvasHeightWeight = 8;
@@ -57,6 +67,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1);
     	
     	VariableListView variableListView = new VariableListViewBasic();
+    	myEnv.addObserver(variableListView);
     	Node variableListViewNode = variableListView.getView();
     	GridPane.setConstraints(variableListViewNode, 1, 0);
     	Rectangle rectangleVariableView = new Rectangle(myWidth * displayWidthRatio,myHeight * variableListHeightRatio);
@@ -64,6 +75,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	rectangleVariableView.setFill(Color.GREENYELLOW);
     	
     	FunctionListView functionListView = new FunctionListViewBasic();
+    	myEnv.addObserver(functionListView);
     	Node functionListViewNode = functionListView.getView();
     	GridPane.setConstraints(functionListViewNode, 1, 1);
     	Rectangle rectangleFunctionView = new Rectangle(myWidth * displayWidthRatio,myHeight * functionListHeightRatio);
@@ -74,10 +86,6 @@ public class SLogoGUIImpl implements SLogoGUI {
     			variableListViewNode,rectangleVariableView,functionListViewNode,rectangleFunctionView,canvasViewNode);
         myRoot.getChildren().addAll(gridPane,canvasViewNode);
         
-	}
-	
-    @Override
-    public Node getView() {
     	return myRoot;
     }
 
