@@ -29,7 +29,7 @@ public class SExpression extends LinkedList<Expression> implements Expression {
 
     public Variable eval(Environment env) throws EvaluationTargetException {
         if (size() == 0) {
-            return BoolVariable.FALSE;
+            return Variable.FALSE;
         }
         Invokable command;
         try {

@@ -10,7 +10,11 @@ public final class StringVariable extends Variable<String> {
 
     @Override
     public StringVariable sum(Variable other) {
-        return new StringVariable(toString() + other.toString());
+        if (other instanceof StringVariable) {
+            return new StringVariable(value() + other.value());
+        } else {
+            return new StringVariable(value() + other.toString());
+        }
     }
 
     @Override
@@ -39,19 +43,19 @@ public final class StringVariable extends Variable<String> {
     }
 
     @Override
-    public double toNumber() throws NotANumberException{
+    public double toNumber() throws NotANumberException {
         if (value().length() == 0) {
             return 0;
         }
         try {
             return Double.parseDouble(value());
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new NotANumberException(value());
         }
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return '\"' + value() + '\"';
     }
 }

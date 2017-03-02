@@ -29,12 +29,12 @@ public class CommandList {
         if (expr[0].eval(env).toBoolean()) {
             return LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         } else {
-            return BoolVariable.FALSE;
+            return Variable.FALSE;
         }
     };
     public static final Invokable REPEAT = (env, expr) -> {
         double count = expr[0].eval(env).toNumber();
-        Variable last = BoolVariable.FALSE;
+        Variable last = Variable.FALSE;
         while (count-- > 0) {
             last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         }
@@ -45,7 +45,7 @@ public class CommandList {
         env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : new NumberVariable(1));
         Variable limit = expr[0].getBody().remove(0).eval(env);
         Variable last = new NumberVariable(0);
-        while (env.getVariableByName(loopVar).greaterThan(limit) == BoolVariable.FALSE) {
+        while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
             last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : new NumberVariable(1)));
         }
@@ -116,8 +116,8 @@ public class CommandList {
     public static final TurtleSet SHOWTURTLE = (t, c) -> new NumberVariable(t.show());
     public static final TurtleSet PENDOWN = (t, c) -> new NumberVariable(t.dropPen());
     public static final TurtleSet PENUP = (t, c) -> new NumberVariable(t.liftPen());
-    public static final TurtleSet ISSHOWING = (t, c) -> !t.hidden() ? BoolVariable.TRUE : BoolVariable.FALSE;
-    public static final TurtleSet ISPENDOWN = (t, c) -> t.penDown() ? BoolVariable.TRUE : BoolVariable.FALSE;
+    public static final TurtleSet ISSHOWING = (t, c) -> !t.hidden() ? Variable.TRUE : Variable.FALSE;
+    public static final TurtleSet ISPENDOWN = (t, c) -> t.penDown() ? Variable.TRUE : Variable.FALSE;
     public static final TurtleSet XCOORDINATE = (t, c) -> new NumberVariable(c.getSpritePosition()[0]);
     public static final TurtleSet YCOORDINATE = (t, c) -> new NumberVariable(c.getSpritePosition()[1]);
     public static final Invokable MAKEVARIABLE = (env, expr) -> {
@@ -133,7 +133,7 @@ public class CommandList {
             throw new Invokable.UnexpectedArgumentException(3, expr.length);
         }
         env.addUserFunction(expr[0].toString(), new Procedure(expr[1], expr[2]));
-        return BoolVariable.TRUE;
+        return Variable.TRUE;
     };
     public static final Invokable IFELSE = (env, expr) -> {
         if (expr.length != 3) {

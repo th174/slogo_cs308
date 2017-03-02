@@ -12,11 +12,10 @@ import java.util.Arrays;
  */
 @FunctionalInterface
 public interface Accumulator extends Invokable {
-
     @Override
     default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         if (expr.length == 0) {
-            return BoolVariable.FALSE;
+            return Variable.FALSE;
         }
         Expression total = expr[expr.length - 1];
         if (expr.length == 1) {

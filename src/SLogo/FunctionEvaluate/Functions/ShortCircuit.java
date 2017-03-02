@@ -14,14 +14,14 @@ public interface ShortCircuit extends Invokable {
     @Override
     default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         if (expr.length == 0) {
-            return BoolVariable.FALSE;
+            return Variable.FALSE;
         }
         Expression total = expr[expr.length - 1];
         if (expr.length == 1) {
             return total.eval(env);
         } else {
             Variable eval = invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1));
-            return (eval.toBoolean() == test(BoolVariable.TRUE, BoolVariable.FALSE).toBoolean()) ? eval :
+            return (eval.toBoolean() == test(Variable.TRUE, Variable.FALSE).toBoolean()) ? eval :
                     test(eval, total.eval(env));
         }
     }

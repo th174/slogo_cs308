@@ -21,5 +21,5 @@ public interface BooleanTest extends Invokable {
         }
     }
 
-    BoolVariable operation(Variable var1, Variable var2);
+    Variable operation(Variable var1, Variable var2);
 }
