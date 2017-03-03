@@ -2,39 +2,43 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Turtles.Turtle;
+import SLogo.Turtles.NewTurtle;
 import SLogo.View.CanvasView;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Observer;
-import java.util.Observable;
+import java.util.function.Predicate;
 
 /**
  * Created by th174 on 2/19/2017.
  */
+
 /**
  * @author Stone Mathers
  * @author th174
- * Created 2/19/2017
- *
+ *         Created 2/19/2017
  */
-public interface Environment{
+public interface Environment {
     /**
      * @return Get parent environment surrounding this one. Returns null if this environment is global.
      */
     Environment outer();
+
     /**
-     * @return Get all defined user variables
+     * @return Get unmodifiable view of all defined user variables
      */
     Map<String, Variable> getLocalVars();
 
     /**
-     * @return Get all defined user functions
+     * @return Get unmodifiable view all defined user functions
      */
+    @Deprecated
     Map<String, Invokable> getLocalFunctions();
 
     /**
-     * @return Get all variables
+     * @return Get unmodifiable view all variables
      */
     Map<String, Variable> getAllVars();
 
@@ -53,14 +57,19 @@ public interface Environment{
      * @param name Name of function
      * @return Named function
      */
+    @Deprecated
     Invokable getFunctionByName(String name) throws FunctionNotFoundException;
 
-    
     /**
-     * @return Turtle
+     * @return All active turtles
      */
-    Turtle getTurtle();
-    
+    List<NewTurtle> getTurtles();
+
+    /**
+     * @return All turtles, including inactive turtles
+     */
+    List<NewTurtle> getAllTurtles();
+
     /**
      * @return CanvasView
      */
@@ -76,13 +85,14 @@ public interface Environment{
      * @param name     Name of function
      * @param function Function
      */
+    @Deprecated
     void addUserFunction(String name, Invokable function);
-    
+
     /**
-     * @param turt Turtle to be used
+     * @param filter Condition that selects active turtles
      */
-    void setTurtle(Turtle turt);
-    
+    void filterTurtles(Predicate<NewTurtle> filter);
+
     /**
      * @param canvas CanvasView to be used
      */

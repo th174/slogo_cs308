@@ -10,7 +10,7 @@ import SLogo.Parse.Expression;
 @FunctionalInterface
 public interface Invokable {
     /**
-     * @param env  Current runtime environment
+     * @param env Current runtime environment
      * @return Result of the command as a variable
      */
     Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException;
@@ -20,7 +20,9 @@ public interface Invokable {
         protected UnexpectedArgumentException(int expected, int actual) {
             super("Unexpected Number of arguments: Expected: " + expected + " Received: " + actual);
         }
+
+        protected UnexpectedArgumentException(String s) {
+            super("Unexpected argument: " + s);
+        }
     }
-
-
 }

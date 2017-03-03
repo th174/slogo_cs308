@@ -9,12 +9,36 @@ import java.util.List;
  */
 public final class ListVariable extends Variable<List<Variable>> {
 
-    public ListVariable(Variable... vars) {
+    ListVariable(Variable... vars) {
         super(new LinkedList<>(Arrays.asList(vars)));
     }
 
-    private ListVariable(List<Variable> list) {
+    ListVariable(List<Variable> list) {
         super(list);
+    }
+
+    @Override
+    public Variable sum(Variable other) {
+        return last().sum(other);
+    }
+
+    @Override
+    public Variable random() {
+        return last().random();
+    }
+
+    @Override
+    public boolean equals(Variable o) {
+        return last().equals(o);
+    }
+
+    @Override
+    public int compareTo(Variable o) {
+        return last().compareTo(o);
+    }
+
+    public boolean contains(Variable other) {
+        return value().stream().anyMatch(other::equals);
     }
 
     @Override
@@ -25,26 +49,30 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
-    public Variable finalElement() {
-        return value().get(value().size() - 1);
-    }
-
-    @Override
     public boolean toBoolean() {
-        return value().get(value().size() - 1).toBoolean();
+        return last().toBoolean();
     }
 
     @Override
     public double toNumber() throws NotANumberException {
         try {
-            return value().get(value().size() - 1).toNumber();
+            return last().toNumber();
         } catch (NumberFormatException e) {
             throw new NotANumberException(value().toString());
         }
     }
 
     @Override
+    public String toContentString() {
+        return last().toContentString();
+    }
+
+    @Override
     public String toString() {
-        return super.toString().replace("[", "(").replace("]", ")").replace(",", " .");
+        return "\n"+super.toContentString().replace("[", "(").replace("]", ")").replace(",", " .")+"\n";
+    }
+
+    private Variable last() {
+        return value().get(value().size() - 1);
     }
 }

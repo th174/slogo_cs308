@@ -10,9 +10,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-/**
- * Created by th174 on 2/17/2017.
- */
 public class SLogoGUIImpl implements SLogoGUI {
 	
 	private Repl myRepl;

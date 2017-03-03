@@ -10,6 +10,7 @@ import java.util.Arrays;
 /**
  * Created by th174 on 3/1/2017.
  */
+@FunctionalInterface
 public interface ShortCircuit extends Invokable {
     @Override
     default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {

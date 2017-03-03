@@ -23,9 +23,9 @@ public interface CanvasView extends Observer {
     void setImage(File imgFile);
     /**
      * Clears all lines from screen and instantiates a new Turtle.
-     * @throws InvalidImageFileException 
+     * @return distance moved
      */
-    void clearScreen();
+    double clearScreen();
     /**
 	 * Return the absolute position of the CanvasView's Sprite.
 	 * The position is represented as a 2d-array, with the

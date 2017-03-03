@@ -209,9 +209,10 @@ public class CanvasViewImpl implements CanvasView {
 	}
 
 	@Override
-	public void clearScreen(){
+	public double clearScreen(){
 		root.getChildren().clear();
 		instantializeSprite();
+		return 0;
 	}
 
 }

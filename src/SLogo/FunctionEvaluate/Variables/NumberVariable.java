@@ -6,18 +6,18 @@ package SLogo.FunctionEvaluate.Variables;
 public final class NumberVariable extends Variable<Number> {
     //IMMUTABLE CLASS
     //ALL VARIABLES MUST BE FINAL
-    public NumberVariable(Number value) {
+    NumberVariable(Number value) {
         super(value);
     }
 
-    public NumberVariable(String value) throws NotANumberException {
+    NumberVariable(String value) throws NotANumberException {
         super(Double.parseDouble(value));
     }
 
     @Override
     public Variable sum(Variable other) {
         if (other instanceof StringVariable) {
-            return new StringVariable(this.toString() + ((StringVariable) other).value());
+            return new StringVariable(this.toContentString() +  other.toContentString());
         } else {
             return super.sum(other);
         }
@@ -44,7 +44,7 @@ public final class NumberVariable extends Variable<Number> {
     }
 
     @Override
-    public String toString() {
-        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.toString();
+    public String toContentString() {
+        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.toContentString();
     }
 }
