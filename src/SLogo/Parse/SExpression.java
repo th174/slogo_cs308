@@ -29,7 +29,7 @@ public class SExpression extends LinkedList<Expression> implements Expression {
             command = peek().getCommand(env);
             isOp = 1;
         } catch (EnvironmentImpl.FunctionNotFoundException e) {
-            command = CommandList.DEFAULT_OPERATION;
+            command = CommandList.$DEFAULT_OPERATION$;
             isOp = 0;
         }
         return command.invoke(env, getBody().toArray(new Expression[0]));

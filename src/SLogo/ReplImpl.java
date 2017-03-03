@@ -7,8 +7,6 @@ import SLogo.Parse.Expression;
 import SLogo.Parse.LispSyntaxParser;
 import SLogo.Parse.Parser;
 import SLogo.Turtles.NewTurtleImpl;
-import SLogo.Turtles.SLogoTurtle;
-import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.io.IOException;
@@ -58,7 +56,7 @@ public class ReplImpl implements Repl {
     @Override
     public void setCanvas(CanvasView canvas) {
         userEnv.setCanvas(canvas);
-        userEnv.getTurtle().addObserver(canvas);
+        userEnv.getTurtles().addObserver(canvas);
     }
 
     @Override

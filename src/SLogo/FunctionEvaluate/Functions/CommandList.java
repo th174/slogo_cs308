@@ -1,6 +1,7 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.LambdaVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
@@ -10,6 +11,7 @@ import SLogo.View.CanvasView;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.ResourceBundle;
 
 /**
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
@@ -20,7 +22,7 @@ import java.util.Collection;
 public class CommandList {
     //Variable argument Length
     public static final Accumulator LIST = Variable::list;
-    public static final Accumulator DEFAULT_OPERATION = LIST;
+    public static final Accumulator $DEFAULT_OPERATION$ = LIST;
     public static final Accumulator SUM = Variable::sum;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
@@ -31,31 +33,25 @@ public class CommandList {
     public static final ShortCircuit OR = Variable::or;
     public static final Invokable IF = (env, expr) -> {
         if (expr[0].eval(env).toBoolean()) {
-            return DEFAULT_OPERATION.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            return $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         } else {
             return Variable.FALSE;
         }
     };
-    public static final Invokable REPEAT = (env, expr) -> {
-        double count = expr[0].eval(env).toNumber();
-        Variable last = Variable.FALSE;
-        while (count-- > 0) {
-            last = DEFAULT_OPERATION.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-        }
-        return last;
-    };
-    public static final Invokable DOTIMES = (env, expr) -> {
-        String loopVar = expr[0].getBody().remove(0).toString();
+    public static final Invokable LOOP = (env, expr) -> {
+        String loopVar = expr[0].getBody().size() > 1 ? expr[0].getBody().remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
         env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : Variable.newInstance(1));
         Variable limit = expr[0].getBody().remove(0).eval(env);
         Variable last = Variable.newInstance(0);
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
-            last = DEFAULT_OPERATION.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            last = $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : Variable.newInstance(1)));
         }
         return last;
     };
-    public static final Invokable FOR = DOTIMES;
+    public static final Invokable DOTIMES = LOOP; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Invokable FOR = LOOP; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Invokable REPEAT = LOOP; //There's actually only one loop function, it just behaves differently depending on the loop arguments
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
         public int expectedArity() {
@@ -74,6 +70,8 @@ public class CommandList {
         env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
+    public static final MultiTurtleSet ASK = (env, list, expr) -> $DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, e -> list.contains(Variable.newInstance(e.id()))), Arrays.copyOfRange(expr, 1, expr.length));
+    public static final Invokable ASKWITH = (env, expr) -> $DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, e -> expr[0].eval(env).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
     //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)
     public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
@@ -105,7 +103,7 @@ public class CommandList {
     public static final TurtleProperties XCOORDINATE = NewTurtle::getX;
     public static final TurtleProperties YCOORDINATE = NewTurtle::getY;
     public static final CanvasProperties CLEARSCREEN = CanvasView::clearScreen;
-    public static final Invokable IFELSE = new IterableInvokable() {
+    public static final IterableInvokable IFELSE = new IterableInvokable() {
         @Override
         public int expectedArity() {
             return 3;
@@ -119,6 +117,10 @@ public class CommandList {
                 return vargs[2].eval(env);
             }
         }
+    };
+    public static final MultiTurtleSet TELL = (env, list, expr) -> {
+        env.filterTurtles(e -> list.contains(Variable.newInstance(e.id())));
+        return list;
     };
 
 

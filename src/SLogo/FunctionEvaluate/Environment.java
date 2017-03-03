@@ -3,27 +3,29 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.NewTurtle;
-import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Observer;
-import java.util.Observable;
+import java.util.function.Predicate;
 
 /**
  * Created by th174 on 2/19/2017.
  */
+
 /**
  * @author Stone Mathers
  * @author th174
- * Created 2/19/2017
- *
+ *         Created 2/19/2017
  */
-public interface Environment{
+public interface Environment {
     /**
      * @return Get parent environment surrounding this one. Returns null if this environment is global.
      */
     Environment outer();
+
     /**
      * @return Get unmodifiable view of all defined user variables
      */
@@ -58,11 +60,15 @@ public interface Environment{
     @Deprecated
     Invokable getFunctionByName(String name) throws FunctionNotFoundException;
 
+    /**
+     * @return All active turtles
+     */
+    List<NewTurtle> getTurtles();
 
     /**
-     * @return Turtle
+     * @return All turtles, including inactive turtles
      */
-    NewTurtle getTurtle();
+    List<NewTurtle> getAllTurtles();
 
     /**
      * @return CanvasView
@@ -83,9 +89,9 @@ public interface Environment{
     void addUserFunction(String name, Invokable function);
 
     /**
-     * @param turtle Turtle to be used
+     * @param filter Condition that selects active turtles
      */
-    void setTurtle(NewTurtle turtle);
+    void filterTurtles(Predicate<NewTurtle> filter);
 
     /**
      * @param canvas CanvasView to be used

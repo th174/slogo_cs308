@@ -8,6 +8,8 @@ import SLogo.Turtles.NewTurtle;
 import SLogo.View.CanvasView;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by th174 on 2/16/2017.
@@ -16,31 +18,36 @@ public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
     private Collection<Observer> observers;
     private Environment outer;
-    private Map<String, Variable> userVariables;
-    @Deprecated
-    private Map<String, Invokable> userFunctions;
-    private NewTurtle myTurtle;
+    private Map<String, Variable> scopeVariables;
+    private Map<String, Invokable> scopeFunctions;
+    private List<NewTurtle> myTurtles;
+    private List<NewTurtle> myActiveTurtles;
     private CanvasView myCanvas;
 
     private EnvironmentImpl() {
-        userVariables = initVariableDictonary();
-        userFunctions = initCommandDictionary();
+        scopeVariables = initVariableDictonary();
+        scopeFunctions = initCommandDictionary();
         outer = null;
         observers = new ArrayList<>();
     }
 
-    public EnvironmentImpl(Environment outer, NewTurtle myTurtle) {
+    public EnvironmentImpl(Environment outer, List<NewTurtle> myTurtles) {
         this.outer = outer;
-        userFunctions = new HashMap<>();
-        userVariables = new HashMap<>();
+        scopeFunctions = new HashMap<>();
+        scopeVariables = new HashMap<>();
         observers = new ArrayList<>();
-        this.myTurtle = myTurtle;
+        this.myTurtles = myTurtles;
+    }
+
+    public EnvironmentImpl(Environment outer, Predicate<NewTurtle> turtleFilter) {
+        this(outer, outer.getAllTurtles());
+        filterTurtles(turtleFilter);
     }
 
     public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
-        this(outer, outer.getTurtle());
+        this(outer, outer.getTurtles());
         for (int i = 0; i < expr.length; i++) {
-            userVariables.put(params.get(i), expr[i].eval(outer));
+            scopeVariables.put(params.get(i), expr[i].eval(outer));
         }
     }
 
@@ -51,13 +58,13 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Variable> getLocalVars() {
-        return Collections.unmodifiableMap(userVariables);
+        return Collections.unmodifiableMap(scopeVariables);
     }
 
     @Deprecated
     @Override
     public Map<String, Invokable> getLocalFunctions() {
-        return Collections.unmodifiableMap(userFunctions);
+        return Collections.unmodifiableMap(scopeFunctions);
     }
 
     @Override
@@ -84,10 +91,10 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Variable getVariableByName(String name) throws VariableNotFoundException {
-        if (userVariables.containsKey(name)) {
-            return userVariables.get(name);
-        } else if (userVariables.containsKey(name)) {
-            return userVariables.get(name);
+        if (scopeVariables.containsKey(name)) {
+            return scopeVariables.get(name);
+        } else if (scopeVariables.containsKey(name)) {
+            return scopeVariables.get(name);
         } else if (Objects.isNull(outer)) {
             throw new VariableNotFoundException(name);
         } else {
@@ -98,10 +105,10 @@ public class EnvironmentImpl extends Observable implements Environment {
     @Deprecated
     @Override
     public Invokable getFunctionByName(String name) throws FunctionNotFoundException {
-        if (userFunctions.containsKey(name)) {
-            return userFunctions.get(name);
-        } else if (userFunctions.containsKey(name)) {
-            return userFunctions.get(name);
+        if (scopeFunctions.containsKey(name)) {
+            return scopeFunctions.get(name);
+        } else if (scopeFunctions.containsKey(name)) {
+            return scopeFunctions.get(name);
         } else if (Objects.isNull(outer)) {
             throw new FunctionNotFoundException(name);
         } else {
@@ -110,8 +117,13 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public NewTurtle getTurtle() {
-        return Objects.isNull(myTurtle) ? outer.getTurtle() : myTurtle;
+    public List<NewTurtle> getTurtles() {
+        return myActiveTurtles;
+    }
+
+    @Override
+    public List<NewTurtle> getAllTurtles() {
+        return myTurtles;
     }
 
     @Override
@@ -120,8 +132,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public void setTurtle(NewTurtle turtle) {
-        myTurtle = turtle;
+    public void filterTurtles(Predicate<NewTurtle> filter) {
+        myActiveTurtles = myTurtles.stream().filter(filter).collect(Collectors.toList());
     }
 
     @Override
@@ -131,16 +143,16 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public void addUserVariable(String name, Variable var) {
-        userVariables.put(name, var);
-        userVariables.put(name, var);
+        scopeVariables.put(name, var);
+        scopeVariables.put(name, var);
         notifyObservers();
     }
 
     @Deprecated
     @Override
     public void addUserFunction(String name, Invokable function) {
-        userFunctions.put(name, function);
-        userFunctions.put(name, function);
+        scopeFunctions.put(name, function);
+        scopeFunctions.put(name, function);
         notifyObservers();
     }
 
@@ -193,7 +205,7 @@ public class EnvironmentImpl extends Observable implements Environment {
      */
     public void notifyObservers() {
         for (Observer o : observers) {
-            o.update(this, new Object[]{userVariables, userFunctions});
+            o.update(this, new Object[]{scopeVariables, scopeFunctions});
         }
     }
 }

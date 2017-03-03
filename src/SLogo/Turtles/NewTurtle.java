@@ -7,6 +7,11 @@ import java.util.Observer;
  */
 public interface NewTurtle {
     /**
+     * @return current ID of turtle
+     */
+    int id();
+
+    /**
      * @return Angle at which the Turtle is facing
      */
     double getHeading();

@@ -4,8 +4,8 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public final class AtomicList extends LinkedList<String> implements Expression {
     public Invokable getCommand(Environment env) {
         try {
             Variable temp = env.getVariableByName(get());
-            if (temp instanceof Invokable){
+            if (temp instanceof Invokable) {
                 return (Invokable) temp;
             } else {
                 throw new Environment.VariableNotFoundException(temp.toString());
@@ -44,7 +44,7 @@ public final class AtomicList extends LinkedList<String> implements Expression {
 
     @Override
     public List<Expression> getBody() {
-        return Arrays.asList(new Expression[]{this});
+        return Collections.singletonList(this);
     }
 
     public boolean add(String o) {

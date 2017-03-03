@@ -17,6 +17,10 @@ public final class ListVariable extends Variable<List<Variable>> {
         super(list);
     }
 
+    public boolean contains(Variable other){
+        return value().stream().anyMatch(other::equals);
+    }
+
     @Override
     public ListVariable list(Variable other) {
         List<Variable> temp = new LinkedList<>(value());
