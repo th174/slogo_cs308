@@ -17,7 +17,27 @@ public final class ListVariable extends Variable<List<Variable>> {
         super(list);
     }
 
-    public boolean contains(Variable other){
+    @Override
+    public Variable sum(Variable other) {
+        return last().sum(other);
+    }
+
+    @Override
+    public Variable random() {
+        return last().random();
+    }
+
+    @Override
+    public boolean equals(Variable o) {
+        return last().equals(o);
+    }
+
+    @Override
+    public int compareTo(Variable o) {
+        return last().compareTo(o);
+    }
+
+    public boolean contains(Variable other) {
         return value().stream().anyMatch(other::equals);
     }
 
@@ -30,20 +50,29 @@ public final class ListVariable extends Variable<List<Variable>> {
 
     @Override
     public boolean toBoolean() {
-        return value().get(value().size() - 1).toBoolean();
+        return last().toBoolean();
     }
 
     @Override
     public double toNumber() throws NotANumberException {
         try {
-            return value().get(value().size() - 1).toNumber();
+            return last().toNumber();
         } catch (NumberFormatException e) {
             throw new NotANumberException(value().toString());
         }
     }
 
     @Override
+    public String toContentString() {
+        return last().toContentString();
+    }
+
+    @Override
     public String toString() {
-        return super.toString().replace("[", "(").replace("]", ")").replace(",", " .");
+        return "\n"+super.toContentString().replace("[", "(").replace("]", ")").replace(",", " .")+"\n";
+    }
+
+    private Variable last() {
+        return value().get(value().size() - 1);
     }
 }

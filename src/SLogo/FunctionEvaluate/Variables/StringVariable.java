@@ -10,11 +10,7 @@ public final class StringVariable extends Variable<String> {
 
     @Override
     public StringVariable sum(Variable other) {
-        if (other instanceof StringVariable) {
-            return new StringVariable(value() + other.value());
-        } else {
-            return new StringVariable(value() + other.toString());
-        }
+        return new StringVariable(value() + other.toContentString());
     }
 
     @Override
@@ -29,12 +25,12 @@ public final class StringVariable extends Variable<String> {
 
     @Override
     public boolean equals(Variable o) {
-        return o instanceof StringVariable ? this.toString().equals(o.toString()) : super.equals(o);
+        return o instanceof StringVariable ? this.toContentString().equals(o.toContentString()) : super.equals(o);
     }
 
     @Override
     public int compareTo(Variable o) {
-        return o instanceof StringVariable ? this.toString().compareTo(o.toString()) : super.compareTo(o);
+        return o instanceof StringVariable ? this.toContentString().compareTo(o.toContentString()) : super.compareTo(o);
     }
 
     @Override

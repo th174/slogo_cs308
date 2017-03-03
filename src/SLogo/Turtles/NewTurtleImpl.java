@@ -7,6 +7,11 @@ import java.util.Observer;
  */
 public class NewTurtleImpl implements NewTurtle {
     @Override
+    public int id() {
+        return 0;
+    }
+
+    @Override
     public double getHeading() {
         return 0;
     }

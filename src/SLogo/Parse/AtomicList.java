@@ -35,7 +35,7 @@ public final class AtomicList extends LinkedList<String> implements Expression {
             if (temp instanceof Invokable) {
                 return (Invokable) temp;
             } else {
-                throw new Environment.VariableNotFoundException(temp.toString());
+                throw new Environment.VariableNotFoundException(temp.toContentString());
             }
         } catch (Environment.VariableNotFoundException e) {
             return env.getFunctionByName(get());
@@ -44,7 +44,7 @@ public final class AtomicList extends LinkedList<String> implements Expression {
 
     @Override
     public List<Expression> getBody() {
-        return Collections.singletonList(this);
+        return new LinkedList<>(Collections.singleton(this));
     }
 
     public boolean add(String o) {

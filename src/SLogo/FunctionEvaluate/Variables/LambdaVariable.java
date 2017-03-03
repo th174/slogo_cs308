@@ -55,11 +55,16 @@ public final class LambdaVariable extends Variable implements Invokable {
 
     @Override
     public double toNumber() throws NotANumberException {
-        throw new NotANumberException(this.toString());
+        throw new NotANumberException(this.toContentString());
+    }
+
+    @Override
+    public String toContentString(){
+        return "#<LAMBDA>";
     }
 
     @Override
     public String toString() {
-        return "(λ " + params.toString().replace("[", "(").replace("]", ")").replace(",", "") + "\n\t" + Arrays.stream(body).map(Expression::toString).collect(Collectors.joining("\n\t")) + ")";
+        return "\n(λ " + params.toString().replace("[", "(").replace("]", ")").replace(",", "") + "\n\t" + Arrays.stream(body).map(Expression::toString).collect(Collectors.joining("\n\t")) + ")\n";
     }
 }

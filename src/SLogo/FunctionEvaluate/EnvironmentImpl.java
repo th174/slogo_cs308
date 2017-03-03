@@ -37,6 +37,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         scopeVariables = new HashMap<>();
         observers = new ArrayList<>();
         this.myTurtles = myTurtles;
+        this.myActiveTurtles = myTurtles;
     }
 
     public EnvironmentImpl(Environment outer, Predicate<NewTurtle> turtleFilter) {

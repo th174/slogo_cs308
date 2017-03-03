@@ -11,6 +11,7 @@ import SLogo.View.CanvasView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class ReplImpl implements Repl {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, new NewTurtleImpl());
+        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new NewTurtleImpl()));
     }
 
     @Override
@@ -34,19 +35,13 @@ public class ReplImpl implements Repl {
         System.out.print("SLogo >>");
         Expression currentCommand = parser.parse(input);
         history.add(currentCommand.toString());
-        System.out.println(eval(currentCommand));
+        eval(currentCommand);
         currentIndex++;
     }
 
     private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
         return expression.eval(userEnv);
     }
-
-
-/*    @Override
-    public void print() {
-        //TODO:
-    }*/
 
     @Override
     public List<String> getHistory() {
@@ -56,7 +51,7 @@ public class ReplImpl implements Repl {
     @Override
     public void setCanvas(CanvasView canvas) {
         userEnv.setCanvas(canvas);
-        userEnv.getTurtles().addObserver(canvas);
+        userEnv.getTurtles().forEach(t -> t.addObserver(canvas));
     }
 
     @Override

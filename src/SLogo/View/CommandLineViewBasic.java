@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
-
 public class CommandLineViewBasic implements CommandLineView {
     private final int TEXT_HEIGHT = 20;
     private final int TEXT_WIDTH = 11;

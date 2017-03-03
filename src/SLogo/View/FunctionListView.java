@@ -5,7 +5,7 @@ import javafx.scene.Node;
 
 public interface FunctionListView extends Observer{
 	
-	public Node getView();
+	Node getView();
 	
-	public void setSize(double width, double height);
+	void setSize(double width, double height);
 }

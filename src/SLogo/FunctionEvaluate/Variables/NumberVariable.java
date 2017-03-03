@@ -17,7 +17,7 @@ public final class NumberVariable extends Variable<Number> {
     @Override
     public Variable sum(Variable other) {
         if (other instanceof StringVariable) {
-            return new StringVariable(this.toString() + ((StringVariable) other).value());
+            return new StringVariable(this.toContentString() +  other.toContentString());
         } else {
             return super.sum(other);
         }
@@ -44,7 +44,7 @@ public final class NumberVariable extends Variable<Number> {
     }
 
     @Override
-    public String toString() {
-        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.toString();
+    public String toContentString() {
+        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.toContentString();
     }
 }

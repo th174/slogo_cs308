@@ -33,9 +33,4 @@ public final class BoolVariable extends Variable<Boolean> {
     public double toNumber() {
         return value() ? 1 : 0;
     }
-
-    @Override
-    public String toString() {
-        return value() ? "true" : "false";
-    }
 }

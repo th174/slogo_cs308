@@ -145,9 +145,13 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public abstract double toNumber() throws NotANumberException;
 
-    @Override
-    public String toString() {
+    public String toContentString() {
         return value.toString();
+    }
+
+    @Override
+    public String toString(){
+        return toContentString();
     }
 
     public static Variable<? extends java.io.Serializable> fromString(String s) {

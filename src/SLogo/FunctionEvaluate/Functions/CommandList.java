@@ -11,6 +11,7 @@ import SLogo.View.CanvasView;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -39,13 +40,15 @@ public class CommandList {
         }
     };
     public static final Invokable LOOP = (env, expr) -> {
-        String loopVar = expr[0].getBody().size() > 1 ? expr[0].getBody().remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
-        env.addUserVariable(loopVar, expr[0].getBody().size() > 2 ? expr[0].getBody().remove(0).eval(env) : Variable.newInstance(1));
-        Variable limit = expr[0].getBody().remove(0).eval(env);
+        List<Expression> loopParams = expr[0].getBody();
+        int loopArity = loopParams.size();
+        String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
+        env.addUserVariable(loopVar, loopArity >= 4 ? loopParams.remove(0).eval(env) : Variable.newInstance(1));
+        Variable limit = loopParams.remove(0).eval(env);
         Variable last = Variable.newInstance(0);
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
             last = $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : Variable.newInstance(1)));
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(loopArity >= 3 ? loopParams.get(0).eval(env) : Variable.newInstance(1)));
         }
         return last;
     };
@@ -72,6 +75,10 @@ public class CommandList {
     };
     public static final MultiTurtleSet ASK = (env, list, expr) -> $DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, e -> list.contains(Variable.newInstance(e.id()))), Arrays.copyOfRange(expr, 1, expr.length));
     public static final Invokable ASKWITH = (env, expr) -> $DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, e -> expr[0].eval(env).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
+    public static final Invokable PRINT = (env, expr) -> {
+        System.out.println($DEFAULT_OPERATION$.invoke(env, expr).toString());
+        return Variable.TRUE;
+    };
     //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)
     public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
@@ -122,7 +129,6 @@ public class CommandList {
         env.filterTurtles(e -> list.contains(Variable.newInstance(e.id())));
         return list;
     };
-
 
     /**
      * You should never instantiate this class
