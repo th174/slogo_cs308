@@ -9,7 +9,6 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by th174 on 2/17/2017.
@@ -19,10 +18,6 @@ public class SExpression extends LinkedList<Expression> implements Expression {
 
     public SExpression() {
         super();
-    }
-
-    public SExpression(List<Expression> l) {
-        super(l);
     }
 
     public Variable eval(Environment env) throws EvaluationTargetException {
@@ -49,10 +44,6 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         return args;
     }
 
-    private boolean addAll(List<String> c) {
-        return super.addAll(c.stream().map(AtomicList::new).collect(Collectors.toList()));
-    }
-
     @Override
     public Invokable getCommand(Environment env) {
         try {
@@ -67,6 +58,6 @@ public class SExpression extends LinkedList<Expression> implements Expression {
 
     @Override
     public String toString() {
-        return super.toString().replace("[", "(").replace("]", ")").replace(",", " .");
+        return super.toString().replace("[", "(").replace("]", ")").replace(",", "");
     }
 }

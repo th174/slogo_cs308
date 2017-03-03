@@ -56,7 +56,25 @@ public class CommandList {
         return last;
     };
     public static final Invokable FOR = DOTIMES;
-    //Fixed argument length (Accepts multiple arguments, but please, don't do it)
+    public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
+        @Override
+        public int expectedArity() {
+            return 2;
+        }
+
+        @Override
+        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+            env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
+            return vargs[0].eval(env);
+        }
+    };
+    public static final Invokable LAMBDA = (env, expr) -> new LambdaVariable(expr);
+    public static final Invokable MAKEUSERINSTRUCTION = (env, expr) -> {
+        env.addUserFunction(expr[0].toString(), (Invokable) LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
+        env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
+        return Variable.TRUE;
+    };
+    //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)
     public static final UnaryFunction RANDOM = Variable::random;
     public static final UnaryFunction NOT = Variable::not;
     public static final UnaryFunction MINUS = Variable::negate;
@@ -87,24 +105,6 @@ public class CommandList {
     public static final TurtleProperties XCOORDINATE = NewTurtle::getX;
     public static final TurtleProperties YCOORDINATE = NewTurtle::getY;
     public static final CanvasProperties CLEARSCREEN = CanvasView::clearScreen;
-    public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
-        @Override
-        public int expectedArity() {
-            return 2;
-        }
-
-        @Override
-        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-            env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
-            return vargs[0].eval(env);
-        }
-    };
-    public static final Invokable LAMBDA = (env, expr) -> new LambdaVariable(expr[0], Arrays.copyOfRange(expr, 1, expr.length));
-    public static final Invokable MAKEUSERINSTRUCTION = (env, expr) -> {
-//        env.addUserFunction(expr[0].toString(), new LambdaVariable(expr[1], Arrays.copyOfRange(expr, 2, expr.length)));
-        env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
-        return Variable.TRUE;
-    };
     public static final Invokable IFELSE = new IterableInvokable() {
         @Override
         public int expectedArity() {

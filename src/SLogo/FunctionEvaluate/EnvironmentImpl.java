@@ -5,7 +5,6 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Turtles.NewTurtle;
-import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.util.*;
@@ -15,10 +14,10 @@ import java.util.*;
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
-
     private Collection<Observer> observers;
     private Environment outer;
     private Map<String, Variable> userVariables;
+    @Deprecated
     private Map<String, Invokable> userFunctions;
     private NewTurtle myTurtle;
     private CanvasView myCanvas;
@@ -55,6 +54,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         return Collections.unmodifiableMap(userVariables);
     }
 
+    @Deprecated
     @Override
     public Map<String, Invokable> getLocalFunctions() {
         return Collections.unmodifiableMap(userFunctions);
@@ -95,6 +95,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         }
     }
 
+    @Deprecated
     @Override
     public Invokable getFunctionByName(String name) throws FunctionNotFoundException {
         if (userFunctions.containsKey(name)) {
@@ -135,6 +136,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         notifyObservers();
     }
 
+    @Deprecated
     @Override
     public void addUserFunction(String name, Invokable function) {
         userFunctions.put(name, function);

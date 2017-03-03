@@ -2,6 +2,7 @@ package SLogo.FunctionEvaluate.Variables;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
+import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.Parse.Expression;
 import SLogo.Parse.LispSyntaxParser;
@@ -19,6 +20,10 @@ public final class LambdaVariable extends Variable implements Invokable {
     private final List<String> params;
     private final Expression[] body;
 
+    public LambdaVariable(Expression... exprs) {
+        this(exprs[0], Arrays.copyOfRange(exprs, 1, exprs.length));
+    }
+
     public LambdaVariable(Expression params, Expression... body) {
         super(null);
         ResourceBundle regex = ResourceBundle.getBundle(LispSyntaxParser.RESOURCES_LOCATION + LispSyntaxParser.REGEX);
@@ -35,16 +40,7 @@ public final class LambdaVariable extends Variable implements Invokable {
 
     @Override
     public Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        return invokeBody(new EnvironmentImpl(env, params, expr), body);
-    }
-
-    private Variable invokeBody(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        if (expr.length == 1) {
-            return expr[0].eval(env);
-        } else {
-            expr[0].eval(env);
-            return invokeBody(env, Arrays.copyOfRange(expr, 1, expr.length));
-        }
+        return CommandList.LIST.invoke(new EnvironmentImpl(env, params, expr), body);
     }
 
     @Override
@@ -64,6 +60,6 @@ public final class LambdaVariable extends Variable implements Invokable {
 
     @Override
     public String toString() {
-        return "(λ " + params.toString().replace("[","(").replace("]",")").replace(","," . ") + " |\n\t" + Arrays.stream(body).map(Expression::toString).collect(Collectors.joining("\t\n")) + ")";
+        return "(λ " + params.toString().replace("[", "(").replace("]", ")").replace(",", "") + "\n\t" + Arrays.stream(body).map(Expression::toString).collect(Collectors.joining("\n\t")) + ")";
     }
 }

@@ -32,6 +32,7 @@ public interface Environment{
     /**
      * @return Get unmodifiable view all defined user functions
      */
+    @Deprecated
     Map<String, Invokable> getLocalFunctions();
 
     /**
@@ -54,6 +55,7 @@ public interface Environment{
      * @param name Name of function
      * @return Named function
      */
+    @Deprecated
     Invokable getFunctionByName(String name) throws FunctionNotFoundException;
 
 
@@ -77,6 +79,7 @@ public interface Environment{
      * @param name     Name of function
      * @param function Function
      */
+    @Deprecated
     void addUserFunction(String name, Invokable function);
 
     /**
