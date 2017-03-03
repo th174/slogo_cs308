@@ -25,11 +25,6 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
-    public Variable finalElement() {
-        return value().get(value().size() - 1);
-    }
-
-    @Override
     public boolean toBoolean() {
         return value().get(value().size() - 1).toBoolean();
     }

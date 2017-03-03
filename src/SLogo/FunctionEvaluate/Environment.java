@@ -7,39 +7,40 @@ import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.util.Map;
+import java.util.Observer;
+import java.util.Observable;
 
 /**
  * Created by th174 on 2/19/2017.
  */
-
 /**
  * @author Stone Mathers
  * @author th174
- *         Created 2/19/2017
+ * Created 2/19/2017
+ *
  */
-public interface Environment {
+public interface Environment{
     /**
      * @return Get parent environment surrounding this one. Returns null if this environment is global.
      */
     Environment outer();
-
     /**
      * @return Get unmodifiable view of all defined user variables
      */
     Map<String, Variable> getLocalVars();
 
     /**
-     * @return Get unmodifiable view of all defined user functions
+     * @return Get unmodifiable view all defined user functions
      */
     Map<String, Invokable> getLocalFunctions();
 
     /**
-     * @return Get unmodifiable view of all variables
+     * @return Get unmodifiable view all variables
      */
     Map<String, Variable> getAllVars();
 
     /**
-     * @return Get unmodifiable view of all functions
+     * @return Get all functions
      */
     Map<String, Invokable> getAllFunctions();
 
@@ -83,6 +84,10 @@ public interface Environment {
      */
     void setTurtle(NewTurtle turtle);
 
+    /**
+     * @param canvas CanvasView to be used
+     */
+    void setCanvas(CanvasView canvas);
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {

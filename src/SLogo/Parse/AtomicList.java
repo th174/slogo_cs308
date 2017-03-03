@@ -24,17 +24,22 @@ public final class AtomicList extends LinkedList<String> implements Expression {
         try {
             return env.getVariableByName(get());
         } catch (Environment.VariableNotFoundException vnfe) {
-            try {
-                return Variable.fromString(get());
-            } catch (Exception e) {
-                throw new EvaluationTargetException(e);
-            }
+            return Variable.fromString(get());
         }
     }
 
     @Override
     public Invokable getCommand(Environment env) {
-        return env.getFunctionByName(get());
+        try {
+            Variable temp = env.getVariableByName(get());
+            if (temp instanceof Invokable){
+                return (Invokable) temp;
+            } else {
+                throw new Environment.VariableNotFoundException(temp.toString());
+            }
+        } catch (Environment.VariableNotFoundException e) {
+            return env.getFunctionByName(get());
+        }
     }
 
     @Override

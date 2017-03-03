@@ -6,6 +6,7 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Parse.LispSyntaxParser;
 import SLogo.Parse.Parser;
+import SLogo.Turtles.NewTurtleImpl;
 import SLogo.Turtles.SLogoTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
@@ -27,7 +28,7 @@ public class ReplImpl implements Repl {
         parser = new LispSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, new SLogoTurtle());
+        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, new NewTurtleImpl());
     }
 
     @Override

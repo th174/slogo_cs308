@@ -21,6 +21,10 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         super();
     }
 
+    public SExpression(List<Expression> l) {
+        super(l);
+    }
+
     public Variable eval(Environment env) throws EvaluationTargetException {
         if (size() == 0) {
             return Variable.FALSE;
@@ -51,7 +55,14 @@ public class SExpression extends LinkedList<Expression> implements Expression {
 
     @Override
     public Invokable getCommand(Environment env) {
-        throw new Environment.FunctionNotFoundException(toString());
+        try {
+            if (peek().getCommand(env).equals(CommandList.LAMBDA)){
+                return (Invokable) eval(env);
+            }
+            throw new Environment.FunctionNotFoundException(peek().toString());
+        } catch (Exception e) {
+            throw new Environment.FunctionNotFoundException(toString());
+        }
     }
 
     @Override

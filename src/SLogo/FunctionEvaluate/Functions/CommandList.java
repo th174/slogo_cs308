@@ -1,6 +1,7 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.Variables.LambdaVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Turtles.NewTurtle;
@@ -18,18 +19,19 @@ import java.util.Collection;
  */
 public class CommandList {
     //Variable argument Length
+    public static final Accumulator LIST = Variable::list;
+    public static final Accumulator DEFAULT_OPERATION = LIST;
     public static final Accumulator SUM = Variable::sum;
     public static final Accumulator DIFFERENCE = Variable::difference;
     public static final Accumulator PRODUCT = Variable::product;
     public static final Accumulator QUOTIENT = Variable::quotient;
     public static final Accumulator REMAINDER = Variable::remainder;
     public static final Accumulator POWER = Variable::power;
-    public static final Accumulator LIST = Variable::list;
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
     public static final Invokable IF = (env, expr) -> {
         if (expr[0].eval(env).toBoolean()) {
-            return LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            return DEFAULT_OPERATION.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         } else {
             return Variable.FALSE;
         }
@@ -38,7 +40,7 @@ public class CommandList {
         double count = expr[0].eval(env).toNumber();
         Variable last = Variable.FALSE;
         while (count-- > 0) {
-            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            last = DEFAULT_OPERATION.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         }
         return last;
     };
@@ -48,7 +50,7 @@ public class CommandList {
         Variable limit = expr[0].getBody().remove(0).eval(env);
         Variable last = Variable.newInstance(0);
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
-            last = LIST.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
+            last = DEFAULT_OPERATION.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(expr[0].getBody().size() > 0 ? expr[0].getBody().get(0).eval(env) : Variable.newInstance(1)));
         }
         return last;
@@ -74,7 +76,6 @@ public class CommandList {
     public static final TurtleMovement SETHEADING = (t, v) -> t.setHeading(v.toNumber());
     public static final TurtlePosition SETPOSITION = (t, vx, vy) -> t.setXY(vx.toNumber(), vy.toNumber());
     public static final TurtlePosition SETTOWARDS = (t, vx, vy) -> t.setHeadingTowards(vx.toNumber(), vy.toNumber());
-    public static final CanvasProperties CLEARSCREEN = CanvasView::clearScreen;
     public static final TurtleProperties HOME = NewTurtle::reset;
     public static final TurtleProperties HEADING = NewTurtle::getHeading;
     public static final TurtleProperties HIDETURTLE = NewTurtle::hideTurtle;
@@ -85,6 +86,7 @@ public class CommandList {
     public static final TurtleProperties ISPENDOWN = NewTurtle::penDown;
     public static final TurtleProperties XCOORDINATE = NewTurtle::getX;
     public static final TurtleProperties YCOORDINATE = NewTurtle::getY;
+    public static final CanvasProperties CLEARSCREEN = CanvasView::clearScreen;
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
         public int expectedArity() {
@@ -93,25 +95,15 @@ public class CommandList {
 
         @Override
         public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-            if (vargs.length != 2) {
-                throw new Invokable.UnexpectedArgumentException(2, vargs.length);
-            } else {
-                env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
-                return vargs[0].eval(env);
-            }
+            env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
+            return vargs[0].eval(env);
         }
     };
-    public static final IterableInvokable MAKEUSERINSTRUCTION = new IterableInvokable() {
-        @Override
-        public int expectedArity() {
-            return 3;
-        }
-
-        @Override
-        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-            env.addUserFunction(vargs[0].toString(), new Procedure(vargs[1], vargs[2]));
-            return Variable.TRUE;
-        }
+    public static final Invokable LAMBDA = (env, expr) -> new LambdaVariable(expr[0], Arrays.copyOfRange(expr, 1, expr.length));
+    public static final Invokable MAKEUSERINSTRUCTION = (env, expr) -> {
+//        env.addUserFunction(expr[0].toString(), new LambdaVariable(expr[1], Arrays.copyOfRange(expr, 2, expr.length)));
+        env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
+        return Variable.TRUE;
     };
     public static final Invokable IFELSE = new IterableInvokable() {
         @Override
@@ -121,9 +113,6 @@ public class CommandList {
 
         @Override
         public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-            if (vargs.length != 3) {
-                throw new UnexpectedArgumentException(3, vargs.length);
-            }
             if (vargs[0].eval(env).toBoolean()) {
                 return vargs[1].eval(env);
             } else {
@@ -132,8 +121,6 @@ public class CommandList {
         }
     };
 
-
-    public static final Accumulator DEFAULT_OPERATION = LIST;
 
     /**
      * You should never instantiate this class

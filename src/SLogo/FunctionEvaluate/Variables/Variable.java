@@ -132,10 +132,6 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return new ListVariable(this, other);
     }
 
-    public Variable finalElement() {
-        return this;
-    }
-
     public int size() {
         return 1;
     }

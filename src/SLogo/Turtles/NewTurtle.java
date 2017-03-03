@@ -1,5 +1,7 @@
 package SLogo.Turtles;
 
+import java.util.Observer;
+
 /**
  * Created by th174 on 3/2/2017.
  */
@@ -17,6 +19,7 @@ public interface NewTurtle {
 
     /**
      * Set heading towards a specific point
+     *
      * @param x x-coordinate of point
      * @param y y-coordinate of point
      * @return angle moved
@@ -35,13 +38,11 @@ public interface NewTurtle {
     double setXY(double x, double y);
 
     /**
-     *
      * @return x-coordinate
      */
     double getX();
 
     /**
-     *
      * @return y-coordinate
      */
     double getY();
@@ -145,4 +146,25 @@ public interface NewTurtle {
     default double reset() {
         return setXY(0, 0);
     }
+
+    /**
+     * Add an object as a listener
+     *
+     * @author Riley Nisbet
+     */
+    void addObserver(Observer o);
+
+    /**
+     * Remove a listener
+     *
+     * @author Riley Nisbet
+     */
+    void removeObserver(Observer o);
+
+    /**
+     * Tell all listeners that something has changed
+     *
+     * @author Riley Nisbet
+     */
+    void notifyObservers();
 }

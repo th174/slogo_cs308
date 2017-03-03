@@ -30,17 +30,16 @@ public class EnvironmentImpl extends Observable implements Environment {
         observers = new ArrayList<>();
     }
 
-    public EnvironmentImpl(Environment outer, NewTurtle myTurtle, CanvasView myCanvas) {
+    public EnvironmentImpl(Environment outer, NewTurtle myTurtle) {
         this.outer = outer;
         userFunctions = new HashMap<>();
         userVariables = new HashMap<>();
         observers = new ArrayList<>();
         this.myTurtle = myTurtle;
-        this.myCanvas = myCanvas;
     }
 
     public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
-        this(outer, outer.getTurtle(), outer.getCanvas());
+        this(outer, outer.getTurtle());
         for (int i = 0; i < expr.length; i++) {
             userVariables.put(params.get(i), expr[i].eval(outer));
         }
@@ -122,6 +121,11 @@ public class EnvironmentImpl extends Observable implements Environment {
     @Override
     public void setTurtle(NewTurtle turtle) {
         myTurtle = turtle;
+    }
+
+    @Override
+    public void setCanvas(CanvasView canvas) {
+        myCanvas = canvas;
     }
 
     @Override
