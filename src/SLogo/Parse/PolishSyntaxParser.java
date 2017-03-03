@@ -6,9 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by th174 on 2/21/2017.
+ * Created by th174 on 3/3/2017.
  */
-public final class LispSyntaxParser implements Parser {
+public class PolishSyntaxParser implements Parser {
     public static final String RESOURCES_LOCATION = "resources.languages/";
     public static final String DEFAULT_LOCALE = "English";
     public static final String REGEX = "Syntax";
@@ -16,11 +16,11 @@ public final class LispSyntaxParser implements Parser {
     private ResourceBundle myLocale;
     private Map<String, String> translator;
 
-    public LispSyntaxParser() throws IOException {
+    public PolishSyntaxParser() throws IOException {
         this(DEFAULT_LOCALE);
     }
 
-    public LispSyntaxParser(String locale) throws SyntaxException, IOException {
+    public PolishSyntaxParser(String locale) throws SyntaxException, IOException {
         myRegex = ResourceBundle.getBundle(RESOURCES_LOCATION + REGEX);
         setLocale(locale);
     }

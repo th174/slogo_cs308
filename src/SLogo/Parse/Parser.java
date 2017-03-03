@@ -7,7 +7,6 @@ import java.io.IOException;
  */
 public interface Parser {
     /**
-     *
      * @param command User written command
      * @return Expression built from command
      */
@@ -18,4 +17,10 @@ public interface Parser {
      * @throws IOException If language is not supported
      */
     void setLocale(String locale) throws IOException;
+
+    class SyntaxException extends RuntimeException {
+        SyntaxException(String s) {
+            super("Error parsing syntax: " + s);
+        }
+    }
 }
