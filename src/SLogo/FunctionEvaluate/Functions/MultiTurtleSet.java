@@ -8,6 +8,7 @@ import SLogo.Parse.Expression;
 /**
  * Created by th174 on 3/2/2017.
  */
+@FunctionalInterface
 public interface MultiTurtleSet extends Invokable {
 
     Variable operation(Environment env, ListVariable listVariable, Expression... expr) throws Expression.EvaluationTargetException;

@@ -39,7 +39,7 @@ public class CommandList {
             return Variable.FALSE;
         }
     };
-    public static final Invokable LOOP = (env, expr) -> {
+    public static final Invokable REPEAT = (env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
         int loopArity = loopParams.size();
         String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
@@ -52,9 +52,8 @@ public class CommandList {
         }
         return last;
     };
-    public static final Invokable DOTIMES = LOOP; //There's actually only one loop function, it just behaves differently depending on the loop arguments
-    public static final Invokable FOR = LOOP; //There's actually only one loop function, it just behaves differently depending on the loop arguments
-    public static final Invokable REPEAT = LOOP; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Invokable DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Invokable FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
         public int expectedArity() {
@@ -92,13 +91,14 @@ public class CommandList {
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
     public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
-    public static final TurtleMovement FORWARD = (t, v) -> t.moveForward(v.toNumber());
-    public static final TurtleMovement BACKWARD = (t, v) -> t.moveBackward(v.toNumber());
-    public static final TurtleMovement LEFT = (t, v) -> t.rotateCCW(v.toNumber());
-    public static final TurtleMovement RIGHT = (t, v) -> t.rotateCW(v.negate().toNumber());
-    public static final TurtleMovement SETHEADING = (t, v) -> t.setHeading(v.toNumber());
-    public static final TurtlePosition SETPOSITION = (t, vx, vy) -> t.setXY(vx.toNumber(), vy.toNumber());
-    public static final TurtlePosition SETTOWARDS = (t, vx, vy) -> t.setHeadingTowards(vx.toNumber(), vy.toNumber());
+    public static final TurtleMovement FORWARD = NewTurtle::moveForward;
+    public static final TurtleMovement BACKWARD = NewTurtle::moveBackward;
+    public static final TurtleMovement LEFT = NewTurtle::rotateCCW;
+    public static final TurtleMovement RIGHT = NewTurtle::rotateCW;
+    public static final TurtleMovement SETHEADING = NewTurtle::setHeading;
+    public static final TurtlePosition SETPOSITION = NewTurtle::setXY;
+    public static final TurtlePosition SETTOWARDS = NewTurtle::setHeadingTowards;
+    public static final TurtleProperties ID = NewTurtle::id;
     public static final TurtleProperties HOME = NewTurtle::reset;
     public static final TurtleProperties HEADING = NewTurtle::getHeading;
     public static final TurtleProperties HIDETURTLE = NewTurtle::hideTurtle;
@@ -109,7 +109,14 @@ public class CommandList {
     public static final TurtleProperties ISPENDOWN = NewTurtle::penDown;
     public static final TurtleProperties XCOORDINATE = NewTurtle::getX;
     public static final TurtleProperties YCOORDINATE = NewTurtle::getY;
-    public static final CanvasProperties CLEARSCREEN = CanvasView::clearScreen;
+    public static final CanvasSetting SETBACKGROUND = CanvasView::setBackground;
+    public static final CanvasSetting SETSHAPE = CanvasView::setShape;
+    public static final CanvasSetting SETPENCOLOR = CanvasView::setPenColor;
+    public static final CanvasSetting SETPENSIZE = CanvasView::setPenSize;
+    public static final CanvasPalette SETPALETTE = CanvasView::setPalette;
+    public static final CanvasProperty CLEARSCREEN = CanvasView::clearScreen;
+    public static final CanvasProperty GETPENCOLOR = CanvasView::getPenColor;
+    public static final CanvasProperty GETSHAPE = CanvasView::getShape;
     public static final IterableInvokable IFELSE = new IterableInvokable() {
         @Override
         public int expectedArity() {
