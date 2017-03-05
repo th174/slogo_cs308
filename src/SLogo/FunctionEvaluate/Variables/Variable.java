@@ -15,7 +15,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     public static final Variable<Number> E = new NumberVariable(Math.E);
     public static final Variable<Boolean> TRUE = new BoolVariable(true);
     public static final Variable<Boolean> FALSE = new BoolVariable(false);
-    public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
+    private static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
 
     private final T value;
 

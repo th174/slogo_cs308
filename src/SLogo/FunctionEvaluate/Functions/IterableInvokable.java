@@ -12,18 +12,18 @@ import java.util.Arrays;
 public interface IterableInvokable extends Invokable {
 
     @Override
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        if (expr.length == 0 || expr.length % expectedArity() != 0) {
-            throw new UnexpectedArgumentException(expectedArity(), expr.length);
-        } else if (expr.length == expectedArity()) {
+    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+        if (expr.length == 0 || expr.length % minimumArity() != 0) {
+            throw new UnexpectedArgumentException(minimumArity(), expr.length);
+        } else if (expr.length == minimumArity()) {
             return operation(env, expr);
         } else {
             operation(env, expr);
-            return invoke(env, Arrays.copyOfRange(expr, expectedArity(), expr.length));
+            return invoke(env, Arrays.copyOfRange(expr, minimumArity(), expr.length));
         }
     }
 
-    int expectedArity();
+    int minimumArity();
 
     Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException;
 }

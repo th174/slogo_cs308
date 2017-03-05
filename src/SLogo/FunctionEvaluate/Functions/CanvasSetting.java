@@ -13,7 +13,7 @@ public interface CanvasSetting extends IterableInvokable {
     Object operation(CanvasView canvas, double var1);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 1;
     }
 

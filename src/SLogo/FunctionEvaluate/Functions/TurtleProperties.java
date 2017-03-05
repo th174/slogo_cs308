@@ -10,10 +10,16 @@ import SLogo.Turtles.NewTurtle;
  */
 @FunctionalInterface
 public interface TurtleProperties extends Invokable, TurtleIterable {
+
     Object operation(NewTurtle turtle);
 
     @Override
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default int minimumArity() {
+        return 0;
+    }
+
+    @Override
+    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         return forEachTurtle(env.getTurtles(), env, expr);
     }
 

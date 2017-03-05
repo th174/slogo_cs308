@@ -8,12 +8,12 @@ import SLogo.Parse.Expression;
  * Created by th174 on 2/16/2017.
  */
 @FunctionalInterface
-public interface UnaryFunction extends IterableInvokable {
+public interface UnaryIterable extends IterableInvokable {
 
     Variable operation(Variable var);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 1;
     }
 

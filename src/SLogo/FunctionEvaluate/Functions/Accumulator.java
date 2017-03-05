@@ -11,8 +11,15 @@ import java.util.Arrays;
  */
 @FunctionalInterface
 public interface Accumulator extends Invokable {
+    Variable accumulate(Variable var1, Variable var2);
+
     @Override
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default int minimumArity(){
+        return 2;
+    }
+
+    @Override
+    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         if (expr.length == 0) {
             return Variable.FALSE;
         }
@@ -23,6 +30,4 @@ public interface Accumulator extends Invokable {
             return accumulate(invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
         }
     }
-
-    Variable accumulate(Variable var1, Variable var2);
 }

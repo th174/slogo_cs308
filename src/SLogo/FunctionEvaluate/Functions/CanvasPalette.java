@@ -12,7 +12,7 @@ public interface CanvasPalette extends IterableInvokable {
     Object operation(CanvasView canvas, double var1, double var2, double var3, double var4);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 4;
     }
 

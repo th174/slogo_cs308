@@ -13,7 +13,7 @@ public interface BooleanTest extends IterableInvokable {
     Variable operation(Variable var1, Variable var2);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 2;
     }
 

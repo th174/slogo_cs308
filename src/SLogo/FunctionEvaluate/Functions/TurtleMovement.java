@@ -17,7 +17,7 @@ public interface TurtleMovement extends IterableInvokable, TurtleIterable {
     Number operation(NewTurtle turtle, double var1);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 1;
     }
 

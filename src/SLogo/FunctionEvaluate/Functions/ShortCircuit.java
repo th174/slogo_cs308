@@ -1,7 +1,6 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.Variables.BoolVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 
@@ -12,8 +11,10 @@ import java.util.Arrays;
  */
 @FunctionalInterface
 public interface ShortCircuit extends Invokable {
+    Variable test(Variable var1, Variable var2);
+
     @Override
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         if (expr.length == 0) {
             return Variable.FALSE;
         }
@@ -27,5 +28,7 @@ public interface ShortCircuit extends Invokable {
         }
     }
 
-    Variable test(Variable var1, Variable var2);
+    default int minimumArity() {
+        return 2;
+    }
 }

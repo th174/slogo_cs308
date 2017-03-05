@@ -3,16 +3,14 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.LambdaVariable;
+import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Turtles.NewTurtle;
 import SLogo.View.CanvasView;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
@@ -32,14 +30,17 @@ public class CommandList {
     public static final Accumulator POWER = Variable::power;
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
-    public static final Invokable IF = (env, expr) -> {
+    public static final BiFunction IF = (env, expr) -> {
         if (expr[0].eval(env).toBoolean()) {
             return $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
         } else {
             return Variable.FALSE;
         }
     };
-    public static final Invokable REPEAT = (env, expr) -> {
+    public static final BiFunction LAMBDA = (env, expr) -> new LambdaVariable(expr);
+    public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
+    public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
+    public static final TriFunction REPEAT = (env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
         int loopArity = loopParams.size();
         String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
@@ -52,11 +53,11 @@ public class CommandList {
         }
         return last;
     };
-    public static final Invokable DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
-    public static final Invokable FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final TriFunction DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final TriFunction FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
-        public int expectedArity() {
+        public int minimumArity() {
             return 2;
         }
 
@@ -66,27 +67,25 @@ public class CommandList {
             return vargs[0].eval(env);
         }
     };
-    public static final Invokable LAMBDA = (env, expr) -> new LambdaVariable(expr);
-    public static final Invokable MAKEUSERINSTRUCTION = (env, expr) -> {
+    public static final TriFunction MAKEUSERINSTRUCTION = (env, expr) -> {
         env.addUserFunction(expr[0].toString(), (Invokable) LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
         env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
-    public static final MultiTurtleSet ASK = (env, list, expr) -> $DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, e -> list.contains(Variable.newInstance(e.id()))), Arrays.copyOfRange(expr, 1, expr.length));
-    public static final Invokable ASKWITH = (env, expr) -> $DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, e -> expr[0].eval(env).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
-    public static final Invokable PRINT = (env, expr) -> {
-        System.out.println($DEFAULT_OPERATION$.invoke(env, expr).toString());
+    public static final UnaryIterable PRINT = var -> {
+        System.out.println(var);
         return Variable.TRUE;
     };
+
     //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)
-    public static final UnaryFunction RANDOM = Variable::random;
-    public static final UnaryFunction NOT = Variable::not;
-    public static final UnaryFunction MINUS = Variable::negate;
-    public static final UnaryFunction SINE = Variable::sine;
-    public static final UnaryFunction COSINE = Variable::cosine;
-    public static final UnaryFunction TANGENT = Variable::tangent;
-    public static final UnaryFunction ARCTANGENT = Variable::atangent;
-    public static final UnaryFunction NATURALLOG = Variable::log;
+    public static final UnaryIterable RANDOM = Variable::random;
+    public static final UnaryIterable NOT = Variable::not;
+    public static final UnaryIterable MINUS = Variable::negate;
+    public static final UnaryIterable SINE = Variable::sine;
+    public static final UnaryIterable COSINE = Variable::cosine;
+    public static final UnaryIterable TANGENT = Variable::tangent;
+    public static final UnaryIterable ARCTANGENT = Variable::atangent;
+    public static final UnaryIterable NATURALLOG = Variable::log;
     public static final BooleanTest LESSTHAN = Variable::lessThan;
     public static final BooleanTest GREATERTHAN = Variable::greaterThan;
     public static final BooleanTest EQUAL = Variable::equalTo;
@@ -119,7 +118,7 @@ public class CommandList {
     public static final CanvasProperty GETSHAPE = CanvasView::getShape;
     public static final IterableInvokable IFELSE = new IterableInvokable() {
         @Override
-        public int expectedArity() {
+        public int minimumArity() {
             return 3;
         }
 
@@ -132,9 +131,17 @@ public class CommandList {
             }
         }
     };
-    public static final MultiTurtleSet TELL = (env, list, expr) -> {
-        env.filterTurtles(e -> list.contains(Variable.newInstance(e.id())));
-        return list;
+    public static final IterableInvokable TELL = new IterableInvokable() {
+        @Override
+        public int minimumArity() {
+            return 1;
+        }
+
+        @Override
+        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+            env.filterTurtles(turtle -> ((ListVariable) LIST.invoke(env, vargs[0])).contains(Variable.newInstance(turtle.id())).toBoolean());
+            return LIST.invoke(env, vargs[0]);
+        }
     };
 
     /**
