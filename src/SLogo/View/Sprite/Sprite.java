@@ -61,12 +61,8 @@ public class Sprite {
 	/**
 	 * @return Array of length 2: First element is the X-coordinate, second element is the Y-coordinate. Center is (0,0)
 	 */
-	public int[] getAbsolutePosition(){
+	public int[] getPosition(){
 		return position;
-	}
-	
-	public int[] getZeroIndexedPosition(){
-		return new int[] {position[0]-viewWidth/2, -1*(position[1]-viewHeight/2)};
 	}
 	
 	public void setPosition(int[] newPos){
