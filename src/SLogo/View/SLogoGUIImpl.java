@@ -44,7 +44,7 @@ public class SLogoGUIImpl implements SLogoGUI {
     	MenuBarItems menuBarItems = new MenuBarItemsBasic();
     	Node menuBarItemsNode = menuBarItems.getView();
     	
-    	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio));
+    	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio), this);
     	myRepl.setCanvas(myCanvasView);
     	Node canvasViewNode = myCanvasView.getView();
     	
