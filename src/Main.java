@@ -18,12 +18,11 @@ public class Main extends Application {
         SLogoGUIImpl gui = new SLogoGUIImpl(repl,SIZE,SIZE);
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(gui.getView());
-        System.out.println("Ayylmao");
         Scene scene = new Scene(GUIPane, SIZE, SIZE);
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
-
 
     public static void main(String[] args) throws Exception {
         launch(args);

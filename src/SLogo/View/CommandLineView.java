@@ -6,8 +6,7 @@ import javafx.scene.Node;
  * @author Alex Salas
  *
  */
-public interface CommandLineView {
+public interface CommandLineView extends SLogoGUI{
 
-		public Node getView();
-		public void setSize(double width, double height);
+		public void setText(String command);
 }

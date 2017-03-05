@@ -2,6 +2,8 @@ package SLogo.View;
 
 import SLogo.Repl;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -44,10 +46,13 @@ public class CommandLineViewBasic implements CommandLineView {
 
     private void sendCommand() {
         try {
-            myRepl.read(myCommandText.getText());
-        } catch (Exception e) {
-            e.printStackTrace();
-            // TODO Make Alert
+			myRepl.read(myCommandText.getText());
+        }catch (Exception e) {
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle("Error");
+        	commandErrorAlert.setHeaderText("Command Not Recognized");
+        	commandErrorAlert.setContentText("Please check your syntax and try again!");
+        	commandErrorAlert.showAndWait();
         }
         myCommandText.clear();
     }
@@ -75,4 +80,10 @@ public class CommandLineViewBasic implements CommandLineView {
     public void setSize(double width, double height) {
 
     }
+
+	@Override
+	public void setText(String command) {
+		myCommandText.setText(command);
+		
+	}
 }
