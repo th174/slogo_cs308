@@ -43,7 +43,7 @@ public class Sprite {
 			spriteIV.setFitWidth(spriteWidth);
 			spriteIV.setFitHeight(spriteHeight);
 		} catch (IOException e) {
-	    	showError("Invalid File Type");
+	    	showError("Invalid Image File or Index");
 		}
 	}
 	

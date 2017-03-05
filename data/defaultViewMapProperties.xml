@@ -1,0 +1,18 @@
+<?xml version="1.0"?><!--Default View Map Properties (@Author Riley Nisbet)-->
+<SpriteSize>
+	<Width>30</Width>
+	<Height>30</Height>
+</<SpriteSize>>
+<Colors>
+	<Color>0,0,0</Color>
+	<Color>255,0,0</Color>
+	<Color>0,0,255</Color>
+	<Color>0,255,0</Color>
+</Colors>
+<Images>
+	<Image name=DefaultTurtle>data/Images/DefaultTurtle.png</Image>
+	<Image name=DetailedTurtle>data/Images/SampleTurtle.png</Image>
+	<Image name=Square>data/Images/Square.png</Image>
+	<Image name=Circle>data/Images/Circle.png</Image>
+	<Image name=Triangle>data/Images/Triangle.png</Image>
+</Images>

@@ -20,7 +20,7 @@ public interface CanvasView extends Observer {
      * @param bg background
      * @throws InvalidImageFileException
      */
-    void setImage(File imgFile);
+    void setImage(String filename);
 
     /**
      * Clears all lines from screen and instantiates a new Turtle.
@@ -64,6 +64,13 @@ public interface CanvasView extends Observer {
      * @return given index
      */
     int setPalette(double index, double r, double g, double b);
+    
+    /**
+     * Returns the RGB values associated with that index
+     * @param index
+     * @return int array of the three RGB values
+     */
+    int[] getPalette(double index);
 
     /**
      * @return turtle's current color index

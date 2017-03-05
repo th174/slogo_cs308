@@ -156,6 +156,8 @@ public class SLogoTurtle extends Observable implements Turtle {
      */
     public void addObserver(Observer o) {
         observers.add(o);
+      //MADE THIS CHANGE:
+        notifyObservers();
     }
 
     /**
