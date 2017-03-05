@@ -37,8 +37,8 @@ public final class ListVariable extends Variable<List<Variable>> {
         return last().compareTo(o);
     }
 
-    public boolean contains(Variable other) {
-        return value().stream().anyMatch(other::equals);
+    public Variable contains(Variable other) {
+        return value().stream().anyMatch(other::equals) ? TRUE : FALSE;
     }
 
     @Override
@@ -69,7 +69,7 @@ public final class ListVariable extends Variable<List<Variable>> {
 
     @Override
     public String toString() {
-        return "\n"+super.toContentString().replace("[", "(").replace("]", ")").replace(",", " .")+"\n";
+        return "\n" + super.toContentString().replace("[", "(").replace("]", ")").replace(",", " .") + "\n";
     }
 
     private Variable last() {

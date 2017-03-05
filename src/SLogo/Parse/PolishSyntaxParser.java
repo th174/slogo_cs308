@@ -2,18 +2,22 @@ package SLogo.Parse;
 
 import java.io.IOException;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Created by th174 on 2/21/2017.
+ * Created by th174 on 3/3/2017.
  */
-public final class LispSyntaxParser extends AbstractParser {
-    public LispSyntaxParser() throws IOException {
+public class PolishSyntaxParser extends AbstractParser {
+    public PolishSyntaxParser() throws IOException {
         super();
     }
 
-    public LispSyntaxParser(String locale) {
-        super(locale);
+    public PolishSyntaxParser(String locale)  {
+       super(locale);
     }
 
     protected Expression readTokens(Deque tokens) {
@@ -32,6 +36,12 @@ public final class LispSyntaxParser extends AbstractParser {
                 subList.add(readTokens(tokens));
             }
             tokens.removeFirst();
+            return subList;
+        } else if (token.matches(REGEX.getString("Command"))) {
+            int expectedArity = getTranslator().getArity(token);
+            for (int i = 0; Objects.nonNull(tokens.peek()) && i < expectedArity; i++) {
+                subList.add(readTokens(tokens));
+            }
             return subList;
         } else {
             return new AtomicList(getTranslator().get(token));

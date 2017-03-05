@@ -14,10 +14,10 @@ import SLogo.Turtles.NewTurtle;
 @FunctionalInterface
 public interface TurtleMovement extends IterableInvokable, TurtleIterable {
 
-    Number operation(NewTurtle turtle, Variable var1);
+    Number operation(NewTurtle turtle, double var1);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 1;
     }
 
@@ -28,6 +28,6 @@ public interface TurtleMovement extends IterableInvokable, TurtleIterable {
 
     @Override
     default Object doTurtle(NewTurtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-        return operation(turtle, vargs[0].eval(env));
+        return operation(turtle, vargs[0].eval(env).toNumber());
     }
 }

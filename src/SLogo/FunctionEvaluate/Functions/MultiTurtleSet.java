@@ -1,24 +1,28 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.Variables.ListVariable;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Turtles.NewTurtle;
+
+import java.util.Arrays;
 
 /**
  * Created by th174 on 3/2/2017.
  */
-public interface MultiTurtleSet extends Invokable {
+@FunctionalInterface
+public interface MultiTurtleSet extends IterableInvokable {
 
-    Variable operation(Environment env, ListVariable listVariable, Expression... expr) throws Expression.EvaluationTargetException;
+    Variable filter(Environment env, NewTurtle turtle, Expression expr) throws Expression.EvaluationTargetException;
 
     @Override
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        Variable list = expr[0].eval(env);
-        if (list instanceof ListVariable) {
-            return operation(env, (ListVariable) list,expr);
-        } else {
-            throw new Invokable.UnexpectedArgumentException(expr[0].toString());
-        }
+    default Variable operation(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+        return CommandList.$DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, turtle -> filter(env, turtle, expr[0]).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
+    }
+
+    @Override
+    default int minimumArity() {
+        return 1;
     }
 }

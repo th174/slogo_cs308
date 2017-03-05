@@ -15,7 +15,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     public static final Variable<Number> E = new NumberVariable(Math.E);
     public static final Variable<Boolean> TRUE = new BoolVariable(true);
     public static final Variable<Boolean> FALSE = new BoolVariable(false);
-    public static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
+    private static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
 
     private final T value;
 
@@ -25,13 +25,13 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public static Variable newInstance(Object o) {
         if (o instanceof Boolean) {
-            return ((Boolean) o).booleanValue() ? TRUE : FALSE;
+            return (Boolean) o ? TRUE : FALSE;
         } else if (o instanceof Number) {
             return new NumberVariable((Number) o);
         } else if (o instanceof String) {
             return new StringVariable((String) o);
         } else if (o instanceof List) {
-            return new ListVariable((List<Variable>) o);
+            return new ListVariable((List) o);
         } else {
             throw new UnrecognizedSymbolException(o.toString());
         }

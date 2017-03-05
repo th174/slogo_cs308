@@ -1,13 +1,16 @@
 package SLogo.Parse;
 
-import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 public interface Parser {
+    String RESOURCES_LOCATION = "resources.languages/";
+    String DEFAULT_LOCALE = "English";
+    ResourceBundle REGEX = ResourceBundle.getBundle(RESOURCES_LOCATION + "Syntax");
+
     /**
-     *
      * @param command User written command
      * @return Expression built from command
      */
@@ -15,7 +18,13 @@ public interface Parser {
 
     /**
      * @param locale Desired Locale of commands
-     * @throws IOException If language is not supported
+     * @return Translator for desired locale
      */
-    void setLocale(String locale) throws IOException;
+    Translator setLocale(String locale);
+
+    class SyntaxException extends RuntimeException {
+        SyntaxException(String s) {
+            super("Error parsing syntax: " + s);
+        }
+    }
 }

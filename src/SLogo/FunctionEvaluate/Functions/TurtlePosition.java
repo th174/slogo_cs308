@@ -11,10 +11,10 @@ import SLogo.Turtles.NewTurtle;
 @FunctionalInterface
 public interface TurtlePosition extends IterableInvokable, TurtleIterable {
 
-    Number operation(NewTurtle turtle, Variable var1, Variable var2);
+    Number operation(NewTurtle turtle, double var1, double var2);
 
     @Override
-    default int expectedArity() {
+    default int minimumArity() {
         return 2;
     }
 
@@ -25,6 +25,6 @@ public interface TurtlePosition extends IterableInvokable, TurtleIterable {
 
     @Override
     default Object doTurtle(NewTurtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-        return operation(turtle, vargs[0].eval(env), vargs[1].eval(env));
+        return operation(turtle, vargs[0].eval(env).toNumber(), vargs[1].eval(env).toNumber());
     }
 }

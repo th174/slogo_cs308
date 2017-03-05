@@ -39,8 +39,13 @@ public final class LambdaVariable extends Variable implements Invokable {
     }
 
     @Override
-    public Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    public Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
         return CommandList.LIST.invoke(new EnvironmentImpl(env, params, expr), body);
+    }
+
+    @Override
+    public int minimumArity() {
+        return params.size();
     }
 
     @Override
