@@ -1,7 +1,11 @@
 package SLogo.View;
 
+import java.util.ResourceBundle;
+
 import SLogo.Repl;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -16,12 +20,18 @@ public class CommandLineViewBasic implements CommandLineView {
     private Repl myRepl;
     private double myWidth;
     private double myHeight;
+	private CanvasView myCanvasView;
+	private final static String RESOURCES_PATH = "resources/View/";
+	private final static String PROPERTIES_FILENAME = "CommandLine";
+	private ResourceBundle myResources;
 
 
-    public CommandLineViewBasic(Repl repl, double width, double height) {
+    public CommandLineViewBasic(Repl repl, CanvasView canvasView, double width, double height) {
         myRepl = repl;
         myWidth = width;
         myHeight = height;
+        myCanvasView = canvasView;
+		initializeResources();
         initializeGridPane();
         initializeCommandPrompt();
         initializeRunButton();
@@ -29,14 +39,23 @@ public class CommandLineViewBasic implements CommandLineView {
         myCommandLine.getChildren().addAll(myCommandText, myRunButton, myClearButton);
     }
 
-    private void initializeClearButton() {
-        myClearButton = new Button("PLACEHOLDER CLEAR");
+    private void initializeResources() {
+    	myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
+	}
+
+	private void initializeClearButton() {
+        myClearButton = new Button(myResources.getString("ClearButton"));
         myClearButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * (1 - .8));
         GridPane.setConstraints(myClearButton, 1, 1);
+        myClearButton.setOnAction(e -> clearScreen());
     }
 
-    private void initializeRunButton() {
-        myRunButton = new Button("PLACEHOLDER RUN");
+    private void clearScreen() {
+		myCanvasView.clearScreen();
+	}
+
+	private void initializeRunButton() {
+        myRunButton = new Button(myResources.getString("RunButton"));
         myRunButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
         GridPane.setConstraints(myRunButton, 1, 0);
         myRunButton.setOnAction(e -> sendCommand());
@@ -44,10 +63,13 @@ public class CommandLineViewBasic implements CommandLineView {
 
     private void sendCommand() {
         try {
-            myRepl.read(myCommandText.getText());
-        } catch (Exception e) {
-            e.printStackTrace();
-            // TODO Make Alert
+			myRepl.read(myCommandText.getText());
+        }catch (Exception e) {
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle("Error");
+        	commandErrorAlert.setHeaderText("Command Not Recognized");
+        	commandErrorAlert.setContentText("Please check your syntax and try again!");
+        	commandErrorAlert.showAndWait();
         }
         myCommandText.clear();
     }
@@ -75,4 +97,10 @@ public class CommandLineViewBasic implements CommandLineView {
     public void setSize(double width, double height) {
 
     }
+
+	@Override
+	public void setText(String command) {
+		myCommandText.setText(command);
+		
+	}
 }

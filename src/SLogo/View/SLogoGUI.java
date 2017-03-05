@@ -10,4 +10,6 @@ public interface SLogoGUI {
      * @return View of GUI
      */
     Node getView();
+
+	void setSize(double width, double height);
 }
