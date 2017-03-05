@@ -21,10 +21,6 @@ import java.util.function.Predicate;
  *         Created 2/19/2017
  */
 public interface Environment {
-    /**
-     * @return Get parent environment surrounding this one. Returns null if this environment is global.
-     */
-    Environment outer();
 
     /**
      * @return Get unmodifiable view of all defined user variables

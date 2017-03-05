@@ -53,11 +53,6 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public Environment outer() {
-        return outer;
-    }
-
-    @Override
     public Map<String, Variable> getLocalVars() {
         return Collections.unmodifiableMap(scopeVariables);
     }
