@@ -40,8 +40,7 @@ public class CanvasViewImpl implements CanvasView {
 		setPen((boolean) newProperties[0]);
 		setPenColor(Color.BLACK);
 		sprite.setDirection(((Double) newProperties[1]).intValue());
-		System.out.println("move: " + newProperties[2] +" " +  newProperties[3]);
-		move(new int[] {((Double)newProperties[2]).intValue(), ((Double) newProperties[3]).intValue() * -1});
+		move(new int[] {((Double)newProperties[2]).intValue(), ((Double) newProperties[3]).intValue()});
 		setHidden((boolean)newProperties[4]);
 	}
 	
@@ -55,81 +54,62 @@ public class CanvasViewImpl implements CanvasView {
 	}
 	
 	private int[] findIntercepts(double x, double y, double xVector, double yVector){
-		if (checkVerticalOrHorizontalSlope(x, y, xVector, yVector) != null){
-			return checkVerticalOrHorizontalSlope(x, y, xVector, yVector);
+		int[] position = absoluteToZero(new int[] {(int) x,(int) y});
+		if (checkVerticalOrHorizontalSlope(position[0], position[1], xVector, yVector) != null){
+			return checkVerticalOrHorizontalSlope(position[0], position[1], xVector, yVector);
 		}
-		double vectorSlope = xVector/yVector;
-		double xRef = 0;
-		double yRef = 0;
-		if (xVector > 0){
-			xRef = viewWidth;
+		double m = yVector/xVector;
+		double xRef = viewWidth/2;
+		double yRef = viewHeight/2;
+		if (xVector < 0){
+			xRef *= -1;
 		}
-		if (yVector > 0){
-			yRef = viewHeight;
+		if (yVector < 0){
+			yRef *= -1;
 		}
-		return interceptMath(x, y, xVector, yVector, vectorSlope, xRef, yRef);
-	}
-
-	public int[] interceptMath(double x, double y, double xVector, double yVector, double vectorSlope, double xRef,
-			double yRef) {
-		double refSlope = (y-yRef)/(x-xRef);
+		double refVector = (position[1]-yRef)/(position[0]-xRef);
+		double b = position[1] - m * position[0];
 		double xInt;
 		double yInt;
-		if (Math.abs(vectorSlope) > Math.abs(refSlope)){
+		if (Math.abs(m) > Math.abs(refVector)){
 			//bouncing off top or bottom
-			if (yVector > 0){
-				//bottom
-				yInt = viewWidth;
-				xInt = x + (viewHeight - y)/vectorSlope;
-			}
-			else {
-				//top
-				yInt = 0;
-				xInt = x + y/vectorSlope;
-			}
+			yInt = yRef;
+			xInt = (yRef-b)/m;
 		}
 		else {
 			//bouncing off right or left
-			if (xVector > 0){
-				//right
-				xInt = viewWidth;
-				yInt = y + (viewWidth - x)*vectorSlope;
-			}
-			else {
-				//left
-				xInt = 0;
-				yInt = y + x*vectorSlope;
-			}
+			xInt = xRef;
+			yInt = m*(xRef) + b;
 		}
-		return new int[] {(int) yInt, (int) xInt};
+		return zeroToAbsolute(new int[] {(int) xInt, (int) yInt});
 	}
-
-	private int[] checkVerticalOrHorizontalSlope(double x, double y, double xVector, double yVector) {
+	
+	private int[] checkVerticalOrHorizontalSlope(int x, int y, double xVector, double yVector) {
 		if (xVector == 0){
 			if (yVector > 0){
-				return new int[] {(int) x, viewWidth};
+				return zeroToAbsolute(new int[] {x, viewHeight/2});
 			}
 			else{
-				return new int[] {(int) x, 0};
+				return zeroToAbsolute(new int[] {x, -1 * viewHeight/2});
 			}
 		}
 		if (yVector == 0){
 			if (xVector > 0){
-				return new int[] {viewWidth, (int) y};
+				return zeroToAbsolute(new int[] {viewWidth/2, y});
 			}
 			else{
-				return new int[] {0, (int) y};
+				return zeroToAbsolute(new int[] {0-1 * viewWidth/2, y});
 			}
 		}
 		return null;
 	}
-
+	
 	private void move(int[] vector){
 		vector[0] = Math.round(vector[0]);
 		vector[1] = Math.round(vector[1]);
 		ArrayList<int[]> linesToMake = new ArrayList<int[]>();
 		addLinesToMake(vector, linesToMake);
-		int[] finalPosition = sprite.getAbsolutePosition();
+		int[] finalPosition = sprite.getPosition();
 		for (int[] coordinates : linesToMake){
 			if (penDown){
 				Line line = new Line();
@@ -143,16 +123,28 @@ public class CanvasViewImpl implements CanvasView {
 			finalPosition = new int[] {coordinates[2], coordinates[3]};
 		}
 		sprite.setPosition(finalPosition);
-		System.out.println("pos" + finalPosition[0] + " " + finalPosition[1]);
+	}
+	
+	private int[] zeroToAbsolute(int[] zeroPosition){
+		return new int[] {zeroPosition[0]+viewWidth/2, -1*(zeroPosition[1]-viewHeight/2)};
+	}
+	
+	private int[] absoluteToZero(int[] absolutePosition){
+		return new int[] {absolutePosition[0]-viewWidth/2, (-1*absolutePosition[1])+viewHeight/2};
 	}
 
 	private void addLinesToMake(int[] vector, ArrayList<int[]> linesToMake) {
-		int[] currLocation = sprite.getAbsolutePosition();
+		//yVector is conventionally facing (+ is up), but this class uses unconventional (+ is down)
+		int[] currLocation = sprite.getPosition();
 		int[] nextLocation;
-		while (true){
-			nextLocation = new int[] {currLocation[0] + vector[0], currLocation[1] + vector[1]};
+		int count = 0;
+		while (count < 100){
+			count++;
+			nextLocation = new int[] {currLocation[0] + vector[0], currLocation[1] - vector[1]};
 			if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0){
 				int[] intercepts = findIntercepts(currLocation[0], currLocation[1], vector[0], vector[1]);
+				int deltaX = intercepts[0] - currLocation[0];
+				int deltaY = intercepts[1] - currLocation[1];
 				linesToMake.add(new int[] {currLocation[0], currLocation[1], intercepts[0], intercepts[1]});
 				currLocation = intercepts;
 				if (currLocation[0] == 0){
@@ -167,6 +159,8 @@ public class CanvasViewImpl implements CanvasView {
 				else if (currLocation[1] == viewHeight){
 					currLocation[1] = 0;
 				}
+				vector[0] -= deltaX;
+				vector[1] += deltaY;
 			}
 			else{
 				linesToMake.add(new int[] {currLocation[0], currLocation[1], nextLocation[0], nextLocation[1]});
@@ -205,55 +199,13 @@ public class CanvasViewImpl implements CanvasView {
 	 * @return	Sprite's absolute location
 	 */
 	public int[] getSpritePosition(){
-		return sprite.getZeroIndexedPosition();
+		return absoluteToZero(sprite.getPosition());
 	}
 
 	@Override
 	public double clearScreen(){
 		root.getChildren().clear();
 		instantializeSprite();
-		return 0;
-	}
-
-	@Override
-	public int setBackground(double index) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int setPenColor(double index) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int setPenSize(double index) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int setShape(double index) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int setPalette(double index, double r, double g, double b) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getPenColor() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShape() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
