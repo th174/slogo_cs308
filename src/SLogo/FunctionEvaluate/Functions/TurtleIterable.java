@@ -14,6 +14,8 @@ import static SLogo.FunctionEvaluate.Variables.Variable.FALSE;
  */
 @FunctionalInterface
 public interface TurtleIterable {
+    Object doTurtle(NewTurtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException;
+
     default Variable forEachTurtle(List<NewTurtle> turtleList, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
         if (turtleList.isEmpty()) {
             return FALSE;
@@ -24,6 +26,4 @@ public interface TurtleIterable {
             return forEachTurtle(turtleList, env, vargs);
         }
     }
-
-    Object doTurtle(NewTurtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException;
 }

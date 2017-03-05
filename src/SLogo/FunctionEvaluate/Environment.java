@@ -51,14 +51,14 @@ public interface Environment {
      * @param name Name of variable
      * @return Named variable
      */
-    Variable getVariableByName(String name) throws VariableNotFoundException;
+    Variable getVariableByName(String name) ;
 
     /**
      * @param name Name of function
      * @return Named function
      */
     @Deprecated
-    Invokable getFunctionByName(String name) throws FunctionNotFoundException;
+    Invokable getFunctionByName(String name) ;
 
     /**
      * @return All active turtles

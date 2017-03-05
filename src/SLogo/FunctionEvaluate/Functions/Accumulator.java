@@ -14,7 +14,7 @@ public interface Accumulator extends Invokable {
     Variable accumulate(Variable var1, Variable var2);
 
     @Override
-    default int minimumArity(){
+    default int minimumArity() {
         return 2;
     }
 
@@ -29,5 +29,13 @@ public interface Accumulator extends Invokable {
         } else {
             return accumulate(invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
         }
+    }
+
+    @Override
+    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+        if (expr.length < minimumArity() - 1) {
+            throw new UnexpectedArgumentException(minimumArity(), expr.length);
+        }
+        return eval(env, expr);
     }
 }
