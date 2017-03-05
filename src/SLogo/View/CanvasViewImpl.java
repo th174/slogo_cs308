@@ -215,4 +215,46 @@ public class CanvasViewImpl implements CanvasView {
 		return 0;
 	}
 
+	@Override
+	public int setBackground(double index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int setPenColor(double index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int setPenSize(double index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int setShape(double index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int setPalette(double index, double r, double g, double b) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getPenColor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShape() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
