@@ -2,6 +2,8 @@ package SLogo.View;
 
 import SLogo.Repl;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
+import SLogo.View.Menu.MenuBarItems;
+import SLogo.View.Menu.MenuBarItemsBasic;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
@@ -25,81 +27,69 @@ public class SLogoGUIImpl implements SLogoGUI {
 		myRoot = new Group();
 		myWidth = width;
 		myHeight = height;
-	}
-	
-    @Override
-    public Node getView() {
-    	GridPane gridPane = new GridPane(); 
-    	int SIZE = 900;
-    	System.out.println("1");
-	
-    	double variableListHeightWeight = 4;
-    	double functionListHeightWeight = 4;
+
+		GridPane gridPane = new GridPane();
     	double canvasHeightWeight = 8;
     	double commandLineHeightWeight = 2;
     	// Heights | Rows
     	double canvasHeightRatio = canvasHeightWeight/(canvasHeightWeight + commandLineHeightWeight);
     	double commandLineHeightRatio = commandLineHeightWeight/(canvasHeightWeight + commandLineHeightWeight);
-    	double variableListHeightRatio = canvasHeightRatio * variableListHeightWeight/(variableListHeightWeight + functionListHeightWeight);
-    	double functionListHeightRatio = canvasHeightRatio * functionListHeightWeight/(variableListHeightWeight + functionListHeightWeight);
     	// Widths | Columns
     	double canvasWidthWeight = 8;
     	double displayWidthWeight = 2;
     	double canvasWidthRatio = canvasWidthWeight/(canvasWidthWeight + displayWidthWeight);
     	double displayWidthRatio = displayWidthWeight/(canvasWidthWeight + displayWidthWeight);
-    	setGridConstraints(gridPane, commandLineHeightRatio, variableListHeightRatio, functionListHeightRatio,
-				canvasWidthRatio, displayWidthRatio);
-    	System.out.println((int)(myWidth * canvasWidthRatio));
+    	setGridConstraints(gridPane, canvasHeightRatio, commandLineHeightRatio, canvasWidthRatio, displayWidthRatio);
+    	
+    	MenuBarItems menuBarItems = new MenuBarItemsBasic();
+    	Node menuBarItemsNode = menuBarItems.getView();
+    	
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio));
-
     	myRepl.setCanvas(myCanvasView);
     	Node canvasViewNode = myCanvasView.getView();
     	
     	Rectangle rectangleCanvasView = new Rectangle(myWidth * canvasWidthRatio,myHeight * canvasHeightRatio);
-    	GridPane.setConstraints(rectangleCanvasView, 0, 0, 1, 2);
+    	GridPane.setConstraints(rectangleCanvasView, 0, 0, 1, 1);
     	rectangleCanvasView.setFill(Color.AQUAMARINE);
     	
     	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myWidth,myHeight*.2);
     	Node commandLineNode = commandLine.getView();
-    	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1);
+    	GridPane.setConstraints(commandLineNode, 0, 1, 2, 1);
     	
-    	VariableListView variableListView = new VariableListViewBasic();
-    	myEnv.addObserver(variableListView);
-    	Node variableListViewNode = variableListView.getView();
-    	GridPane.setConstraints(variableListViewNode, 1, 0);
-    	Rectangle rectangleVariableView = new Rectangle(myWidth * displayWidthRatio,myHeight * variableListHeightRatio);
-    	GridPane.setConstraints(rectangleVariableView, 1, 0);
-    	rectangleVariableView.setFill(Color.GREENYELLOW);
+    	Rectangle rectangleMenuView = new Rectangle(width,height);
+    	rectangleMenuView.setFill(Color.GREENYELLOW);
+    	GridPane.setConstraints(rectangleMenuView, 1, 0);
     	
-    	FunctionListView functionListView = new FunctionListViewBasic();
-    	myEnv.addObserver(functionListView);
-    	Node functionListViewNode = functionListView.getView();
-    	GridPane.setConstraints(functionListViewNode, 1, 1);
-    	Rectangle rectangleFunctionView = new Rectangle(myWidth * displayWidthRatio,myHeight * functionListHeightRatio);
-    	GridPane.setConstraints(rectangleFunctionView, 1, 1);
-    	rectangleFunctionView.setFill(Color.BLANCHEDALMOND);
+    	SLogoGUI menuItemTabPane = new MenuItemTabPane(commandLine, myEnv, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
+    	Node menuItemTabPaneNode = menuItemTabPane.getView();
+    	GridPane.setConstraints(menuItemTabPaneNode, 1, 0);
     	
-    	gridPane.getChildren().addAll(rectangleCanvasView,commandLineNode,
-    			variableListViewNode,rectangleVariableView,functionListViewNode,rectangleFunctionView,canvasViewNode);
-        myRoot.getChildren().addAll(gridPane,canvasViewNode);
-        
+    	gridPane.getChildren().addAll(rectangleCanvasView,menuItemTabPaneNode,commandLineNode);
+        myRoot.getChildren().addAll(gridPane,canvasViewNode,menuBarItemsNode);
+	}
+	
+    @Override
+    public Node getView() {
     	return myRoot;
     }
 
-	private void setGridConstraints(GridPane gridPane, double commandLineHeightRatio, double variableListHeightRatio,
-			double functionListHeightRatio, double canvasWidthRatio, double displayWidthRatio) {
-		RowConstraints variableRow = new RowConstraints();
-    	variableRow.setPercentHeight(variableListHeightRatio);
-    	RowConstraints functionRow = new RowConstraints();
-    	functionRow.setPercentHeight(functionListHeightRatio);
+	private void setGridConstraints(GridPane gridPane, double canvasHeightRatio, double commandLineHeightRatio, double canvasWidthRatio, double displayWidthRatio) {
+		RowConstraints canvasRow = new RowConstraints();
+		canvasRow.setPercentHeight(canvasHeightRatio);
     	RowConstraints commandLineRow = new RowConstraints();
     	commandLineRow.setPercentHeight(commandLineHeightRatio);
-    	gridPane.getRowConstraints().addAll(variableRow,functionRow,commandLineRow);
+    	gridPane.getRowConstraints().addAll(canvasRow,commandLineRow);
     	
     	ColumnConstraints canvasColumn = new ColumnConstraints();
     	canvasColumn.setPercentWidth(canvasWidthRatio);
     	ColumnConstraints displayColumn = new ColumnConstraints();
     	displayColumn.setPercentWidth(displayWidthRatio);
     	gridPane.getColumnConstraints().addAll(canvasColumn,displayColumn);
+	}
+
+	@Override
+	public void setSize(double width, double height) {
+		// TODO Auto-generated method stub
+		
 	}
 }
