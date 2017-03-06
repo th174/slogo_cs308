@@ -178,6 +178,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		//this also needs to return the distance traveled
 		root.getChildren().clear();
 		instantializeSprite(0); 
+		//TODO: return distance moved
 		return 0;
 	}
 

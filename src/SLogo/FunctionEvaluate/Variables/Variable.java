@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
-    public static final Variable<Number> PI = new NumberVariable(Math.PI);
-    public static final Variable<Number> E = new NumberVariable(Math.E);
-    public static final Variable<Boolean> TRUE = new BoolVariable(true);
-    public static final Variable<Boolean> FALSE = new BoolVariable(false);
-    private static final ResourceBundle regex = ResourceBundle.getBundle("resources.languages/Syntax");
+    public static final Variable PI = new NumberVariable(Math.PI);
+    public static final Variable E = new NumberVariable(Math.E);
+    public static final Variable TRUE = new BoolVariable(true);
+    public static final Variable FALSE = new BoolVariable(false);
+    protected static final ResourceBundle REGEX = ResourceBundle.getBundle("resources.languages/Syntax");
 
     private final T value;
 
@@ -154,14 +154,14 @@ public abstract class Variable<T> implements Comparable<Variable> {
         return toContentString();
     }
 
-    public static Variable<? extends java.io.Serializable> fromString(String s) {
-        if (s.matches(regex.getString("Constant"))) {
+    public static Variable fromString(String s) {
+        if (s.matches(REGEX.getString("Constant"))) {
             try {
                 return new NumberVariable(Double.parseDouble(s));
             } catch (NumberFormatException e) {
                 throw new NotANumberException(s);
             }
-        } else if (s.matches(regex.getString("StringLiteral"))) {
+        } else if (s.matches(REGEX.getString("StringLiteral"))) {
             return new StringVariable(s.substring(1, s.length() - 1));
         } else {
             throw new UnrecognizedSymbolException(s);
