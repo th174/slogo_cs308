@@ -2,9 +2,7 @@ package SLogo.View;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +15,6 @@ import org.xml.sax.SAXException;
 import javafx.scene.paint.Color;
 
 public class XMLParser {
-	private static ResourceBundle viewResources;
 	
 	public static void populateMaps(Map<Double,Color> colorMap, Map<Double,String> imageMap, String filename) {
 		File mapPropertiesFile = new File(filename);

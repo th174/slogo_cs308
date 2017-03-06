@@ -2,7 +2,6 @@ package SLogo.View;
 
 import javafx.scene.Node;
 
-import java.io.File;
 import java.util.Observer;
 
 /**
@@ -17,10 +16,11 @@ public interface CanvasView extends Observer {
     /**
      * Sets Image
      *
-     * @param bg background
+     * @param ID		ID of the turtle trying to change
+     * @param filename 	filename of image to set
      * @throws InvalidImageFileException
      */
-    void setImage(String filename);
+    void setImage(int ID, String filename);
 
     /**
      * Clears all lines from screen and instantiates a new Turtle.
@@ -48,10 +48,11 @@ public interface CanvasView extends Observer {
     int setPenSize(double index);
 
     /**
+     * @param ID	ID of the turtle trying to change
      * @param index sets shape of turtle to that represented by index
      * @return given index
      */
-    int setShape(double index);
+    int setShape(int ID, double index);
 
     /**
      * sets color corresponding at given index to given r g b color values
@@ -78,7 +79,29 @@ public interface CanvasView extends Observer {
     int getPenColor();
 
     /**
+     * @param ID	ID of the turtle trying to access
      * @return turtle's current shape index
      */
-    int getShape();
+    int getShape(int currID);
+    
+    /**
+	 * Add an object as a listener
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void addObserver(Observer o);
+	
+	/**
+	 * Remove a listener
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void removeObserver(Observer o);
+	
+	/**
+	 * Tell all listeners that something has changed
+	 * 
+	 * @author Riley Nisbet
+	 */
+	public void notifyObservers();
 }
