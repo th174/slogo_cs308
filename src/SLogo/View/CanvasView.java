@@ -48,11 +48,10 @@ public interface CanvasView extends Observer {
     int setPenSize(double index);
 
     /**
-     * @param ID	ID of the turtle trying to change
      * @param index sets shape of turtle to that represented by index
      * @return given index
      */
-    int setShape(int ID, double index);
+    int setShape(double index);
 
     /**
      * sets color corresponding at given index to given r g b color values
@@ -79,10 +78,9 @@ public interface CanvasView extends Observer {
     int getPenColor();
 
     /**
-     * @param ID	ID of the turtle trying to access
      * @return turtle's current shape index
      */
-    int getShape(int currID);
+    int getShape();
     
     /**
 	 * Add an object as a listener
