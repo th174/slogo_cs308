@@ -39,9 +39,9 @@ public abstract class AbstractParser implements Parser {
 
     @Override
     public Expression parse(String input) {
-        LinkedList<String> tokens = tokenSplit("(" + input.replaceAll(REGEX.getString("Comment"), "") + ")");
+        LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
         Expression temp = readTokens(tokens);
-        System.out.println(temp.toString());
+        System.out.println(temp.toString().substring(1,temp.toString().length()-1));
         return temp;
     }
 

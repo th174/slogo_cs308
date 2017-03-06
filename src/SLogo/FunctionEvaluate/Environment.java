@@ -21,10 +21,6 @@ import java.util.function.Predicate;
  *         Created 2/19/2017
  */
 public interface Environment {
-    /**
-     * @return Get parent environment surrounding this one. Returns null if this environment is global.
-     */
-    Environment outer();
 
     /**
      * @return Get unmodifiable view of all defined user variables
@@ -51,14 +47,14 @@ public interface Environment {
      * @param name Name of variable
      * @return Named variable
      */
-    Variable getVariableByName(String name) throws VariableNotFoundException;
+    Variable getVariableByName(String name) ;
 
     /**
      * @param name Name of function
      * @return Named function
      */
     @Deprecated
-    Invokable getFunctionByName(String name) throws FunctionNotFoundException;
+    Invokable getFunctionByName(String name) ;
 
     /**
      * @return All active turtles

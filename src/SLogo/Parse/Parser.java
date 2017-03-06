@@ -23,7 +23,7 @@ public interface Parser {
     Translator setLocale(String locale);
 
     class SyntaxException extends RuntimeException {
-        SyntaxException(String s) {
+        public SyntaxException(String s) {
             super("Error parsing syntax: " + s);
         }
     }

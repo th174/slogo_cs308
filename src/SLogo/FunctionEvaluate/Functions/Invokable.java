@@ -2,12 +2,18 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Parse.AtomicList;
 import SLogo.Parse.Expression;
+import SLogo.Parse.Parser;
+import SLogo.Parse.SExpression;
+
+import java.util.*;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 public interface Invokable {
+    ResourceBundle REGEX = ResourceBundle.getBundle("resources.languages/Syntax");
 
     /**
      * @param env Current runtime environment
@@ -25,6 +31,7 @@ public interface Invokable {
         }
         return eval(env, expr);
     }
+
 
     /**
      * @return default number of arguments
