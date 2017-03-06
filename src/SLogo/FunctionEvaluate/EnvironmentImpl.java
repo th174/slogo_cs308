@@ -114,7 +114,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public List<NewTurtle> getTurtles() {
-        return myActiveTurtles;
+        return new ArrayList<>(myActiveTurtles);
     }
 
     @Override
