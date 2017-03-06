@@ -40,7 +40,7 @@ public class CommandList {
     public static final BiFunction LAMBDA = (env, expr) -> new LambdaVariable(expr);
     public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
     public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
-    public static final TriFunction REPEAT = (env, expr) -> {
+    public static final BiFunction REPEAT = (env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
         int loopArity = loopParams.size();
         String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
@@ -53,8 +53,8 @@ public class CommandList {
         }
         return last;
     };
-    public static final TriFunction DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
-    public static final TriFunction FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final BiFunction DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final BiFunction FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
         public int minimumArity() {

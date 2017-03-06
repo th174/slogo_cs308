@@ -177,7 +177,43 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	public double clearScreen(){ //will this method clear the screen and create a disconnected turtle? that's a problem
 		//this also needs to return the distance traveled
 		root.getChildren().clear();
-		instantializeSprite(0); 
+		instantializeSprite();
+		//TODO: return distance moved
+		return 0;
+	}
+
+	@Override
+	public int setBackground(double index) {
+		return 0;
+	}
+
+	@Override
+	public int setPenColor(double index) {
+		return 0;
+	}
+
+	@Override
+	public int setPenSize(double index) {
+		return 0;
+	}
+
+	@Override
+	public int setShape(double index) {
+		return 0;
+	}
+
+	@Override
+	public int setPalette(double index, double r, double g, double b) {
+		return 0;
+	}
+
+	@Override
+	public int getPenColor() {
+		return 0;
+	}
+
+	@Override
+	public int getShape() {
 		return 0;
 	}
 

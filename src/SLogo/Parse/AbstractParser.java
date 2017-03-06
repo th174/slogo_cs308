@@ -17,7 +17,7 @@ public abstract class AbstractParser implements Parser {
     }
 
     public AbstractParser(String locale) {
-        myTranslator = setLocale(locale);
+        setLocale(locale);
     }
 
     private LinkedList<String> tokenSplit(String s) {
@@ -39,15 +39,15 @@ public abstract class AbstractParser implements Parser {
 
     @Override
     public Expression parse(String input) {
-        LinkedList<String> tokens = tokenSplit("(" + input.replaceAll(REGEX.getString("Comment"), "") + ")");
+        LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
         Expression temp = readTokens(tokens);
-        System.out.println(temp.toString());
+        System.out.println(temp.toString().substring(1, temp.toString().length() - 1));
         return temp;
     }
 
     @Override
-    public Translator setLocale(String locale) {
-        return new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
+    public void setLocale(String locale) {
+        myTranslator = new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
     }
 
 }

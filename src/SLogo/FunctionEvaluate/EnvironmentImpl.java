@@ -53,11 +53,6 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public Environment outer() {
-        return outer;
-    }
-
-    @Override
     public Map<String, Variable> getLocalVars() {
         return Collections.unmodifiableMap(scopeVariables);
     }
@@ -119,7 +114,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public List<NewTurtle> getTurtles() {
-        return myActiveTurtles;
+        return new ArrayList<>(myActiveTurtles);
     }
 
     @Override

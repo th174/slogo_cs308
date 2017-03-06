@@ -11,7 +11,7 @@ import SLogo.Turtles.NewTurtle;
 @FunctionalInterface
 public interface TurtlePosition extends IterableInvokable, TurtleIterable {
 
-    Number operation(NewTurtle turtle, double var1, double var2);
+    Object operation(NewTurtle turtle, double var1, double var2);
 
     @Override
     default int minimumArity() {

@@ -5,12 +5,10 @@ import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.Parse.Expression;
-import SLogo.Parse.LispSyntaxParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 /**
@@ -26,10 +24,9 @@ public final class LambdaVariable extends Variable implements Invokable {
 
     public LambdaVariable(Expression params, Expression... body) {
         super(null);
-        ResourceBundle regex = ResourceBundle.getBundle(LispSyntaxParser.RESOURCES_LOCATION + LispSyntaxParser.REGEX);
         this.params = new ArrayList<>();
         for (Expression expr : params.getBody()) {
-            if (expr.toString().matches(regex.getString("Variable"))) {
+            if (expr.toString().matches(Variable.REGEX.getString("Variable"))) {
                 this.params.add(expr.toString());
             } else {
                 throw new RuntimeException(expr.toString());
@@ -64,7 +61,7 @@ public final class LambdaVariable extends Variable implements Invokable {
     }
 
     @Override
-    public String toContentString(){
+    public String toContentString() {
         return "#<LAMBDA>";
     }
 

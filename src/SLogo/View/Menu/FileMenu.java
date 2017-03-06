@@ -2,6 +2,8 @@ package SLogo.View.Menu;
 
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
@@ -12,9 +14,9 @@ public class FileMenu implements SLogoMenu{
 	private final static String PROPERTIES_FILENAME = "FileMenu";
 	private ResourceBundle myResources;
 	
-	public FileMenu() {
+	public FileMenu(EventHandler<ActionEvent> addProject) {
 		initializeResources();
-		initializeFileMenu();
+		initializeFileMenu(addProject);
 	}
 	
 	
@@ -23,12 +25,10 @@ public class FileMenu implements SLogoMenu{
 	}
 
 
-	private void initializeFileMenu() {
+	private void initializeFileMenu(EventHandler<ActionEvent> addProject) {
 		myFileMenu.setText(myResources.getString("FileMenu"));
 		MenuItem fileChoice = new MenuItem(myResources.getString("NewProject"));
-		fileChoice.setOnAction(e -> {
-			//Add new tab of a blank project.
-		});
+		fileChoice.setOnAction(addProject);
 		myFileMenu.getItems().add(fileChoice);
 	}
 
