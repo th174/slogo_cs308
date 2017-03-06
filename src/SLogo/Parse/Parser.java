@@ -18,9 +18,8 @@ public interface Parser {
 
     /**
      * @param locale Desired Locale of commands
-     * @return Translator for desired locale
      */
-    Translator setLocale(String locale);
+    void setLocale(String locale);
 
     class SyntaxException extends RuntimeException {
         public SyntaxException(String s) {
