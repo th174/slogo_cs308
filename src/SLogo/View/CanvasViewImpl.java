@@ -182,41 +182,6 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		return 0;
 	}
 
-	@Override
-	public int setBackground(double index) {
-		return 0;
-	}
-
-	@Override
-	public int setPenColor(double index) {
-		return 0;
-	}
-
-	@Override
-	public int setPenSize(double index) {
-		return 0;
-	}
-
-	@Override
-	public int setShape(double index) {
-		return 0;
-	}
-
-	@Override
-	public int setPalette(double index, double r, double g, double b) {
-		return 0;
-	}
-
-	@Override
-	public int getPenColor() {
-		return 0;
-	}
-
-	@Override
-	public int getShape() {
-		return 0;
-	}
-
 	/**
      * Add an object as a listener
      *
