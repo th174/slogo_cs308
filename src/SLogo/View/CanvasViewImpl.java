@@ -33,15 +33,17 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	private HashMap<Integer,Boolean> penDownMap;
 	private HashMap<Integer,Double> currentImageIndexMap;
 	
-	public CanvasViewImpl(int aviewWidth, int aviewHeight, SLogoGUIImpl SLogoGUI){
-		gui = SLogoGUI;
+	public CanvasViewImpl(int aviewWidth, int aviewHeight){
+		//TODO: get SlogoGUI instance to change background
+		//gui = SLogoGUI;
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
 		root = new Group();
 		colorMap = new HashMap<Double, Color>();
 		imageMap = new HashMap<Double, String>();
 		XMLParser.populateMaps(colorMap, imageMap, defaultMapPropertiesFilename);
-		notifyObservers();
+		//TODO: notify GUI of maps
+		//notifyObservers();
 	}
 	
 	//theoretically, when Stone makes first turtle, it will create an instance using instantializeSprite
@@ -187,7 +189,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	public double clearScreen(){ //will this method clear the screen and create a disconnected turtle? that's a problem
 		//this also needs to return the distance traveled
 		root.getChildren().clear();
-		instantializeSprite();
+		instantializeSprite(0);
 		//TODO: return distance moved
 		return 0;
 	}
