@@ -16,8 +16,8 @@ import javafx.scene.paint.Color;
 
 public class XMLParser {
 	
-	public static void populateMaps(Map<Double,Color> colorMap, Map<Double,String> imageMap, String filename) {
-		File mapPropertiesFile = new File(filename);
+	public static void populateMaps(Map<Double,Color> colorMap, Map<Double,File> imageMap, String XMLFilename) {
+		File mapPropertiesFile = new File(XMLFilename);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try {
@@ -37,7 +37,7 @@ public class XMLParser {
 			NodeList images = doc.getElementsByTagName("Image");
 			for (int i = 0; i < images.getLength(); i++){
 				String filenameValue = images.item(i).getTextContent();
-				imageMap.put((double) i, filenameValue);
+				imageMap.put((double) i, new File(filenameValue));
 			}
 		} catch (ParserConfigurationException e) {
 			new ErrorPrompt("MapProperties XML file not formatted correctly");
