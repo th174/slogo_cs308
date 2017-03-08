@@ -20,10 +20,10 @@ public interface TurtleIterable {
         if (turtleList.isEmpty()) {
             return FALSE;
         } else if (turtleList.size() == 1) {
-            return Variable.newInstance(doTurtle(turtleList.remove(0), env, vargs));
+            return Variable.newInstance(doTurtle(turtleList.get(0), env, vargs));
         } else {
-            Variable.newInstance(doTurtle(turtleList.remove(0), env, vargs));
-            return forEachTurtle(turtleList, env, vargs);
+            Variable.newInstance(doTurtle(turtleList.get(0), env, vargs));
+            return forEachTurtle(turtleList.subList(1,turtleList.size()), env, vargs);
         }
     }
 }

@@ -1,7 +1,6 @@
 package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
@@ -9,6 +8,7 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by th174 on 2/17/2017.
@@ -24,13 +24,12 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         if (size() == 0) {
             return Variable.FALSE;
         }
-        Invokable command;
-        try {
-            command = peek().getCommand(env);
-            isOp = 1;
-        } catch (EnvironmentImpl.FunctionNotFoundException e) {
+        Invokable command = peek().getCommand(env);
+        if (Objects.isNull(command)) {
             command = CommandList.$DEFAULT_OPERATION$;
             isOp = 0;
+        } else {
+            isOp = 1;
         }
         return command.invoke(env, getBody().toArray(new Expression[0]));
     }
@@ -46,18 +45,11 @@ public class SExpression extends LinkedList<Expression> implements Expression {
 
     @Override
     public Invokable getCommand(Environment env) {
-        try {
-            if (peek().getCommand(env).equals(CommandList.LAMBDA)){
-                return (Invokable) eval(env);
-            }
-            throw new Environment.FunctionNotFoundException(peek().toString());
-        } catch (Exception e) {
-            throw new Environment.FunctionNotFoundException(toString());
-        }
+        return null;
     }
 
     @Override
     public String toString() {
-        return super.toString().replace("[", "(").replace("]", ")").replace(",", "");
+        return super.toString().replace("[", "(").replace("]", ")").replace(",", "").replace('\u039b', '\u03bb');
     }
 }

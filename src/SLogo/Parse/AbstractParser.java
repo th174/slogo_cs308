@@ -20,7 +20,7 @@ public abstract class AbstractParser implements Parser {
         setLocale(locale);
     }
 
-    private LinkedList<String> tokenSplit(String s) {
+    protected LinkedList<String> tokenSplit(String s) {
         Matcher m = Pattern.compile(String.format("(%s|%s|%s|%s)", REGEX.getString("GroupStart"), REGEX.getString("GroupEnd"), REGEX.getString("ListStart"), REGEX.getString("ListEnd"))).matcher(s);
         s = m.replaceAll(" $1 ");
         m = Pattern.compile(REGEX.getString("Token"), Pattern.DOTALL).matcher(s);
@@ -40,9 +40,7 @@ public abstract class AbstractParser implements Parser {
     @Override
     public Expression parse(String input) {
         LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
-        Expression temp = readTokens(tokens);
-        System.out.println(temp.toString().substring(1, temp.toString().length() - 1));
-        return temp;
+        return readTokens(tokens);
     }
 
     @Override

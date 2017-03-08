@@ -2,7 +2,6 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.FunctionEvaluate.Variables.LambdaVariable;
 import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
@@ -37,7 +36,6 @@ public class CommandList {
             return Variable.FALSE;
         }
     };
-    public static final BiFunction LAMBDA = (env, expr) -> new LambdaVariable(expr);
     public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
     public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
     public static final BiFunction REPEAT = (env, expr) -> {
@@ -68,13 +66,12 @@ public class CommandList {
         }
     };
     public static final TriFunction MAKEUSERINSTRUCTION = (env, expr) -> {
-        env.addUserFunction(expr[0].toString(), (Invokable) LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
-        env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
+        env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
-    public static final UnaryIterable PRINT = var -> {
+    public static final UnaryIterable CONSOLE = var -> {
         System.out.println(var);
-        return Variable.TRUE;
+        return var;
     };
 
     //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)

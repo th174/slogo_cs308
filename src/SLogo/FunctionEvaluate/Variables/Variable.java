@@ -138,7 +138,11 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     @Override
     public int compareTo(Variable other) {
-        return (int) ((toNumber() - other.toNumber()) * 1000000000);
+        try {
+            return (int) ((toNumber() - other.toNumber()) * 1000000000);
+        } catch (NotANumberException nan) {
+            return this.toContentString().compareTo(other.toContentString());
+        }
     }
 
     public abstract boolean toBoolean();
@@ -150,7 +154,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return toContentString();
     }
 

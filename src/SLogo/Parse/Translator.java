@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 public class Translator {
 
     private Map<String, String> translator;
-    private Map<String, Integer> arity;
 
     public Translator(ResourceBundle myLocale) {
         translator = new HashMap<>();

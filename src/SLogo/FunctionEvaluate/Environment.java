@@ -4,7 +4,6 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.NewTurtle;
 import SLogo.View.CanvasView;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,14 +46,13 @@ public interface Environment {
      * @param name Name of variable
      * @return Named variable
      */
-    Variable getVariableByName(String name) ;
+    Variable getVariableByName(String name);
 
     /**
      * @param name Name of function
      * @return Named function
      */
-    @Deprecated
-    Invokable getFunctionByName(String name) ;
+    Invokable getFunctionByName(String name);
 
     /**
      * @return All active turtles
@@ -64,7 +62,7 @@ public interface Environment {
     /**
      * @return All turtles, including inactive turtles
      */
-    List<NewTurtle> getAllTurtles();
+    Collection<NewTurtle> getAllTurtles();
 
     /**
      * @return CanvasView
@@ -81,13 +79,17 @@ public interface Environment {
      * @param name     Name of function
      * @param function Function
      */
-    @Deprecated
     void addUserFunction(String name, Invokable function);
 
     /**
      * @param filter Condition that selects active turtles
      */
     void filterTurtles(Predicate<NewTurtle> filter);
+
+    /**
+     * @param turtleIDs Ids of turtles to be set active
+     */
+    void selectTurtles(List<Integer> turtleIDs);
 
     /**
      * @param canvas CanvasView to be used
