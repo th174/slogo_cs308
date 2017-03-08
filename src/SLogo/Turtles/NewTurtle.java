@@ -167,18 +167,4 @@ public interface NewTurtle {
      * @author Riley Nisbet
      */
     void addObserver(Observer o);
-
-    /**
-     * Remove a listener
-     *
-     * @author Riley Nisbet
-     */
-    void removeObserver(Observer o);
-
-    /**
-     * Tell all listeners that something has changed
-     *
-     * @author Riley Nisbet
-     */
-    void notifyObservers();
 }

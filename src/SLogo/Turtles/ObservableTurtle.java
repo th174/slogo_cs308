@@ -105,11 +105,6 @@ public class ObservableTurtle extends Observable implements NewTurtle {
         return isTurtleShowing;
     }
 
-    @Override
-    public void removeObserver(Observer o) {
-        deleteObserver(o);
-    }
-
     private void notifyObservers(Pair<Double, Double> arg) {
         super.notifyObservers(new Object[]{isPenDown(), getHeading(), arg.getKey(), arg.getValue(), !isTurtleShow()});
     }
