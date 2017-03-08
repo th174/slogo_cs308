@@ -2,6 +2,7 @@ package SLogo.View;
 
 import javafx.scene.Node;
 
+import java.io.File;
 import java.util.Observer;
 
 /**
@@ -16,11 +17,10 @@ public interface CanvasView extends Observer {
     /**
      * Sets Image
      *
-     * @param ID		ID of the turtle trying to change
      * @param filename 	filename of image to set
-     * @throws InvalidImageFileException
+     * @return ID	ID of the turtle trying to change
      */
-    void setImage(int ID, String filename);
+    void addImage(File imgFile);
 
     /**
      * Clears all lines from screen and instantiates a new Turtle.
@@ -74,6 +74,7 @@ public interface CanvasView extends Observer {
 
     /**
      * @return turtle's current color index
+     * @throws ErrorPrompt 
      */
     int getPenColor();
 

@@ -87,3 +87,4 @@ public class SLogoGUIImpl implements SLogoGUI {
 		
 	}
 }
+
