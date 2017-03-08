@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
  * Created by th174 on 3/4/2017.
  */
 public class Translator {
-
     private Map<String, String> translator;
 
     public Translator(ResourceBundle myLocale) {
@@ -22,9 +21,5 @@ public class Translator {
 
     public String get(String s) {
         return translator.getOrDefault(s.toUpperCase(), s);
-    }
-
-    public int getArity(String s){
-        return 0;
     }
 }

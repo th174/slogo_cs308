@@ -5,6 +5,7 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
 
 import java.util.*;
@@ -138,8 +139,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     @Override
     public void selectTurtles(List<Integer> turtleIDs) {
         myActiveTurtles = turtleIDs.stream().map(id -> {
-            if (!myTurtles.containsKey(id)){
-                my
+            if (!myTurtles.containsKey(id)) {
+                myTurtles.put(id, new ObservableTurtle(id));
             }
             return myTurtles.get(id);
         }).collect(Collectors.toList());

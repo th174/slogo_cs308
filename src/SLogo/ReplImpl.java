@@ -26,7 +26,7 @@ public class ReplImpl implements Repl {
 //        parser = new PolishSyntaxParser();
         history = new ArrayList<>();
         currentIndex = 0;
-        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new ObservableTurtle()));
+        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new ObservableTurtle(1)));
         parser = new SLogoParser();
     }
 
