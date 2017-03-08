@@ -81,12 +81,22 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		new ErrorPrompt("Color index cannot be found");
 		return 0;
 	}
-	
+
+	@Override
+	public int getShape() {
+		return 0;
+	}
+
 	public int setPenSize(double index){
 		penWidth = (int) index;
 		return (int) index;
 	}
-	
+
+	@Override
+	public int setShape(double index) {
+		return 0;
+	}
+
 	public int setShape(int currID, double index){
 		Sprite currSprite = spriteMap.get(currID);
 		currSprite.setImage(new File(imageMap.get(index)));
