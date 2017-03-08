@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
-    private Collection<Observer> observers;
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
@@ -29,14 +28,12 @@ public class EnvironmentImpl extends Observable implements Environment {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
         outer = null;
-        observers = new ArrayList<>();
     }
 
     public EnvironmentImpl(Environment outer, Collection<NewTurtle> myTurtles) {
         this.outer = outer;
         scopeFunctions = new HashMap<>();
         scopeVariables = new HashMap<>();
-        observers = new ArrayList<>();
         this.myTurtles = myTurtles.stream().collect(Collectors.toMap(NewTurtle::id, t -> t));
         this.myActiveTurtles = new ArrayList<>(this.myTurtles.values());
     }
@@ -188,32 +185,5 @@ public class EnvironmentImpl extends Observable implements Environment {
             }
         });
         return variables;
-    }
-
-    /**
-     * Add an object as a listener
-     *
-     * @author Riley Nisbet
-     */
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    /**
-     * Remove a listener
-     *
-     * @author Riley Nisbet
-     */
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
-
-    /**
-     * Tell all listeners that something has changed
-     *
-     * @author Riley Nisbet
-     */
-    public void notifyObservers() {
-        observers.forEach(o -> o.update(this, new Object[]{scopeVariables, scopeFunctions}));
     }
 }
