@@ -43,18 +43,8 @@ public interface Turtle {
 	
 	/**
 	 * @param angle Angle at which to set heading
-	 * @return change in angle
 	 */
-	public double setHeading(double angle);
-	
-	/**
-     * Set heading towards a specific point
-     *
-     * @param x x-coordinate of point
-     * @param y y-coordinate of point
-     * @return angle moved
-     */
-    public double setHeadingTowards(double x, double y);
+	public void setHeading(double angle);
 	
 	/**
 	 * Sets pen to up position.
