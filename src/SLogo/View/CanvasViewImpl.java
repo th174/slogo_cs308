@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class CanvasViewImpl extends Observable implements CanvasView {
-	private ArrayList<Observer> observers;
 	private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
 	private ResourceBundle exceptionResources;
 	private static final String RESOURCE_FILEPATH = "resources/View/";
@@ -206,34 +205,4 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		//TODO: return distance moved
 		return 0;
 	}
-
-	/**
-     * Add an object as a listener
-     *
-     * @author Riley Nisbet
-     */
-    public void addObserver(Observer o) {
-        observers.add(o);
-        notifyObservers();
-    }
-
-    /**
-     * Remove a listener
-     *
-     * @author Riley Nisbet
-     */
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
-
-    /**
-     * Tell all listeners that something has changed
-     *
-     * @author Riley Nisbet
-     */
-    public void notifyObservers() {
-        for (Observer o : observers) {
-            o.update(this, new Object[]{colorMap, imageMap});
-        }
-    }
 }

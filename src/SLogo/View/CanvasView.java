@@ -82,25 +82,4 @@ public interface CanvasView extends Observer {
      * @return turtle's current shape index
      */
     int getShape();
-    
-    /**
-	 * Add an object as a listener
-	 * 
-	 * @author Riley Nisbet
-	 */
-	public void addObserver(Observer o);
-	
-	/**
-	 * Remove a listener
-	 * 
-	 * @author Riley Nisbet
-	 */
-	public void removeObserver(Observer o);
-	
-	/**
-	 * Tell all listeners that something has changed
-	 * 
-	 * @author Riley Nisbet
-	 */
-	public void notifyObservers();
 }
