@@ -1,6 +1,8 @@
 package SLogo.Turtles;
 
 
+import javafx.util.Pair;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -8,7 +10,7 @@ import java.util.Observer;
  * Created by th174 on 3/2/2017.
  */
 public class ObservableTurtle extends Observable implements NewTurtle {
-    private static final double[] NO_POS_CHANGE = {0, 0};
+    private static final Pair<Double, Double> NO_POS_CHANGE = new Pair<>(0.0, 0.0);
     private int id;
     private double xPos;
     private double yPos;
@@ -50,7 +52,7 @@ public class ObservableTurtle extends Observable implements NewTurtle {
         double dist = Math.hypot(dx, dy);
         xPos = x;
         yPos = y;
-        notifyObservers(new double[]{dx, dy});
+        notifyObservers(new Pair<>(dx, dy));
         return dist;
     }
 
@@ -68,7 +70,7 @@ public class ObservableTurtle extends Observable implements NewTurtle {
     public double moveForward(double distance) {
         xPos += Math.cos(headingAngle) * distance;
         yPos += Math.sin(headingAngle) * distance;
-        notifyObservers(new double[]{Math.cos(headingAngle) * distance, Math.sin(headingAngle) * distance});
+        notifyObservers(new Pair<>(Math.cos(headingAngle) * distance, Math.sin(headingAngle) * distance));
         return distance;
     }
 
@@ -108,7 +110,7 @@ public class ObservableTurtle extends Observable implements NewTurtle {
         deleteObserver(o);
     }
 
-    private void notifyObservers(double[] arg) {
-        super.notifyObservers(new Object[]{isPenDown(), getHeading(), arg[0], arg[1], !isTurtleShow()});
+    private void notifyObservers(Pair<Double, Double> arg) {
+        super.notifyObservers(new Object[]{isPenDown(), getHeading(), arg.getKey(), arg.getValue(), !isTurtleShow()});
     }
 }
