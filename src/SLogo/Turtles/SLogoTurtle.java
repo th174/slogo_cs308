@@ -14,6 +14,7 @@ import java.util.Observer;
  */
 public class SLogoTurtle extends Observable implements Turtle {
 
+	private int myID;
     private ArrayList<Observer> observers;
     private double myChangeX;
     private double myChangeY;
@@ -21,11 +22,11 @@ public class SLogoTurtle extends Observable implements Turtle {
     boolean penDown;
     boolean hidden;
 
-    public SLogoTurtle() {
-        this(90);
+    public SLogoTurtle(int id) {
+        this(90, id);
     }
 
-    public SLogoTurtle(double heading) {
+    public SLogoTurtle(double heading, int id) {
         myHeading = adjustAngle(heading);
         observers = new ArrayList<Observer>();
         this.dropPen();
@@ -51,6 +52,11 @@ public class SLogoTurtle extends Observable implements Turtle {
     public double getHeading() {
         return myHeading;
     }
+    
+    @Override
+    public double setHeadingTowards(double x, double y) {
+        return setHeading(Math.atan2(y, x));
+    }
 
     @Override
     public void setChangeX(double changeX) {
@@ -63,10 +69,12 @@ public class SLogoTurtle extends Observable implements Turtle {
     }
 
     @Override
-    public void setHeading(double angle) {
+    public double setHeading(double angle) {
         angle = adjustAngle(angle);
+        double angleDifference = angle - myHeading ;
         myHeading = angle;
         notifyObservers();
+        return angleDifference;
     }
 
     @Override
@@ -156,7 +164,6 @@ public class SLogoTurtle extends Observable implements Turtle {
      */
     public void addObserver(Observer o) {
         observers.add(o);
-      //MADE THIS CHANGE:
         notifyObservers();
     }
 
@@ -176,8 +183,7 @@ public class SLogoTurtle extends Observable implements Turtle {
      */
     public void notifyObservers() {
         for (Observer o : observers) {
-            o.update(this, new Object[]{penDown, myHeading, myChangeX, myChangeY, hidden});
-            System.out.print("call: " + myChangeX + " " + myChangeY);
+            o.update(this, new Object[]{penDown, myHeading, myChangeX, myChangeY, hidden, myID});
             myChangeX = 0;
             myChangeY = 0;
         }

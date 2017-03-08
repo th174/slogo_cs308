@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
 import SLogo.View.Sprite.Sprite;
 import javafx.scene.Group;
@@ -16,32 +17,43 @@ import javafx.scene.shape.Line;
 public class CanvasViewImpl extends Observable implements CanvasView {
 	private ArrayList<Observer> observers;
 	private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
-	private SLogoGUIImpl gui;
+	private ResourceBundle exceptionResources;
+	private static final String RESOURCE_FILEPATH = "resources/View/";
+	private SLogoGUI gui;
 	private Group root;
 	private int viewWidth;
 	private int viewHeight;
 	private int spriteWidth;
 	private int spriteHeight;
-	private String defaultTurtleFilename;
+	private File defaultTurtleFile;
 	private Map<Double,Color> colorMap;
-	private Map<Double,String> imageMap;
+	private Map<Double,File> imageMap;
 	private double penColor;
 	private double penWidth;
+	private int currentShapeIndex;
 	
 	private HashMap<Integer,Sprite> spriteMap;
 	private HashMap<Integer,Boolean> turtleHiddenMap;
 	private HashMap<Integer,Boolean> penDownMap;
 	private HashMap<Integer,Double> currentImageIndexMap;
 	
-	public CanvasViewImpl(int aviewWidth, int aviewHeight, SLogoGUIImpl SLogoGUI){
-		gui = SLogoGUI;
+	public CanvasViewImpl(int aviewWidth, int aviewHeight){
+		//TODO: get SlogoGUI instance to change background
+		//gui = SLogoGUI;
+		exceptionResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "Exceptions");
+
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
 		root = new Group();
 		colorMap = new HashMap<Double, Color>();
-		imageMap = new HashMap<Double, String>();
+		imageMap = new HashMap<Double, File>();
 		XMLParser.populateMaps(colorMap, imageMap, defaultMapPropertiesFilename);
-		notifyObservers();
+		currentShapeIndex = 0;
+		defaultTurtleFile = imageMap.get(currentShapeIndex);
+		penColor = 0;
+		penWidth = 1;
+		//TODO: notify GUI of maps
+		//notifyObservers();
 	}
 	
 	//theoretically, when Stone makes first turtle, it will create an instance using instantializeSprite
@@ -54,6 +66,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		Sprite currSprite = spriteMap.get(currID);
 		setPen(currID, (boolean) newProperties[0]);
 		setPenColor(penColor);
+		setPenSize(penWidth);
 		currSprite.setDirection(((Double) newProperties[1]).intValue());
 		move(currID, new int[] {((Double)newProperties[2]).intValue(), ((Double) newProperties[3]).intValue()});
 		setHidden(currID, (boolean)newProperties[4]);
@@ -78,13 +91,8 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		    	return indexEntry.intValue();
 		    }
 		}
-		new ErrorPrompt("Color index cannot be found");
-		return 0;
-	}
-
-	@Override
-	public int getShape() {
-		return 0;
+		//TODO: Learn how to throw exceptions
+		throw new ErrorPrompt(exceptionResources.getString("InvalidColorIndex"));
 	}
 
 	public int setPenSize(double index){
@@ -92,24 +100,26 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		return (int) index;
 	}
 
-	@Override
-	public int setShape(double index) {
-		return 0;
-	}
-
 	public int setShape(int currID, double index){
 		Sprite currSprite = spriteMap.get(currID);
-		currSprite.setImage(new File(imageMap.get(index)));
+		currSprite.setImage(imageMap.get(index));
 		currentImageIndexMap.put(currID, index);
 		return (int) index;
 	}
 	
-	public int getShape(int currID){
-		return currentImageIndexMap.get(currID).intValue();
+	public int setShape(double index){
+		currentShapeIndex = (int) index;
+		defaultTurtleFile = imageMap.get(index);
+		return currentShapeIndex;
+	}
+	
+	public int getShape(){
+		return currentShapeIndex;
 	}
 	
 	public int setBackground(double index){
-		gui.setTurtleBackgroundColor(colorMap.get(index));
+		//TODO: get gui instance and be able to change background color
+		//gui.setTurtleBackgroundColor(colorMap.get(index));
 		return (int) index;
 	}
 	
@@ -148,11 +158,17 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		currSprite.setPosition(finalPosition);
 	}
 	
-	public void setImage(int currID, String filename){
+	public void setImage(int currID, File imgFile){
 		Sprite currSprite = spriteMap.get(currID);
 		currentImageIndexMap.put(currID, (double) imageMap.size());
-		imageMap.put((double) currentImageIndexMap.get(currID), filename);
-		currSprite.setImage(new File(filename));
+		imageMap.put((double) currentImageIndexMap.get(currID), imgFile);
+		currSprite.setImage(imgFile);
+		notifyObservers();
+	}
+	
+	public void addImage(File imgFile){
+		int ID = imageMap.size();
+		imageMap.put((double) ID, imgFile);
 		notifyObservers();
 	}
 	
@@ -164,9 +180,8 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 
 	private void instantializeSprite(int ID){
 		currentImageIndexMap.put(ID, (double) imageMap.size());
-		imageMap.put(currentImageIndexMap.get(ID), defaultTurtleFilename);
-		File defaultSpriteFile = new File(defaultTurtleFilename);
-		spriteMap.put(ID, new Sprite(ID, defaultSpriteFile, spriteWidth, spriteHeight, viewWidth, viewHeight));
+		imageMap.put(currentImageIndexMap.get(ID), defaultTurtleFile);
+		spriteMap.put(ID, new Sprite(ID, defaultTurtleFile, spriteWidth, spriteHeight, viewWidth, viewHeight));
 		root.getChildren().add(spriteMap.get(ID).getImageView());
 		notifyObservers();
 	}
@@ -187,7 +202,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	public double clearScreen(){ //will this method clear the screen and create a disconnected turtle? that's a problem
 		//this also needs to return the distance traveled
 		root.getChildren().clear();
-		instantializeSprite();
+		instantializeSprite(0);
 		//TODO: return distance moved
 		return 0;
 	}
