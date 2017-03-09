@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ResourceBundle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * The purpose of this class is to obtain a file from the user, then return a String containing 
@@ -20,19 +20,19 @@ public class FileHandler {
 	
 	private static final String ERROR_BUNDLE = "resources/View/Exceptions";
 	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
-	private Stage myStage;
+	private Window myWindow;
 	
 	/**
 	 * 
 	 */
-	public FileHandler(Stage stage) {
-		myStage = stage;
+	public FileHandler(Window userWindow) {
+		myWindow = userWindow;
 	}
 	
 	public String getFile(){
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Select SLogo File");
-		return readFile(chooser.showOpenDialog(myStage));
+		return readFile(chooser.showOpenDialog(myWindow));
 	}
 	
 	private String readFile(File file){
