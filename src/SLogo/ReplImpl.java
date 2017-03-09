@@ -2,9 +2,9 @@ package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.Parse.PolishParser;
 import SLogo.Parse.Expression;
 import SLogo.Parse.Parser;
+import SLogo.Parse.PolishParser;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
 
@@ -33,8 +33,8 @@ public class ReplImpl implements Repl {
     @Override
     public void read(String input) throws Exception {
         Expression currentCommand = parser.parse(userEnv, input);
-        history.add(currentCommand.toString());
-//        eval(currentCommand);
+        history.add(currentCommand.toString().substring(1, currentCommand.toString().length() - 1));
+        System.out.println(history.get(currentIndex));
         currentIndex++;
     }
 
@@ -50,14 +50,14 @@ public class ReplImpl implements Repl {
     @Override
     public void setCanvas(CanvasView canvas) {
         userEnv.setCanvas(canvas);
-        userEnv.getTurtles().forEach(t -> t.addObserver(canvas));
+        userEnv.getActiveTurtleList().forEach(t -> t.addObserver(canvas));
     }
 
     @Override
     public Environment getEnvironment() {
         return userEnv;
     }
-
+    
 	@Override
 	public Parser getParser(){
 		return parser;

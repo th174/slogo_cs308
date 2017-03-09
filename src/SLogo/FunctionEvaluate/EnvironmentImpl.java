@@ -1,12 +1,13 @@
 package SLogo.FunctionEvaluate;
 
-import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
-import SLogo.Turtles.NewTurtle;
 import SLogo.Turtles.ObservableTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -20,8 +21,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
-    private Map<Integer, NewTurtle> myTurtles;
-    private List<NewTurtle> myActiveTurtles;
+    private ObservableMap<Integer, Turtle> myTurtles;
+    private List<Turtle> myActiveTurtles;
     private CanvasView myCanvas;
 
     private EnvironmentImpl() {
@@ -30,26 +31,27 @@ public class EnvironmentImpl extends Observable implements Environment {
         outer = null;
     }
 
-    public EnvironmentImpl(Environment outer, Collection<NewTurtle> myTurtles) {
+    public EnvironmentImpl(Environment outer, Collection<Turtle> myTurtles) {
         this.outer = outer;
         scopeFunctions = new HashMap<>();
         scopeVariables = new HashMap<>();
-        this.myTurtles = myTurtles.stream().collect(Collectors.toMap(NewTurtle::id, t -> t));
+        this.myTurtles = FXCollections.observableMap(myTurtles.stream().collect(Collectors.toMap(Turtle::id, t -> t)));
         this.myActiveTurtles = new ArrayList<>(this.myTurtles.values());
+        notifyObservers();
     }
 
-    public EnvironmentImpl(Environment outer, Predicate<NewTurtle> turtleFilter) {
-        this(outer, outer.getAllTurtles());
+    public EnvironmentImpl(Environment outer, Predicate<Turtle> turtleFilter) {
+        this(outer, outer.getAllTurtles().values());
         filterTurtles(turtleFilter);
     }
 
     public EnvironmentImpl(Environment outer, List<Integer> turtleIDs) {
-        this(outer, outer.getAllTurtles());
+        this(outer, outer.getAllTurtles().values());
         selectTurtles(turtleIDs);
     }
 
     public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
-        this(outer, outer.getTurtles());
+        this(outer, outer.getActiveTurtleList());
         for (int i = 0; i < expr.length; i++) {
             scopeVariables.put(params.get(i), expr[i].eval(outer));
         }
@@ -114,13 +116,13 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public List<NewTurtle> getTurtles() {
+    public List<Turtle> getActiveTurtleList() {
         return Collections.unmodifiableList(myActiveTurtles);
     }
 
     @Override
-    public Collection<NewTurtle> getAllTurtles() {
-        return myTurtles.values();
+    public ObservableMap<Integer, Turtle> getAllTurtles() {
+        return myTurtles;
     }
 
     @Override
@@ -129,8 +131,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public void filterTurtles(Predicate<NewTurtle> filter) {
-        myActiveTurtles = myTurtles.values().stream().sorted(Comparator.comparingInt(NewTurtle::id)).filter(filter).collect(Collectors.toList());
+    public void filterTurtles(Predicate<Turtle> filter) {
+        myActiveTurtles = myTurtles.values().stream().sorted(Comparator.comparingInt(Turtle::id)).filter(filter).collect(Collectors.toList());
     }
 
     @Override
@@ -165,7 +167,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     private Map<String, Invokable> initCommandDictionary() {
         try {
-            return CommandList.getAllCommands();
+            return PredefinedCommandList.getAllCommands();
         } catch (IllegalAccessException i) {
             throw new NullPointerException();
         }

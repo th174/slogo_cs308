@@ -1,111 +1,170 @@
 package SLogo.Turtles;
 
+import java.util.Observer;
+
 /**
- * Handles all data behind the Turtle that will be
- * displayed in the GUI.
- *
- * @author Stone Mathers
- *         Created 2/23/17
+ * Created by th174 on 3/2/2017.
  */
-
 public interface Turtle {
+    double DEFAULT_X_POS = 0;
+    double DEFAULT_Y_POS = 0;
+    double DEFAULT_HEADING = 90;
+    boolean DEFAULT_IS_SHOWING = false;
+    boolean DEFAULT_IS_PEN_DOWN = false;
 
     /**
-     * @return Change in X-position
+     * @return current ID of turtle
      */
-    public double getChangeX();
-
-    /**
-     * @return Change in Y-position
-     */
-    public double getChangeY();
+    int id();
 
     /**
      * @return Angle at which the Turtle is facing
      */
-    public double getHeading();
-
-    /**
-     * Set the Turtle's change in X-position.
-     *
-     * @param changeX
-     */
-    public void setChangeX(double changeX);
-
-    /**
-     * Set the Turtle's change in Y-position.
-     *
-     * @param changeY
-     */
-    public void setChangeY(double changeY);
+    double getHeading();
 
     /**
      * @param angle Angle at which to set heading
+     * @return change in heading angle
      */
-    public void setHeading(double angle);
+    double setHeading(double angle);
+
+    /**
+     * Set heading towards a specific point
+     *
+     * @param x x-coordinate of point
+     * @param y y-coordinate of point
+     * @return angle moved
+     */
+    default double setHeadingTowards(double x, double y) {
+        return setHeading(Math.atan2(y, x));
+    }
+
+    /**
+     * Moves to absolute position
+     *
+     * @param x x-coordinate to move to
+     * @param y y-coordinate to move to
+     * @return distance moved
+     */
+    double setXY(double x, double y);
+
+    /**
+     * @return x-coordinate
+     */
+    double getX();
+
+    /**
+     * @return y-coordinate
+     */
+    double getY();
+
+    /**
+     * @param distance amount to move forward
+     * @return distance moved
+     */
+    double moveForward(double distance);
+
+    /**
+     * @param distance amount to move backward
+     * @return distance moved
+     */
+    default double moveBackward(double distance) {
+        return -moveForward(-distance);
+    }
+
+    /**
+     * @param angle to rotate left
+     * @return angle moved
+     */
+    double rotateCCW(double angle);
+
+    /**
+     * @param angle to rotate left
+     * @return angle moved
+     */
+    default double rotateCW(double angle) {
+        return -rotateCCW(-angle);
+    }
+
+    /**
+     * @param isPenDown new state of isPenDown
+     * @return isPenDown
+     */
+    boolean setPenDown(boolean isPenDown);
 
     /**
      * Sets pen to up position.
      *
      * @return 0
      */
-    public int liftPen();
+    default int penUp() {
+        setPenDown(false);
+        return 0;
+    }
 
     /**
      * Sets pen to down position.
      *
      * @return 1
      */
-    public int dropPen();
+    default int penDown() {
+        setPenDown(true);
+        return 0;
+    }
 
     /**
      * @return true if pen is down, false if pen is up
      */
-    public boolean penDown();
+    boolean isPenDown();
 
     /**
-     * Turns Turtle the number of degrees given.
-     * A positive value turns the Turtle to the left,
-     * a negative value turns the Turtle to the right.
-     *
-     * @param degrees Degrees to turn the turtle
+     * @param isTurtleShowing new state of isTurtleShowing
+     * @return isTurtleShowing
      */
-    public void turn(double degrees);
+    boolean setTurtleShow(boolean isTurtleShowing);
 
     /**
-     * Calculates coordinate changes required to move the Turtle
-     * the given number of pixels in the direction of its heading.
-     *
-     * @param pixels Number of pixels to move Turtle
-     */
-    public void move(double pixels);
-
-    /**
-     * Sets Turtle's state to hidden.
-     *
-     * @return 0
-     */
-    public int hide();
-
-    /**
-     * Sets Turtle's state to not hidden.
+     * Sets turtle to show
      *
      * @return 1
      */
-    public int show();
+    default int showTurtle() {
+        setTurtleShow(true);
+        return 1;
+    }
 
     /**
-     * @return true if Turtle is hidden, false if Turtle is not hidden
+     * Sets turtle to hide
+     *
+     * @return 0
      */
-    public boolean hidden();
+    default int hideTurtle() {
+        setTurtleShow(false);
+        return 0;
+    }
 
+    /**
+     * @return returns true if turtle showing, else false if turtle hidden
+     */
+    boolean isTurtleShow();
 
     /**
      * Calculate coordinate changes required to return Turtle to (0,0)
      * from (curX, curY) and sets all instance variables to default values.
      *
-     * @param curX Current X-coordinate
-     * @param curY Current Y-coordinate
+     * @return distance moved
      */
-    public void reset(double curX, double curY);
+    default double reset() {
+        setPenDown(DEFAULT_IS_PEN_DOWN);
+        setTurtleShow(DEFAULT_IS_SHOWING);
+        setHeading(DEFAULT_HEADING);
+        return setXY(DEFAULT_X_POS, DEFAULT_Y_POS);
+    }
+
+    /**
+     * Add an object as a listener
+     *
+     * @author Riley Nisbet
+     */
+    void addObserver(Observer o);
 }

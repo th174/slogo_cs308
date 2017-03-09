@@ -23,7 +23,6 @@ public class XMLParser {
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(mapPropertiesFile);
-			System.out.println("yo");
 			NodeList colors = doc.getElementsByTagName("Color");
 			for (int i = 0; i < colors.getLength(); i++){
 				String RGB = colors.item(i).getTextContent();
@@ -40,11 +39,11 @@ public class XMLParser {
 				imageMap.put((double) i, new File(filenameValue));
 			}
 		} catch (ParserConfigurationException e) {
-			new ErrorPrompt("MapProperties XML file not formatted correctly");
+			throw new ErrorPrompt("MapProperties XML file not formatted correctly");
 		} catch (SAXException e) {
-			new ErrorPrompt("MapProperties XML file not formatted correctly");
+			throw new ErrorPrompt("MapProperties XML file not formatted correctly");
 		} catch (IOException e) {
-			new ErrorPrompt("MapProperties XML file not formatted correctly");
+			throw new ErrorPrompt("MapProperties XML file not formatted correctly");
 		}
 	}
 }

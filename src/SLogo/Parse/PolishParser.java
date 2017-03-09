@@ -15,17 +15,16 @@ public class PolishParser extends AbstractParser {
         String token = tokens.removeFirst().toString();
         SExpression subList = new SExpression();
         if (token.matches(REGEX.getString("GroupEnd")) | token.matches(REGEX.getString("ListEnd"))) {
-            throw new SyntaxException("");
+            throw new SyntaxException(token);
         } else if (token.matches(REGEX.getString("GroupStart"))) {
-            subList.add(readGroup(env, tokens));
-            return readUntil(env, REGEX.getString("GroupEnd"), subList, tokens);
+            return readUntil(env, REGEX.getString("GroupEnd"), subList, tokens, true);
         } else if (token.matches(REGEX.getString("ListStart"))) {
-            return readUntil(env, REGEX.getString("ListEnd"), subList, tokens);
+            return readUntil(env, REGEX.getString("ListEnd"), subList, tokens, false);
         } else {
             Invokable fn = env.getFunctionByName(getTranslator().get(token));
             if (Objects.nonNull(fn)) {
                 subList.add(new AtomicList(getTranslator().get(token)));
-                subList.addAll(fn.readArgs(fn.minimumArity(),env,tokens));
+                subList.addAll(fn.readArgs(fn.minimumArity(), env, tokens));
                 return subList;
             } else {
                 return new AtomicList(getTranslator().get(token));
@@ -33,16 +32,15 @@ public class PolishParser extends AbstractParser {
         }
     }
 
-    private Expression readGroup(Environment env, Deque tokens) {
+    private Expression readFirstToken(Environment env, Deque tokens) {
         String token = tokens.removeFirst().toString();
         SExpression subList = new SExpression();
         if (token.matches(REGEX.getString("GroupEnd")) | token.matches(REGEX.getString("ListEnd"))) {
-            return subList;
+            throw new SyntaxException(token);
         } else if (token.matches(REGEX.getString("GroupStart"))) {
-            subList.add(readGroup(env, tokens));
-            return readUntil(env, REGEX.getString("GroupEnd"), subList, tokens);
+            return readUntil(env, REGEX.getString("GroupEnd"), subList, tokens, true);
         } else if (token.matches(REGEX.getString("ListStart"))) {
-            return readUntil(env, REGEX.getString("ListEnd"), subList, tokens);
+            return readUntil(env, REGEX.getString("ListEnd"), subList, tokens, false);
         } else {
             return new AtomicList(getTranslator().get(token));
         }
@@ -53,8 +51,12 @@ public class PolishParser extends AbstractParser {
         return super.parse(env, "[" + input + "]");
     }
 
-    private Expression readUntil(Environment env, String end, SExpression subList, Deque tokens) {
+    private Expression readUntil(Environment env, String end, SExpression subList, Deque tokens, boolean isGroup) {
         while (Objects.nonNull(tokens.peek()) && !tokens.peek().toString().matches(end)) {
+            if (isGroup) {
+                subList.add(readFirstToken(env, tokens));
+                isGroup = false;
+            }
             subList.add(readTokens(env, tokens));
         }
         tokens.pollFirst();

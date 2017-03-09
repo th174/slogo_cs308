@@ -1,11 +1,10 @@
-package SLogo.FunctionEvaluate.Functions;
+package SLogo.FunctionEvaluate;
 
-import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
+import SLogo.FunctionEvaluate.Functions.*;
 import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
-import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.lang.reflect.Field;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Stone Mathers
  */
-public final class CommandList {
+public final class PredefinedCommandList {
     //Variable argument Length
     public static final Accumulator LIST = Variable::list;
     public static final Accumulator $DEFAULT_OPERATION$ = LIST;
@@ -30,30 +29,24 @@ public final class CommandList {
     public static final Accumulator POWER = Variable::power;
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
-    public static final BiFunction IF = (env, expr) -> {
-        if (expr[0].eval(env).toBoolean()) {
-            return $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-        } else {
-            return Variable.FALSE;
-        }
-    };
     public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
     public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
-    public static final BiFunction REPEAT = (env, expr) -> {
+    public static final Conditional REPEAT = (env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
         int loopArity = loopParams.size();
         String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
         env.addUserVariable(loopVar, loopArity >= 4 ? loopParams.remove(0).eval(env) : Variable.newInstance(1));
         Variable limit = loopParams.remove(0).eval(env);
-        Variable last = Variable.newInstance(0);
+        Variable last = Variable.FALSE;
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
             last = $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(loopArity >= 3 ? loopParams.get(0).eval(env) : Variable.newInstance(1)));
         }
         return last;
     };
-    public static final BiFunction DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
-    public static final BiFunction FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Conditional DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Conditional FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Conditional IF = REPEAT; //If statement is actually just a loop, boolean expressions eval to 0 or 1 lol
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
         public int minimumArity() {
@@ -70,7 +63,7 @@ public final class CommandList {
         env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
-    public static final UnaryIterable CONSOLE = var -> {
+    public static final UnaryIterable ECHO = var -> {
         System.out.println(var);
         return var;
     };
@@ -88,28 +81,28 @@ public final class CommandList {
     public static final UnaryIterable TANGENT = Variable::tangent;
     public static final UnaryIterable ARCTANGENT = Variable::atangent;
     public static final UnaryIterable NATURALLOG = Variable::log;
-    public static final BooleanTest LESSTHAN = Variable::lessThan;
-    public static final BooleanTest GREATERTHAN = Variable::greaterThan;
-    public static final BooleanTest EQUAL = Variable::equalTo;
-    public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
-    public static final TurtleMovement FORWARD = NewTurtle::moveForward;
-    public static final TurtleMovement BACKWARD = NewTurtle::moveBackward;
-    public static final TurtleMovement LEFT = NewTurtle::rotateCCW;
-    public static final TurtleMovement RIGHT = NewTurtle::rotateCW;
-    public static final TurtleMovement SETHEADING = NewTurtle::setHeading;
-    public static final TurtlePosition SETPOSITION = NewTurtle::setXY;
-    public static final TurtlePosition SETTOWARDS = NewTurtle::setHeadingTowards;
-    public static final TurtleProperties ID = NewTurtle::id;
-    public static final TurtleProperties HOME = NewTurtle::reset;
-    public static final TurtleProperties HEADING = NewTurtle::getHeading;
-    public static final TurtleProperties HIDETURTLE = NewTurtle::hideTurtle;
-    public static final TurtleProperties SHOWTURTLE = NewTurtle::showTurtle;
-    public static final TurtleProperties PENDOWN = NewTurtle::penDown;
-    public static final TurtleProperties PENUP = NewTurtle::penUp;
-    public static final TurtleProperties ISSHOWING = NewTurtle::isTurtleShow;
-    public static final TurtleProperties ISPENDOWN = NewTurtle::penDown;
-    public static final TurtleProperties XCOORDINATE = NewTurtle::getX;
-    public static final TurtleProperties YCOORDINATE = NewTurtle::getY;
+    public static final BinaryIterable LESSTHAN = Variable::lessThan;
+    public static final BinaryIterable GREATERTHAN = Variable::greaterThan;
+    public static final BinaryIterable EQUAL = Variable::equalTo;
+    public static final BinaryIterable NOTEQUAL = Variable::notEqualTo;
+    public static final TurtleMovement FORWARD = Turtle::moveForward;
+    public static final TurtleMovement BACKWARD = Turtle::moveBackward;
+    public static final TurtleMovement LEFT = Turtle::rotateCCW;
+    public static final TurtleMovement RIGHT = Turtle::rotateCW;
+    public static final TurtleMovement SETHEADING = Turtle::setHeading;
+    public static final TurtlePosition SETPOSITION = Turtle::setXY;
+    public static final TurtlePosition SETTOWARDS = Turtle::setHeadingTowards;
+    public static final TurtleProperties ID = Turtle::id;
+    public static final TurtleProperties HOME = Turtle::reset;
+    public static final TurtleProperties HEADING = Turtle::getHeading;
+    public static final TurtleProperties HIDETURTLE = Turtle::hideTurtle;
+    public static final TurtleProperties SHOWTURTLE = Turtle::showTurtle;
+    public static final TurtleProperties PENDOWN = Turtle::penDown;
+    public static final TurtleProperties PENUP = Turtle::penUp;
+    public static final TurtleProperties ISSHOWING = Turtle::isTurtleShow;
+    public static final TurtleProperties ISPENDOWN = Turtle::penDown;
+    public static final TurtleProperties XCOORDINATE = Turtle::getX;
+    public static final TurtleProperties YCOORDINATE = Turtle::getY;
     public static final CanvasSetting SETBACKGROUND = CanvasView::setBackground;
     public static final CanvasSetting SETSHAPE = CanvasView::setShape;
     public static final CanvasSetting SETPENCOLOR = CanvasView::setPenColor;
@@ -141,19 +134,24 @@ public final class CommandList {
 
         @Override
         public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-            env.filterTurtles(turtle -> ((ListVariable) LIST.invoke(env, vargs[0])).contains(Variable.newInstance(turtle.id())).toBoolean());
-            return LIST.invoke(env, vargs[0]);
+            ListVariable turtlesIDs = (ListVariable) LIST.invoke(env, vargs[0]);
+            env.filterTurtles(turtle -> turtlesIDs.contains(Variable.newInstance(turtle.id())).toBoolean());
+            return turtlesIDs;
         }
     };
 
     /**
-     * You should never instantiate this class
+     * You should never instantiate this class.
      */
-    private CommandList() {
+    private PredefinedCommandList() {
     }
 
+    /**
+     * @return A map of all defined commands, with their instance name as a key
+     * @throws IllegalAccessException
+     */
     public static Map<String, Invokable> getAllCommands() throws IllegalAccessException {
-        return Arrays.stream(CommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
+        return Arrays.stream(PredefinedCommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
             try {
                 return (Invokable) e.get(null);
             } catch (IllegalAccessException e1) {

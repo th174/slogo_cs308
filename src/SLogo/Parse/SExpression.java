@@ -1,7 +1,7 @@
 package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.Functions.CommandList;
+import SLogo.FunctionEvaluate.PredefinedCommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
@@ -26,7 +26,7 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         }
         Invokable command = peek().getCommand(env);
         if (Objects.isNull(command)) {
-            command = CommandList.$DEFAULT_OPERATION$;
+            command = PredefinedCommandList.$DEFAULT_OPERATION$;
             isOp = 0;
         } else {
             isOp = 1;

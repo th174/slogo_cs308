@@ -3,7 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
-import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.Turtle;
 
 /**
  * Created by th174 on 2/28/2017.
@@ -11,7 +11,7 @@ import SLogo.Turtles.NewTurtle;
 @FunctionalInterface
 public interface TurtleProperties extends Invokable, TurtleIterable {
 
-    Object operation(NewTurtle turtle);
+    Object operation(Turtle turtle);
 
     @Override
     default int minimumArity() {
@@ -20,11 +20,11 @@ public interface TurtleProperties extends Invokable, TurtleIterable {
 
     @Override
     default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        return forEachTurtle(env.getTurtles(), env, expr);
+        return forEachTurtle(env.getActiveTurtleList(), env, expr);
     }
 
     @Override
-    default Object doTurtle(NewTurtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+    default Object doTurtle(Turtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
         return operation(turtle);
     }
 }

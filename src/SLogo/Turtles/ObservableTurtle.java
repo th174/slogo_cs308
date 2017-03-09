@@ -8,7 +8,7 @@ import java.util.Observable;
 /**
  * Created by th174 on 3/2/2017.
  */
-public class ObservableTurtle extends Observable implements NewTurtle {
+public class ObservableTurtle extends Observable implements Turtle {
     private static final Pair<Double, Double> NO_POS_CHANGE = new Pair<>(0.0, 0.0);
     private int id;
     private double xPos;
@@ -24,6 +24,7 @@ public class ObservableTurtle extends Observable implements NewTurtle {
         this.headingAngle = DEFAULT_HEADING;
         this.isTurtleShowing = DEFAULT_IS_SHOWING;
         this.isPenDown = DEFAULT_IS_PEN_DOWN;
+        notifyObservers(NO_POS_CHANGE);
     }
 
     @Override
@@ -102,9 +103,5 @@ public class ObservableTurtle extends Observable implements NewTurtle {
     @Override
     public boolean isTurtleShow() {
         return isTurtleShowing;
-    }
-
-    private void notifyObservers(Pair<Double, Double> arg) {
-        super.notifyObservers(new Object[]{isPenDown(), getHeading(), arg.getKey(), arg.getValue(), !isTurtleShow()});
     }
 }

@@ -2,8 +2,7 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.FunctionEvaluate.Functions.CommandList;
-import SLogo.FunctionEvaluate.Functions.Invokable;
+import SLogo.FunctionEvaluate.PredefinedCommandList;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 
@@ -34,7 +33,7 @@ public final class UserFunction implements Invokable {
 
     @Override
     public Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        return CommandList.LIST.invoke(new EnvironmentImpl(env, params, expr), body);
+        return PredefinedCommandList.LIST.invoke(new EnvironmentImpl(env, params, expr), body);
     }
 
     @Override

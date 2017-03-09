@@ -2,7 +2,6 @@ package SLogo.View.DisplayBar;
 
 import java.util.Map;
 import java.util.Observable;
-import java.util.ResourceBundle;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.View.CommandLineView;

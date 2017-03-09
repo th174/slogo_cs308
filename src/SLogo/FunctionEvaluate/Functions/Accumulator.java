@@ -7,7 +7,9 @@ import SLogo.Parse.Expression;
 import java.util.Arrays;
 
 /**
- * Created by th174 on 2/16/2017.
+ * This interface wraps operations that work by accumulating value over a number of arguments.
+ * This recursively applies Accumulator::accumulate over each of its arguments.
+ * @Author Created by th174 on 2/16/2017.
  */
 @FunctionalInterface
 public interface Accumulator extends Invokable {
