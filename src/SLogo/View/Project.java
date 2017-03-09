@@ -4,19 +4,16 @@ import java.util.ResourceBundle;
 
 import SLogo.Repl;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.View.Menu.MenuBarItems;
-import SLogo.View.Menu.MenuBarItemsBasic;
+import SLogo.View.DisplayBar.ItemDisplay;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Project implements SLogoGUI {
+public class Project implements SLogoGUIElement {
 	
 	private Repl myRepl;
 	private CanvasView myCanvasView;
@@ -64,7 +61,7 @@ public class Project implements SLogoGUI {
 //    	rectangleMenuView.setFill(Color.GREENYELLOW);
 //    	GridPane.setConstraints(rectangleMenuView, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	SLogoGUI menuItemTabPane = new MenuItemTabPane(commandLine, myEnv, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
+    	SLogoGUIElement menuItemTabPane = new ItemDisplay(commandLine, myEnv, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
     	Node menuItemTabPaneNode = menuItemTabPane.getView();
     	GridPane.setConstraints(menuItemTabPaneNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
