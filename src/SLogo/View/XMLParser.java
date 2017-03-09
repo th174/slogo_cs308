@@ -40,11 +40,11 @@ public class XMLParser {
 				imageMap.put((double) i, new File(filenameValue));
 			}
 		} catch (ParserConfigurationException e) {
-			new ErrorPrompt("MapProperties XML file not formatted correctly");
+			throw new ErrorPrompt("MapProperties XML file not formatted correctly");
 		} catch (SAXException e) {
-			new ErrorPrompt("MapProperties XML file not formatted correctly");
+			throw new ErrorPrompt("MapProperties XML file not formatted correctly");
 		} catch (IOException e) {
-			new ErrorPrompt("MapProperties XML file not formatted correctly");
+			throw new ErrorPrompt("MapProperties XML file not formatted correctly");
 		}
 	}
 }
