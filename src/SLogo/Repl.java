@@ -3,6 +3,7 @@ package SLogo;
 import java.util.List;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.Parse.Parser;
 import SLogo.View.CanvasView;
 
 /**
@@ -35,4 +36,9 @@ public interface Repl {
      * @return Environment
      */
     Environment getEnvironment();
+    
+    /**
+     * @return Parser
+     */
+    Parser getParser();
 }

@@ -83,8 +83,8 @@ public class CommandLineViewBasic implements CommandLineView {
         }catch (Exception e) {
             e.printStackTrace();
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
-        	commandErrorAlert.setTitle("Error");
-        	commandErrorAlert.setHeaderText("Command Not Recognized");
+        	commandErrorAlert.setTitle(myResources.getString("AlertError"));
+        	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
         	commandErrorAlert.setContentText(e.getClass().getName());
         	commandErrorAlert.showAndWait();
         }

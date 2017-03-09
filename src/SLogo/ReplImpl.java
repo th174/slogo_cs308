@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.Parse.PolishParser;
 import SLogo.Parse.Expression;
+import SLogo.Parse.Parser;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
 
@@ -56,4 +57,9 @@ public class ReplImpl implements Repl {
     public Environment getEnvironment() {
         return userEnv;
     }
+
+	@Override
+	public Parser getParser(){
+		return parser;
+	}
 }

@@ -2,21 +2,24 @@ package SLogo.View.Menu;
 
 import java.util.ResourceBundle;
 
+import com.sun.org.apache.xml.internal.security.keys.keyresolver.implementations.PrivateKeyResolver;
+
+import SLogo.Parse.Parser;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 public class LanguageMenu implements SLogoMenu{
 
-	Menu myLanguageMenu = new Menu();
+	private Menu myLanguageMenu = new Menu();
+	private Parser myParser;
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "LanguageMenu";
 	private ResourceBundle myResources;
 	
-	public LanguageMenu() {
+	public LanguageMenu(Parser parser) {
 		initializeResources();
+		myParser = parser;
 		initializeLanguageMenu();
-		
-		
 	}
 	
 	private void initializeResources() {
@@ -33,7 +36,7 @@ public class LanguageMenu implements SLogoMenu{
 	private void addLanguage(String language) {
 		MenuItem languageChoice = new MenuItem(language);
 		languageChoice.setOnAction(e -> {
-			//Repl.setLanguage(englishChoice.getName());
+			myParser.setLocale(languageChoice.getText());
 		});
 		myLanguageMenu.getItems().add(languageChoice);
 	}
