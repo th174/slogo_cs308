@@ -164,26 +164,14 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     private Map<String, Invokable> initCommandDictionary() {
-        Map<String, Invokable> commands = new HashMap<>();
-        CommandList.getAllCommands().forEach(e -> {
-            try {
-                commands.put(e.getName(), (Invokable) e.get(null));
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        });
-        return commands;
+        try {
+            return CommandList.getAllCommands();
+        } catch (IllegalAccessException i) {
+            throw new NullPointerException();
+        }
     }
 
     private Map<String, Variable> initVariableDictonary() {
-        Map<String, Variable> variables = new HashMap<>();
-        Variable.getPredefinedVariables().forEach(e -> {
-            try {
-                variables.put(e.getName(), (Variable) e.get(null));
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        });
-        return variables;
+        return Variable.getPredefinedVariables();
     }
 }

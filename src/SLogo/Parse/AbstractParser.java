@@ -1,5 +1,7 @@
 package SLogo.Parse;
 
+import SLogo.FunctionEvaluate.Environment;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -31,21 +33,21 @@ public abstract class AbstractParser implements Parser {
         return tokens;
     }
 
-    protected abstract Expression readTokens(Deque tokens);
+    protected abstract Expression readTokens(Environment env, Deque tokens);
 
     protected Translator getTranslator() {
         return myTranslator;
     }
 
-    @Override
-    public Expression parse(String input) {
+    public Expression parse(Environment env, String input) {
         LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
-        return readTokens(tokens);
+        Expression temp = readTokens(env, tokens);
+        temp.eval(env);
+        return temp;
     }
 
     @Override
     public void setLocale(String locale) {
         myTranslator = new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
     }
-
 }

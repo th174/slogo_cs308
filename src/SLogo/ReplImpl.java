@@ -2,7 +2,7 @@ package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.FunctionEvaluate.SLogoParser;
+import SLogo.Parse.PolishParser;
 import SLogo.Parse.Expression;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
@@ -16,7 +16,7 @@ import java.util.List;
  * Created by th174 on 2/16/2017.
  */
 public class ReplImpl implements Repl {
-    private SLogoParser parser;
+    private PolishParser parser;
     private ArrayList<String> history;
     private int currentIndex;
     private Environment userEnv;
@@ -26,7 +26,7 @@ public class ReplImpl implements Repl {
         history = new ArrayList<>();
         currentIndex = 0;
         userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new ObservableTurtle(1)));
-        parser = new SLogoParser();
+        parser = new PolishParser();
     }
 
     @Override

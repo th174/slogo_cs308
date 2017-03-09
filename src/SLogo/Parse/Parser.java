@@ -1,5 +1,7 @@
 package SLogo.Parse;
 
+import SLogo.FunctionEvaluate.Environment;
+
 import java.util.ResourceBundle;
 
 /**
@@ -12,9 +14,10 @@ public interface Parser {
 
     /**
      * @param command User written command
+     * @param env, Current runtime environmental variables
      * @return Expression built from command
      */
-    Expression parse(String command);
+    Expression parse(Environment env, String command);
 
     /**
      * @param locale Desired Locale of commands

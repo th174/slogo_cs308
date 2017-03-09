@@ -30,4 +30,12 @@ public interface Accumulator extends Invokable {
             return accumulate(eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
         }
     }
+
+    @Override
+    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+        if (expr.length < 1) {
+            throw new UnexpectedArgumentException(minimumArity(), expr.length);
+        }
+        return eval(env,expr);
+    }
 }

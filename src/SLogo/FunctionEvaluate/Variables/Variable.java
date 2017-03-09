@@ -2,8 +2,8 @@ package SLogo.FunctionEvaluate.Variables;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -15,7 +15,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
     public static final Variable E = new NumberVariable(Math.E);
     public static final Variable TRUE = new BoolVariable(true);
     public static final Variable FALSE = new BoolVariable(false);
-    protected static final ResourceBundle REGEX = ResourceBundle.getBundle("resources.languages/Syntax");
+    private static final ResourceBundle REGEX = ResourceBundle.getBundle("resources.languages/Syntax");
 
     private final T value;
 
@@ -172,8 +172,14 @@ public abstract class Variable<T> implements Comparable<Variable> {
         }
     }
 
-    public static Collection<Field> getPredefinedVariables() {
-        return Arrays.stream(Variable.class.getDeclaredFields()).filter(e -> e.getType().equals(Variable.class)).collect(Collectors.toSet());
+    public static Map<String, Variable> getPredefinedVariables() {
+        return Arrays.stream(Variable.class.getDeclaredFields()).filter(e -> Variable.class.isAssignableFrom(e.getType())).collect(Collectors.toMap(Field::getName, e -> {
+            try {
+                return (Variable) e.get(null);
+            } catch (IllegalAccessException e1) {
+                throw new UnrecognizedSymbolException(e.getName());
+            }
+        }));
     }
 
     static class UnrecognizedSymbolException extends RuntimeException {

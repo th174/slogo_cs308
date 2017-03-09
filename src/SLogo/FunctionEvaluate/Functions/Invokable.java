@@ -1,11 +1,14 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.SLogoParser;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Parse.PolishParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,8 +16,7 @@ import java.util.stream.Stream;
  * Created by th174 on 2/16/2017.
  */
 public interface Invokable {
-    ResourceBundle REGEX = ResourceBundle.getBundle("resources.languages/Syntax");
-    SLogoParser parser = new SLogoParser();
+    PolishParser parser = new PolishParser();
 
     /**
      * @param env Current runtime environment
@@ -33,22 +35,13 @@ public interface Invokable {
         return eval(env, expr);
     }
 
-    default Variable invoke(Environment env, Deque tokens) throws Expression.EvaluationTargetException {
-        List<Expression> exprs = readArgs(minimumArity(),env,tokens);
-        System.out.println("\n--Function Invoked--\nArgs:");
-        System.out.println(exprs);
-        return invoke(env, exprs.toArray(new Expression[0]));
-    }
-
-    static List<Expression> readArgs(int numArgs, Environment env, Deque tokens) {
+    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens) {
         if (numArgs == 0) {
             return new ArrayList<>(0);
         } else if (numArgs == 1) {
-            return new ArrayList<>(Collections.singletonList(parser.readTokens(env, tokens)));
+            return Collections.singletonList(parser.readTokens(env, tokens));
         } else {
-            List<Expression> temp = readArgs(numArgs - 1, env, tokens);
-            temp.add(parser.readTokens(env, tokens));
-            return temp;
+            return Stream.concat(readArgs(numArgs - 1, env, tokens).stream(), Stream.of(parser.readTokens(env, tokens))).collect(Collectors.toList());
         }
     }
 

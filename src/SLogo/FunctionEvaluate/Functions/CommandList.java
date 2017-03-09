@@ -10,6 +10,7 @@ import SLogo.View.CanvasView;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
@@ -17,7 +18,7 @@ import java.util.*;
  *
  * @author Stone Mathers
  */
-public class CommandList {
+public final class CommandList {
     //Variable argument Length
     public static final Accumulator LIST = Variable::list;
     public static final Accumulator $DEFAULT_OPERATION$ = LIST;
@@ -65,12 +66,16 @@ public class CommandList {
             return vargs[0].eval(env);
         }
     };
-    public static final TriFunction MAKEUSERINSTRUCTION = (env, expr) -> {
+    public static final Define MAKEUSERINSTRUCTION = (env, expr) -> {
         env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
     public static final UnaryIterable CONSOLE = var -> {
         System.out.println(var);
+        return var;
+    };
+    public static final UnaryIterable EXIT = var -> {
+        System.exit((int) var.toNumber());
         return var;
     };
 
@@ -147,7 +152,13 @@ public class CommandList {
     private CommandList() {
     }
 
-    public static Collection<Field> getAllCommands() {
-        return Arrays.asList(CommandList.class.getDeclaredFields());
+    public static Map<String, Invokable> getAllCommands() throws IllegalAccessException {
+        return Arrays.stream(CommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
+            try {
+                return (Invokable) e.get(null);
+            } catch (IllegalAccessException e1) {
+                throw new NullPointerException();
+            }
+        }));
     }
 }
