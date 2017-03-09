@@ -20,7 +20,7 @@ public interface TurtleProperties extends Invokable, TurtleIterable {
 
     @Override
     default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        return forEachTurtle(env.getTurtles(), env, expr);
+        return forEachTurtle(env.getActiveTurtleList(), env, expr);
     }
 
     @Override

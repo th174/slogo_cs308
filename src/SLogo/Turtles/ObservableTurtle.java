@@ -24,6 +24,7 @@ public class ObservableTurtle extends Observable implements Turtle {
         this.headingAngle = DEFAULT_HEADING;
         this.isTurtleShowing = DEFAULT_IS_SHOWING;
         this.isPenDown = DEFAULT_IS_PEN_DOWN;
+        notifyObservers(NO_POS_CHANGE);
     }
 
     @Override

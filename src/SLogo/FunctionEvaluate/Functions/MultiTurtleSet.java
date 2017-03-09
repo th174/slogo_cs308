@@ -1,5 +1,6 @@
 package SLogo.FunctionEvaluate.Functions;
 
+import SLogo.FunctionEvaluate.PredefinedCommandList;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
@@ -18,7 +19,7 @@ public interface MultiTurtleSet extends IterableInvokable {
 
     @Override
     default Variable operation(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
-        return CommandList.$DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, turtle -> filter(env, turtle, expr[0]).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
+        return PredefinedCommandList.$DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, turtle -> filter(env, turtle, expr[0]).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
     }
 
     @Override

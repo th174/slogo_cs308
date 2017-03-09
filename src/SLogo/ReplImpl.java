@@ -49,7 +49,7 @@ public class ReplImpl implements Repl {
     @Override
     public void setCanvas(CanvasView canvas) {
         userEnv.setCanvas(canvas);
-        userEnv.getTurtles().forEach(t -> t.addObserver(canvas));
+        userEnv.getActiveTurtleList().forEach(t -> t.addObserver(canvas));
     }
 
     @Override

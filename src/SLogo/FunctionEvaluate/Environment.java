@@ -4,8 +4,8 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
+import javafx.collections.ObservableMap;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -57,12 +57,12 @@ public interface Environment {
     /**
      * @return All active turtles
      */
-    List<Turtle> getTurtles();
+    List<Turtle> getActiveTurtleList();
 
     /**
      * @return All turtles, including inactive turtles
      */
-    Collection<Turtle> getAllTurtles();
+    ObservableMap<Integer, Turtle> getAllTurtles();
 
     /**
      * @return CanvasView

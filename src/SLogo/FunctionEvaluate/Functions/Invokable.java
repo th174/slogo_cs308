@@ -26,7 +26,10 @@ public interface Invokable {
     Variable eval(Environment env, Expression... expr);
 
     /**
-     * @param env Current runtime environment
+     * Invokes the method on its arguments in dynamic scope
+     *
+     * @param env  Current runtime environment
+     * @param expr Array of arguments
      * @return Result of the command as a variable
      */
     default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
@@ -36,6 +39,14 @@ public interface Invokable {
         return eval(env, expr);
     }
 
+    /**
+     * Parses arguments for this Invokable
+     *
+     * @param numArgs Number of arguments to parse
+     * @param env     Current environment
+     * @param tokens  Deque of tokenized inputs to parse
+     * @return List of arguments for this invokable
+     */
     default List<Expression> readArgs(int numArgs, Environment env, Deque tokens) {
         if (numArgs == 0) {
             return new ArrayList<>(0);
@@ -50,14 +61,15 @@ public interface Invokable {
         }
     }
 
-
     /**
-     * @return default number of arguments
+     * @return Minimum number of arguments for this
      */
     int minimumArity();
 
-
-    final class UnexpectedArgumentException extends RuntimeException {
+    /**
+     * Is thrown when this function is invoked on either an unexpected number of arguments, or an argument for which it has undefined behavior
+     */
+    class UnexpectedArgumentException extends RuntimeException {
         protected UnexpectedArgumentException(int expected, int actual) {
             super("Unexpected Number of arguments: Expected: " + expected + " Received: " + actual);
         }

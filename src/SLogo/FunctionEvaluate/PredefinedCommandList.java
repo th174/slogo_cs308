@@ -1,7 +1,6 @@
-package SLogo.FunctionEvaluate.Functions;
+package SLogo.FunctionEvaluate;
 
-import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
+import SLogo.FunctionEvaluate.Functions.*;
 import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Stone Mathers
  */
-public final class CommandList {
+public final class PredefinedCommandList {
     //Variable argument Length
     public static final Accumulator LIST = Variable::list;
     public static final Accumulator $DEFAULT_OPERATION$ = LIST;
@@ -82,10 +81,10 @@ public final class CommandList {
     public static final UnaryIterable TANGENT = Variable::tangent;
     public static final UnaryIterable ARCTANGENT = Variable::atangent;
     public static final UnaryIterable NATURALLOG = Variable::log;
-    public static final BooleanTest LESSTHAN = Variable::lessThan;
-    public static final BooleanTest GREATERTHAN = Variable::greaterThan;
-    public static final BooleanTest EQUAL = Variable::equalTo;
-    public static final BooleanTest NOTEQUAL = Variable::notEqualTo;
+    public static final BinaryIterable LESSTHAN = Variable::lessThan;
+    public static final BinaryIterable GREATERTHAN = Variable::greaterThan;
+    public static final BinaryIterable EQUAL = Variable::equalTo;
+    public static final BinaryIterable NOTEQUAL = Variable::notEqualTo;
     public static final TurtleMovement FORWARD = Turtle::moveForward;
     public static final TurtleMovement BACKWARD = Turtle::moveBackward;
     public static final TurtleMovement LEFT = Turtle::rotateCCW;
@@ -142,13 +141,17 @@ public final class CommandList {
     };
 
     /**
-     * You should never instantiate this class
+     * You should never instantiate this class.
      */
-    private CommandList() {
+    private PredefinedCommandList() {
     }
 
+    /**
+     * @return A map of all defined commands, with their instance name as a key
+     * @throws IllegalAccessException
+     */
     public static Map<String, Invokable> getAllCommands() throws IllegalAccessException {
-        return Arrays.stream(CommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
+        return Arrays.stream(PredefinedCommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
             try {
                 return (Invokable) e.get(null);
             } catch (IllegalAccessException e1) {

@@ -23,7 +23,7 @@ public interface TurtleMovement extends IterableInvokable, TurtleIterable {
 
     @Override
     default Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-        return forEachTurtle(env.getTurtles(), env, vargs);
+        return forEachTurtle(env.getActiveTurtleList(), env, vargs);
     }
 
     @Override

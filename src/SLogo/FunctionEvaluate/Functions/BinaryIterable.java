@@ -5,10 +5,11 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 
 /**
+ *
  * Created by th174 on 2/16/2017.
  */
 @FunctionalInterface
-public interface BooleanTest extends IterableInvokable {
+public interface BinaryIterable extends IterableInvokable {
 
     Variable operation(Variable var1, Variable var2);
 
