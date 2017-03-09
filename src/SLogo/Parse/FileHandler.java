@@ -29,7 +29,7 @@ public class FileHandler {
 		myWindow = userWindow;
 	}
 	
-	public String getFile(){
+	public String getFileData(){
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Select SLogo File");
 		return readFile(chooser.showOpenDialog(myWindow));
