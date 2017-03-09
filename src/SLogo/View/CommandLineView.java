@@ -5,7 +5,7 @@ package SLogo.View;
  * @author Alex Salas
  *
  */
-public interface CommandLineView extends SLogoGUI{
+public interface CommandLineView extends SLogoGUIElement{
 
 		public void setText(String command);
 }

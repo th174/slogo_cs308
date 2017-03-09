@@ -1,6 +1,5 @@
 package SLogo.View.Menu;
 
-import SLogo.View.SLogoGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -11,19 +10,25 @@ public class MenuBarItemsBasic implements MenuBarItems{
 
 	MenuBar myMenuBar = new MenuBar();
 	
-	public MenuBarItemsBasic(EventHandler<ActionEvent> addProject) {
-		initializeFileMenu(addProject);
+	public MenuBarItemsBasic(EventHandler<ActionEvent> addProject,EventHandler<ActionEvent> saveProject,EventHandler<ActionEvent> loadProject) {
+		initializeFileMenu(addProject,saveProject,loadProject);
 		initializeLanguageMenu();
+		initializeHelpMenu();
 	}
 
-	private void initializeFileMenu(EventHandler<ActionEvent> addProject) {
-		Menu fileMenu = new FileMenu(addProject).getMenu();
-		myMenuBar.getMenus().addAll(fileMenu);
+	private void initializeFileMenu(EventHandler<ActionEvent> addProject,EventHandler<ActionEvent> saveProject,EventHandler<ActionEvent> loadProject) {
+		Menu fileMenu = new FileMenu(addProject,saveProject,loadProject).getMenu();
+		myMenuBar.getMenus().add(fileMenu);
 	}
 
 	private void initializeLanguageMenu() {
 		Menu languageMenu = new LanguageMenu().getMenu();
-		myMenuBar.getMenus().addAll(languageMenu);
+		myMenuBar.getMenus().add(languageMenu);
+	}
+
+	private void initializeHelpMenu() {
+		Menu helpMenu = new HelpMenu().getMenu();
+		myMenuBar.getMenus().add(helpMenu);
 	}
 	
 	@Override

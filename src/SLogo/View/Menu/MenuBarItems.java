@@ -1,7 +1,7 @@
 package SLogo.View.Menu;
 
-import SLogo.View.SLogoGUI;
+import SLogo.View.SLogoGUIElement;
 
-public interface MenuBarItems extends SLogoGUI{
+public interface MenuBarItems extends SLogoGUIElement{
 	
 }
