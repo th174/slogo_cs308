@@ -4,7 +4,7 @@ import SLogo.FunctionEvaluate.Functions.CommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
-import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
 
@@ -20,8 +20,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
-    private Map<Integer, NewTurtle> myTurtles;
-    private List<NewTurtle> myActiveTurtles;
+    private Map<Integer, Turtle> myTurtles;
+    private List<Turtle> myActiveTurtles;
     private CanvasView myCanvas;
 
     private EnvironmentImpl() {
@@ -30,16 +30,16 @@ public class EnvironmentImpl extends Observable implements Environment {
         outer = null;
     }
 
-    public EnvironmentImpl(Environment outer, Collection<NewTurtle> myTurtles) {
+    public EnvironmentImpl(Environment outer, Collection<Turtle> myTurtles) {
         this.outer = outer;
         scopeFunctions = new HashMap<>();
         scopeVariables = new HashMap<>();
-        this.myTurtles = myTurtles.stream().collect(Collectors.toMap(NewTurtle::id, t -> t));
+        this.myTurtles = myTurtles.stream().collect(Collectors.toMap(Turtle::id, t -> t));
         this.myActiveTurtles = new ArrayList<>(this.myTurtles.values());
         notifyObservers();
     }
 
-    public EnvironmentImpl(Environment outer, Predicate<NewTurtle> turtleFilter) {
+    public EnvironmentImpl(Environment outer, Predicate<Turtle> turtleFilter) {
         this(outer, outer.getAllTurtles());
         filterTurtles(turtleFilter);
     }
@@ -115,12 +115,12 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public List<NewTurtle> getTurtles() {
+    public List<Turtle> getTurtles() {
         return Collections.unmodifiableList(myActiveTurtles);
     }
 
     @Override
-    public Collection<NewTurtle> getAllTurtles() {
+    public Collection<Turtle> getAllTurtles() {
         return myTurtles.values();
     }
 
@@ -130,8 +130,8 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public void filterTurtles(Predicate<NewTurtle> filter) {
-        myActiveTurtles = myTurtles.values().stream().sorted(Comparator.comparingInt(NewTurtle::id)).filter(filter).collect(Collectors.toList());
+    public void filterTurtles(Predicate<Turtle> filter) {
+        myActiveTurtles = myTurtles.values().stream().sorted(Comparator.comparingInt(Turtle::id)).filter(filter).collect(Collectors.toList());
     }
 
     @Override

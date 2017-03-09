@@ -4,7 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
-import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.Turtle;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ import java.util.Arrays;
 @FunctionalInterface
 public interface MultiTurtleSet extends IterableInvokable {
 
-    Variable filter(Environment env, NewTurtle turtle, Expression expr) throws Expression.EvaluationTargetException;
+    Variable filter(Environment env, Turtle turtle, Expression expr) throws Expression.EvaluationTargetException;
 
     @Override
     default Variable operation(Environment env, Expression... expr) throws Expression.EvaluationTargetException {

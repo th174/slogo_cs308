@@ -2,7 +2,7 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
 import java.util.Collection;
@@ -57,12 +57,12 @@ public interface Environment {
     /**
      * @return All active turtles
      */
-    List<NewTurtle> getTurtles();
+    List<Turtle> getTurtles();
 
     /**
      * @return All turtles, including inactive turtles
      */
-    Collection<NewTurtle> getAllTurtles();
+    Collection<Turtle> getAllTurtles();
 
     /**
      * @return CanvasView
@@ -84,7 +84,7 @@ public interface Environment {
     /**
      * @param filter Condition that selects active turtles
      */
-    void filterTurtles(Predicate<NewTurtle> filter);
+    void filterTurtles(Predicate<Turtle> filter);
 
     /**
      * @param turtleIDs Ids of turtles to be set active

@@ -8,7 +8,7 @@ import java.util.Observable;
 /**
  * Created by th174 on 3/2/2017.
  */
-public class ObservableTurtle extends Observable implements NewTurtle {
+public class ObservableTurtle extends Observable implements Turtle {
     private static final Pair<Double, Double> NO_POS_CHANGE = new Pair<>(0.0, 0.0);
     private int id;
     private double xPos;
