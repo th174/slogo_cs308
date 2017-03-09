@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Parse.Parser;
 import SLogo.Parse.PolishParser;
 
 import java.util.ArrayList;
@@ -41,7 +42,11 @@ public interface Invokable {
         } else if (numArgs == 1) {
             return Collections.singletonList(parser.readTokens(env, tokens));
         } else {
-            return Stream.concat(readArgs(numArgs - 1, env, tokens).stream(), Stream.of(parser.readTokens(env, tokens))).collect(Collectors.toList());
+            try {
+                return Stream.concat(readArgs(numArgs - 1, env, tokens).stream(), Stream.of(parser.readTokens(env, tokens))).collect(Collectors.toList());
+            } catch (Parser.SyntaxException e) {
+                throw new UnexpectedArgumentException(e.getMessage());
+            }
         }
     }
 

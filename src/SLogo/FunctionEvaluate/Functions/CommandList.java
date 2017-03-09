@@ -30,30 +30,24 @@ public final class CommandList {
     public static final Accumulator POWER = Variable::power;
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
-    public static final BiFunction IF = (env, expr) -> {
-        if (expr[0].eval(env).toBoolean()) {
-            return $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-        } else {
-            return Variable.FALSE;
-        }
-    };
     public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
     public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
-    public static final BiFunction REPEAT = (env, expr) -> {
+    public static final Conditional REPEAT = (env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
         int loopArity = loopParams.size();
         String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
         env.addUserVariable(loopVar, loopArity >= 4 ? loopParams.remove(0).eval(env) : Variable.newInstance(1));
         Variable limit = loopParams.remove(0).eval(env);
-        Variable last = Variable.newInstance(0);
+        Variable last = Variable.FALSE;
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
             last = $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
             env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(loopArity >= 3 ? loopParams.get(0).eval(env) : Variable.newInstance(1)));
         }
         return last;
     };
-    public static final BiFunction DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
-    public static final BiFunction FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Conditional DOTIMES = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Conditional FOR = REPEAT; //There's actually only one loop function, it just behaves differently depending on the loop arguments
+    public static final Conditional IF = REPEAT; //If statement is actually just a loop, boolean expressions eval to 0 or 1 lol
     public static final IterableInvokable MAKEVARIABLE = new IterableInvokable() {
         @Override
         public int minimumArity() {
@@ -70,7 +64,7 @@ public final class CommandList {
         env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
-    public static final UnaryIterable CONSOLE = var -> {
+    public static final UnaryIterable ECHO = var -> {
         System.out.println(var);
         return var;
     };
@@ -141,8 +135,9 @@ public final class CommandList {
 
         @Override
         public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
-            env.filterTurtles(turtle -> ((ListVariable) LIST.invoke(env, vargs[0])).contains(Variable.newInstance(turtle.id())).toBoolean());
-            return LIST.invoke(env, vargs[0]);
+            ListVariable turtlesIDs = (ListVariable) LIST.invoke(env, vargs[0]);
+            env.filterTurtles(turtle -> turtlesIDs.contains(Variable.newInstance(turtle.id())).toBoolean());
+            return turtlesIDs;
         }
     };
 
