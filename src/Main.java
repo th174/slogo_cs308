@@ -12,10 +12,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        
+
         ReplImpl repl = new ReplImpl();
         int SIZE = 800;
-        SLogoGUIImpl gui = new SLogoGUIImpl(repl,SIZE,SIZE);
+        SLogoGUIImpl gui = new SLogoGUIImpl(repl, SIZE, SIZE);
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(gui.getView());
         Scene scene = new Scene(GUIPane, SIZE, SIZE);
@@ -26,10 +26,11 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         launch(args);
-//        ReplImpl repl = new ReplImpl();
-//        Scanner input = new Scanner(System.in);
-//        while (true) {
-//            repl.read(input.next("\0000"));
-//        }
+        ReplImpl repl = new ReplImpl();
+        Scanner input = new Scanner(System.in);
+        while (true) {
+            System.out.print("SLogo >> ");
+            repl.read(input.nextLine());
+        }
     }
 }

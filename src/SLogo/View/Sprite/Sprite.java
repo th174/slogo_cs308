@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import SLogo.View.TurtleMath;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Sprite {
+	private int myID;
 	private File defaultSpriteFile;
 	private ImageView spriteIV;
 	private Image spriteImg;
@@ -21,8 +22,11 @@ public class Sprite {
 	private int direction;
 	private int position[];
 	private boolean hidden;
+	private boolean penDown;
+	private PropertiesDisplay propDisp;
 	
-	public Sprite(File adefaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+	public Sprite(int ID, File adefaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+		myID = ID;
 		spriteWidth = aspriteWidth;
 		spriteHeight = aspriteHeight;
 		viewWidth = aviewWidth;
@@ -34,6 +38,9 @@ public class Sprite {
 		setPosition(position);
 		setDirection(90);
 		setHidden(false);
+		propDisp = new PropertiesDisplay(myID, TurtleMath.absoluteToZero(viewWidth, viewHeight, getPosition()), 
+				getDirection(), getHidden(), penDown);
+		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay(e));
 	}
 	
 	public void setImage(File newSpriteFile){
@@ -43,8 +50,12 @@ public class Sprite {
 			spriteIV.setFitWidth(spriteWidth);
 			spriteIV.setFitHeight(spriteHeight);
 		} catch (IOException e) {
-	    	showError("Invalid File Type");
+	    	showError("Invalid Image File or Index");
 		}
+	}
+	
+	public void setPen(boolean newPen){
+		penDown = newPen;
 	}
 	
 	private void showError (String message) {

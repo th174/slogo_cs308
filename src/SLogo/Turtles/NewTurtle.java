@@ -6,6 +6,12 @@ import java.util.Observer;
  * Created by th174 on 3/2/2017.
  */
 public interface NewTurtle {
+    double DEFAULT_X_POS = 0;
+    double DEFAULT_Y_POS = 0;
+    double DEFAULT_HEADING = 90;
+    boolean DEFAULT_IS_SHOWING = false;
+    boolean DEFAULT_IS_PEN_DOWN = false;
+
     /**
      * @return current ID of turtle
      */
@@ -112,10 +118,10 @@ public interface NewTurtle {
     boolean isPenDown();
 
     /**
-     * @param isTurtleShow new state of isTurtleShow
-     * @return is
+     * @param isTurtleShowing new state of isTurtleShowing
+     * @return isTurtleShowing
      */
-    boolean setTurtleShow(boolean isTurtleShow);
+    boolean setTurtleShow(boolean isTurtleShowing);
 
     /**
      * Sets turtle to show
@@ -149,7 +155,10 @@ public interface NewTurtle {
      * @return distance moved
      */
     default double reset() {
-        return setXY(0, 0);
+        setPenDown(DEFAULT_IS_PEN_DOWN);
+        setTurtleShow(DEFAULT_IS_SHOWING);
+        setHeading(DEFAULT_HEADING);
+        return setXY(DEFAULT_X_POS, DEFAULT_Y_POS);
     }
 
     /**
@@ -158,18 +167,4 @@ public interface NewTurtle {
      * @author Riley Nisbet
      */
     void addObserver(Observer o);
-
-    /**
-     * Remove a listener
-     *
-     * @author Riley Nisbet
-     */
-    void removeObserver(Observer o);
-
-    /**
-     * Tell all listeners that something has changed
-     *
-     * @author Riley Nisbet
-     */
-    void notifyObservers();
 }

@@ -69,7 +69,7 @@ public final class ListVariable extends Variable<List<Variable>> {
 
     @Override
     public String toString() {
-        return "\n" + super.toContentString().replace("[", "(").replace("]", ")").replace(",", " .") + "\n";
+        return super.toContentString().replace("[", "(").replace("]", ")").replace(",", " .");
     }
 
     private Variable last() {

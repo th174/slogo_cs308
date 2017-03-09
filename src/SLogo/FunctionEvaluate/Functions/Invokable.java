@@ -2,18 +2,21 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Parse.AtomicList;
 import SLogo.Parse.Expression;
-import SLogo.Parse.Parser;
-import SLogo.Parse.SExpression;
+import SLogo.Parse.PolishParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by th174 on 2/16/2017.
  */
 public interface Invokable {
-    ResourceBundle REGEX = ResourceBundle.getBundle("resources.languages/Syntax");
+    PolishParser parser = new PolishParser();
 
     /**
      * @param env Current runtime environment
@@ -30,6 +33,16 @@ public interface Invokable {
             throw new UnexpectedArgumentException(minimumArity(), expr.length);
         }
         return eval(env, expr);
+    }
+
+    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens) {
+        if (numArgs == 0) {
+            return new ArrayList<>(0);
+        } else if (numArgs == 1) {
+            return Collections.singletonList(parser.readTokens(env, tokens));
+        } else {
+            return Stream.concat(readArgs(numArgs - 1, env, tokens).stream(), Stream.of(parser.readTokens(env, tokens))).collect(Collectors.toList());
+        }
     }
 
 

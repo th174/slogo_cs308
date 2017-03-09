@@ -2,12 +2,9 @@ package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Parse.PolishParser;
 import SLogo.Parse.Expression;
-import SLogo.Parse.LispSyntaxParser;
-import SLogo.Parse.Parser;
-import SLogo.Parse.PolishSyntaxParser;
-import SLogo.Turtles.NewTurtleImpl;
+import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
 
 import java.io.IOException;
@@ -19,31 +16,30 @@ import java.util.List;
  * Created by th174 on 2/16/2017.
  */
 public class ReplImpl implements Repl {
-    private Parser parser;
+    private PolishParser parser;
     private ArrayList<String> history;
     private int currentIndex;
     private Environment userEnv;
 
     public ReplImpl() throws IOException {
-        parser = new LispSyntaxParser();
-//        parser = new PolishSyntaxParser();
+
         history = new ArrayList<>();
         currentIndex = 0;
-        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new NewTurtleImpl()));
+        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new ObservableTurtle(1)));
+        parser = new PolishParser();
     }
 
     @Override
     public void read(String input) throws Exception {
-        System.out.print("SLogo >>");
-        Expression currentCommand = parser.parse(input);
+        Expression currentCommand = parser.parse(userEnv, input);
         history.add(currentCommand.toString());
-        eval(currentCommand);
+//        eval(currentCommand);
         currentIndex++;
     }
 
-    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
-        return expression.eval(userEnv);
-    }
+//    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
+//        return expression.eval(userEnv);
+//    }
 
     @Override
     public List<String> getHistory() {

@@ -1,5 +1,7 @@
 package SLogo.Parse;
 
+import SLogo.FunctionEvaluate.Environment;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -17,10 +19,10 @@ public abstract class AbstractParser implements Parser {
     }
 
     public AbstractParser(String locale) {
-        myTranslator = setLocale(locale);
+        setLocale(locale);
     }
 
-    private LinkedList<String> tokenSplit(String s) {
+    protected LinkedList<String> tokenSplit(String s) {
         Matcher m = Pattern.compile(String.format("(%s|%s|%s|%s)", REGEX.getString("GroupStart"), REGEX.getString("GroupEnd"), REGEX.getString("ListStart"), REGEX.getString("ListEnd"))).matcher(s);
         s = m.replaceAll(" $1 ");
         m = Pattern.compile(REGEX.getString("Token"), Pattern.DOTALL).matcher(s);
@@ -31,23 +33,21 @@ public abstract class AbstractParser implements Parser {
         return tokens;
     }
 
-    protected abstract Expression readTokens(Deque tokens);
+    protected abstract Expression readTokens(Environment env, Deque tokens);
 
     protected Translator getTranslator() {
         return myTranslator;
     }
 
-    @Override
-    public Expression parse(String input) {
+    public Expression parse(Environment env, String input) {
         LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
-        Expression temp = readTokens(tokens);
-        System.out.println(temp.toString().substring(1,temp.toString().length()-1));
+        Expression temp = readTokens(env, tokens);
+        temp.eval(env);
         return temp;
     }
 
     @Override
-    public Translator setLocale(String locale) {
-        return new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
+    public void setLocale(String locale) {
+        myTranslator = new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
     }
-
 }

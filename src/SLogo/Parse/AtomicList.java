@@ -21,25 +21,12 @@ public final class AtomicList extends LinkedList<String> implements Expression {
 
     @Override
     public Variable eval(Environment env) throws EvaluationTargetException, Environment.VariableNotFoundException {
-        try {
-            return env.getVariableByName(get());
-        } catch (Environment.VariableNotFoundException vnfe) {
-            return Variable.fromString(get());
-        }
+        return env.getVariableByName(get());
     }
 
     @Override
     public Invokable getCommand(Environment env) {
-        try {
-            Variable temp = env.getVariableByName(get());
-            if (temp instanceof Invokable) {
-                return (Invokable) temp;
-            } else {
-                throw new Environment.VariableNotFoundException(temp.toContentString());
-            }
-        } catch (Environment.VariableNotFoundException e) {
-            return env.getFunctionByName(get());
-        }
+        return env.getFunctionByName(get());
     }
 
     @Override

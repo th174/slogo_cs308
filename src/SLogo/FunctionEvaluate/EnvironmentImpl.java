@@ -5,6 +5,7 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Turtles.NewTurtle;
+import SLogo.Turtles.ObservableTurtle;
 import SLogo.View.CanvasView;
 
 import java.util.*;
@@ -16,11 +17,10 @@ import java.util.stream.Collectors;
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
-    private Collection<Observer> observers;
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
-    private List<NewTurtle> myTurtles;
+    private Map<Integer, NewTurtle> myTurtles;
     private List<NewTurtle> myActiveTurtles;
     private CanvasView myCanvas;
 
@@ -28,21 +28,24 @@ public class EnvironmentImpl extends Observable implements Environment {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
         outer = null;
-        observers = new ArrayList<>();
     }
 
-    public EnvironmentImpl(Environment outer, List<NewTurtle> myTurtles) {
+    public EnvironmentImpl(Environment outer, Collection<NewTurtle> myTurtles) {
         this.outer = outer;
         scopeFunctions = new HashMap<>();
         scopeVariables = new HashMap<>();
-        observers = new ArrayList<>();
-        this.myTurtles = myTurtles;
-        this.myActiveTurtles = myTurtles;
+        this.myTurtles = myTurtles.stream().collect(Collectors.toMap(NewTurtle::id, t -> t));
+        this.myActiveTurtles = new ArrayList<>(this.myTurtles.values());
     }
 
     public EnvironmentImpl(Environment outer, Predicate<NewTurtle> turtleFilter) {
         this(outer, outer.getAllTurtles());
         filterTurtles(turtleFilter);
+    }
+
+    public EnvironmentImpl(Environment outer, List<Integer> turtleIDs) {
+        this(outer, outer.getAllTurtles());
+        selectTurtles(turtleIDs);
     }
 
     public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
@@ -57,7 +60,6 @@ public class EnvironmentImpl extends Observable implements Environment {
         return Collections.unmodifiableMap(scopeVariables);
     }
 
-    @Deprecated
     @Override
     public Map<String, Invokable> getLocalFunctions() {
         return Collections.unmodifiableMap(scopeFunctions);
@@ -86,27 +88,26 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public Variable getVariableByName(String name) throws VariableNotFoundException {
+    public Variable getVariableByName(String name) {
         if (scopeVariables.containsKey(name)) {
             return scopeVariables.get(name);
         } else if (scopeVariables.containsKey(name)) {
             return scopeVariables.get(name);
         } else if (Objects.isNull(outer)) {
-            throw new VariableNotFoundException(name);
+            return Variable.fromString(name);
         } else {
             return outer.getVariableByName(name);
         }
     }
 
-    @Deprecated
     @Override
-    public Invokable getFunctionByName(String name) throws FunctionNotFoundException {
+    public Invokable getFunctionByName(String name) {
         if (scopeFunctions.containsKey(name)) {
             return scopeFunctions.get(name);
         } else if (scopeFunctions.containsKey(name)) {
             return scopeFunctions.get(name);
         } else if (Objects.isNull(outer)) {
-            throw new FunctionNotFoundException(name);
+            return null;
         } else {
             return outer.getFunctionByName(name);
         }
@@ -114,12 +115,12 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public List<NewTurtle> getTurtles() {
-        return myActiveTurtles;
+        return Collections.unmodifiableList(myActiveTurtles);
     }
 
     @Override
-    public List<NewTurtle> getAllTurtles() {
-        return myTurtles;
+    public Collection<NewTurtle> getAllTurtles() {
+        return myTurtles.values();
     }
 
     @Override
@@ -129,7 +130,17 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public void filterTurtles(Predicate<NewTurtle> filter) {
-        myActiveTurtles = myTurtles.stream().filter(filter).collect(Collectors.toList());
+        myActiveTurtles = myTurtles.values().stream().sorted(Comparator.comparingInt(NewTurtle::id)).filter(filter).collect(Collectors.toList());
+    }
+
+    @Override
+    public void selectTurtles(List<Integer> turtleIDs) {
+        myActiveTurtles = turtleIDs.stream().map(id -> {
+            if (!myTurtles.containsKey(id)) {
+                myTurtles.put(id, new ObservableTurtle(id));
+            }
+            return myTurtles.get(id);
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -153,55 +164,14 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     private Map<String, Invokable> initCommandDictionary() {
-        Map<String, Invokable> commands = new HashMap<>();
-        CommandList.getAllCommands().forEach(e -> {
-            try {
-                commands.put(e.getName(), (Invokable) e.get(null));
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        });
-        return commands;
+        try {
+            return CommandList.getAllCommands();
+        } catch (IllegalAccessException i) {
+            throw new NullPointerException();
+        }
     }
 
     private Map<String, Variable> initVariableDictonary() {
-        Map<String, Variable> variables = new HashMap<>();
-        Variable.getPredefinedVariables().forEach(e -> {
-            try {
-                variables.put(e.getName(), (Variable) e.get(null));
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        });
-        return variables;
-    }
-
-    /**
-     * Add an object as a listener
-     *
-     * @author Riley Nisbet
-     */
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
-
-    /**
-     * Remove a listener
-     *
-     * @author Riley Nisbet
-     */
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
-
-    /**
-     * Tell all listeners that something has changed
-     *
-     * @author Riley Nisbet
-     */
-    public void notifyObservers() {
-        for (Observer o : observers) {
-            o.update(this, new Object[]{scopeVariables, scopeFunctions});
-        }
+        return Variable.getPredefinedVariables();
     }
 }

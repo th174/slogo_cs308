@@ -1,5 +1,8 @@
 package SLogo.FunctionEvaluate.Variables;
 
+import java.util.Random;
+import java.util.stream.Collectors;
+
 /**
  * Created by th174 on 2/16/2017.
  */
@@ -15,22 +18,16 @@ public final class StringVariable extends Variable<String> {
 
     @Override
     public StringVariable random() {
-        char[] randomChars = new char[(int) (Math.random() * (value().length() + 1))];
-        for (int i = 0; i < randomChars.length; i++) {
-            String alphanumericString = "abcdefghijklmnopqrstuvwxyz0123456789";
-            randomChars[i] = alphanumericString.charAt((int) (Math.random() * alphanumericString.length()));
-        }
-        return new StringVariable(new String(randomChars));
+        return new StringVariable(
+                new Random().ints((int) (Math.random() * (value().length() + 1)), ' ', 127)
+                        .mapToObj(i -> (char) i)
+                        .map(Object::toString)
+                        .collect(Collectors.joining()));
     }
 
     @Override
     public boolean equals(Variable o) {
         return o instanceof StringVariable ? this.toContentString().equals(o.toContentString()) : super.equals(o);
-    }
-
-    @Override
-    public int compareTo(Variable o) {
-        return o instanceof StringVariable ? this.toContentString().compareTo(o.toContentString()) : super.compareTo(o);
     }
 
     @Override

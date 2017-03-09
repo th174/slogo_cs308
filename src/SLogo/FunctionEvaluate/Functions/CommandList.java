@@ -2,7 +2,6 @@ package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
-import SLogo.FunctionEvaluate.Variables.LambdaVariable;
 import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
@@ -11,6 +10,7 @@ import SLogo.View.CanvasView;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it
@@ -18,7 +18,7 @@ import java.util.*;
  *
  * @author Stone Mathers
  */
-public class CommandList {
+public final class CommandList {
     //Variable argument Length
     public static final Accumulator LIST = Variable::list;
     public static final Accumulator $DEFAULT_OPERATION$ = LIST;
@@ -37,7 +37,6 @@ public class CommandList {
             return Variable.FALSE;
         }
     };
-    public static final BiFunction LAMBDA = (env, expr) -> new LambdaVariable(expr);
     public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
     public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
     public static final BiFunction REPEAT = (env, expr) -> {
@@ -67,14 +66,17 @@ public class CommandList {
             return vargs[0].eval(env);
         }
     };
-    public static final TriFunction MAKEUSERINSTRUCTION = (env, expr) -> {
-        env.addUserFunction(expr[0].toString(), (Invokable) LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
-        env.addUserVariable(expr[0].toString(), LAMBDA.invoke(env, Arrays.copyOfRange(expr, 1, expr.length)));
+    public static final Define MAKEUSERINSTRUCTION = (env, expr) -> {
+        env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
-    public static final UnaryIterable PRINT = var -> {
+    public static final UnaryIterable CONSOLE = var -> {
         System.out.println(var);
-        return Variable.TRUE;
+        return var;
+    };
+    public static final UnaryIterable EXIT = var -> {
+        System.exit((int) var.toNumber());
+        return var;
     };
 
     //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)
@@ -150,7 +152,13 @@ public class CommandList {
     private CommandList() {
     }
 
-    public static Collection<Field> getAllCommands() {
-        return Arrays.asList(CommandList.class.getDeclaredFields());
+    public static Map<String, Invokable> getAllCommands() throws IllegalAccessException {
+        return Arrays.stream(CommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
+            try {
+                return (Invokable) e.get(null);
+            } catch (IllegalAccessException e1) {
+                throw new NullPointerException();
+            }
+        }));
     }
 }

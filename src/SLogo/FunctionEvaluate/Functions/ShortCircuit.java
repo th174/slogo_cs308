@@ -22,7 +22,7 @@ public interface ShortCircuit extends Invokable {
         if (expr.length == 1) {
             return total.eval(env);
         } else {
-            Variable eval = invoke(env, Arrays.copyOfRange(expr, 0, expr.length - 1));
+            Variable eval = eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1));
             return (eval.toBoolean() == test(Variable.TRUE, Variable.FALSE).toBoolean()) ? eval :
                     test(eval, total.eval(env));
         }
