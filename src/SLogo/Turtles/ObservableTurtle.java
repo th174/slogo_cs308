@@ -104,8 +104,4 @@ public class ObservableTurtle extends Observable implements Turtle {
     public boolean isTurtleShow() {
         return isTurtleShowing;
     }
-
-    private void notifyObservers(Pair<Double, Double> arg) {
-        super.notifyObservers(new Object[]{isPenDown(), getHeading(), arg.getKey(), arg.getValue(), !isTurtleShow()});
-    }
 }
