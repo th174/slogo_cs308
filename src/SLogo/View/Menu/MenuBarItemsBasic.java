@@ -1,5 +1,6 @@
 package SLogo.View.Menu;
 
+import SLogo.Parse.Parser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -10,9 +11,9 @@ public class MenuBarItemsBasic implements MenuBarItems{
 
 	MenuBar myMenuBar = new MenuBar();
 	
-	public MenuBarItemsBasic(EventHandler<ActionEvent> addProject,EventHandler<ActionEvent> saveProject,EventHandler<ActionEvent> loadProject) {
+	public MenuBarItemsBasic(Parser parser, EventHandler<ActionEvent> addProject,EventHandler<ActionEvent> saveProject,EventHandler<ActionEvent> loadProject) {
 		initializeFileMenu(addProject,saveProject,loadProject);
-		initializeLanguageMenu();
+		initializeLanguageMenu(parser);
 		initializeHelpMenu();
 	}
 
@@ -21,8 +22,8 @@ public class MenuBarItemsBasic implements MenuBarItems{
 		myMenuBar.getMenus().add(fileMenu);
 	}
 
-	private void initializeLanguageMenu() {
-		Menu languageMenu = new LanguageMenu().getMenu();
+	private void initializeLanguageMenu(Parser parser) {
+		Menu languageMenu = new LanguageMenu(parser).getMenu();
 		myMenuBar.getMenus().add(languageMenu);
 	}
 

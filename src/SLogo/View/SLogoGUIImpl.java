@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import SLogo.Repl;
 import SLogo.View.Menu.MenuBarItems;
 import SLogo.View.Menu.MenuBarItemsBasic;
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
@@ -44,9 +45,8 @@ public class SLogoGUIImpl implements SLogoGUI {
     	double tabPaneHeightRatio = (1 - menuBarHeightRatio);
     	setGridConstraints(gridPane, menuBarHeightRatio, tabPaneHeightRatio);
     	
-    	MenuBarItems menuBarItems = new MenuBarItemsBasic(e->addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project"))),
-    													  e->saveFile(),
-    													  e->loadFile());
+    	MenuBarItems menuBarItems = new MenuBarItemsBasic(myRepl.getParser(), e->addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project"))),
+    													  this::saveFile,this::loadFile);
     	Node menuBarItemsNode = menuBarItems.getView();
     	GridPane.setConstraints(menuBarItemsNode, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
     	
@@ -56,17 +56,17 @@ public class SLogoGUIImpl implements SLogoGUI {
         myRoot.getChildren().addAll(gridPane);
 	}
 
-	private void saveFile() {
+	private void saveFile(ActionEvent e) {
 		Node saveProject = myTabPane.getSelectionModel().getSelectedItem().getContent();
 		try {
 			myProjectReaderWriter.writeObject(saveProject);
-		}catch(FileNotFoundException e) {
+		}catch(FileNotFoundException ex) {
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle("Error");
         	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
         	commandErrorAlert.setContentText(e.getClass().getName());
         	commandErrorAlert.showAndWait();
-		}catch(Exception e){
+		}catch(Exception ex){
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle("Error");
         	commandErrorAlert.setHeaderText(myResources.getString("SaveError"));
@@ -75,20 +75,20 @@ public class SLogoGUIImpl implements SLogoGUI {
 		}
 	}
 
-	private void loadFile() {
+	private void loadFile(ActionEvent e) {
 		Node loadedProject;
 		try {
 			loadedProject = myProjectReaderWriter.readObject();
 			Tab loadedTab = new Tab(myResources.getString("LoadedTab"), loadedProject);
 			myTabPane.getTabs().add(loadedTab);
-		}catch(FileNotFoundException e) {
+		}catch(FileNotFoundException ex) {
 			loadedProject = null;
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle("Error");
         	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
         	commandErrorAlert.setContentText(e.getClass().getName());
         	commandErrorAlert.showAndWait();
-		}catch(Exception e){
+		}catch(Exception ex){
 			loadedProject = null;
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle("Error");
