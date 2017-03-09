@@ -1,28 +1,25 @@
 package SLogo.View;
 
+import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 import SLogo.Repl;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.View.Menu.MenuBarItems;
 import SLogo.View.Menu.MenuBarItemsBasic;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class SLogoGUIImpl implements SLogoGUI {
 	
 	private Repl myRepl;
-	private CanvasView myCanvasView;
-	private EnvironmentImpl myEnv;
 	TabPane myTabPane = new TabPane();
 	private Group myRoot;
 	private double myWidth;
@@ -30,14 +27,15 @@ public class SLogoGUIImpl implements SLogoGUI {
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "SLogoGUI";
 	private ResourceBundle myResources;
+	private ReaderWriter<Node> myProjectReaderWriter;
 	
 	
 	public SLogoGUIImpl(Repl repl,double width,double height){
 		myRepl = repl;
-		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
 		myRoot = new Group();
 		myWidth = width;
 		myHeight = height;
+		myProjectReaderWriter = new ReaderWriter<Node>();
 		initializeResources();
 		GridPane gridPane = new GridPane();
 		double menuBarHeight = Integer.parseInt(myResources.getString("MenuBarHeight"));
@@ -46,22 +44,69 @@ public class SLogoGUIImpl implements SLogoGUI {
     	double tabPaneHeightRatio = (1 - menuBarHeightRatio);
     	setGridConstraints(gridPane, menuBarHeightRatio, tabPaneHeightRatio);
     	
-    	MenuBarItems menuBarItems = new MenuBarItemsBasic(e->addNewProject(myRepl,menuBarHeight,myResources.getString("Project")));
+    	MenuBarItems menuBarItems = new MenuBarItemsBasic(e->addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project"))),
+    													  e->saveFile(),
+    													  e->loadFile());
     	Node menuBarItemsNode = menuBarItems.getView();
     	GridPane.setConstraints(menuBarItemsNode, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	addNewProject(repl, menuBarHeight,myResources.getString("FirstProject"));
+    	addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project")));
     	GridPane.setConstraints(myTabPane, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
-    	
     	gridPane.getChildren().addAll(menuBarItemsNode,myTabPane);
         myRoot.getChildren().addAll(gridPane);
 	}
 
-	private void addNewProject(Repl repl, double menuBarHeight,String title) {
+	private void saveFile() {
+		Node saveProject = myTabPane.getSelectionModel().getSelectedItem().getContent();
+		try {
+			myProjectReaderWriter.writeObject(saveProject);
+		}catch(FileNotFoundException e) {
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle("Error");
+        	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
+        	commandErrorAlert.setContentText(e.getClass().getName());
+        	commandErrorAlert.showAndWait();
+		}catch(Exception e){
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle("Error");
+        	commandErrorAlert.setHeaderText(myResources.getString("SaveError"));
+        	commandErrorAlert.setContentText(e.getClass().getName());
+        	commandErrorAlert.showAndWait();
+		}
+	}
+
+	private void loadFile() {
+		Node loadedProject;
+		try {
+			loadedProject = myProjectReaderWriter.readObject();
+			Tab loadedTab = new Tab(myResources.getString("LoadedTab"), loadedProject);
+			myTabPane.getTabs().add(loadedTab);
+		}catch(FileNotFoundException e) {
+			loadedProject = null;
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle("Error");
+        	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
+        	commandErrorAlert.setContentText(e.getClass().getName());
+        	commandErrorAlert.showAndWait();
+		}catch(Exception e){
+			loadedProject = null;
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle("Error");
+        	commandErrorAlert.setHeaderText(myResources.getString("LoadError"));
+        	commandErrorAlert.setContentText(e.getClass().getName());
+        	commandErrorAlert.showAndWait();
+		}
+	}
+
+	private void addNewProjectTab(Tab tab) {
+    	myTabPane.getTabs().add(tab);
+	}
+	
+	private Tab createNewProjectTab(Repl repl, double menuBarHeight,String title) {
 		Tab defaultProject = new Tab();
 		defaultProject.setText(title);
     	defaultProject.setContent(new Project(repl, myWidth, myHeight-menuBarHeight*2).getView());
-    	myTabPane.getTabs().add(defaultProject);
+    	return defaultProject;
 	}
 	
     @Override
@@ -86,5 +131,10 @@ public class SLogoGUIImpl implements SLogoGUI {
 		// TODO Auto-generated method stub
 		
 	}
-}
 
+	@Override
+	public void setTurtleBackgroundColor(Color color) {
+		// TODO Auto-generated method stub
+		
+	}
+}
