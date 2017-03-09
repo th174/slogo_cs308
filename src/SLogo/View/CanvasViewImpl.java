@@ -68,6 +68,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 
 	//theoretically, when Stone makes first turtle, it will create an instance using instantializeSprite
 	public void update(Observable o, Object n){
+		System.out.println("update");
 		ObservableTurtle turtle = (ObservableTurtle) o;
 		Pair<Integer, Integer> changeLoc = (Pair<Integer, Integer>) n;
 		int currID = (int) turtle.id();
@@ -76,16 +77,16 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		currSprite.setDirection(((Double) turtle.getHeading()).intValue());
 		move(currID, new int[] {changeLoc.getKey(), changeLoc.getValue()});
 		setHidden(currID, !turtle.isTurtleShow());
-		//TODO: need to set pen Color at some point
+		//TODO: need to set pen Color/Width at some point
 	}
 	
 	private void onTurtleMapChange(MapChangeListener.Change<? extends Integer, ? extends Turtle> turtlesChange) {
-		System.out.println("newTurtle");
         int id = turtlesChange.getKey();
         Turtle t = turtlesChange.getValueAdded();
         Turtle r = turtlesChange.getValueRemoved();
         if (t != null){
         	instantializeSprite(id, t);
+        	t.addObserver(this);
         }
         if (r != null){
         	removeSprite(id, r);
