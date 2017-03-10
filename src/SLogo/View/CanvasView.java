@@ -2,8 +2,10 @@ package SLogo.View;
 
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Observer;
 
 /**
@@ -100,4 +102,21 @@ public interface CanvasView extends Observer {
 	 * @return Sprite's absolute location
 	 */
 	double[] getSpritePosition(int currID);
+	
+	/**
+     * Add an object as a listener
+     *
+     * @author Riley Nisbet
+     */
+    void addObserver(Observer o);
+    
+    /**
+     * @return	map of Indices to Colors
+     */
+    Map<Integer,Color> getColorMap();
+    
+    /**
+     * @return	map of Indices to Image
+     */
+    Map<Integer,Image> getImageMap();
 }

@@ -66,8 +66,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		root = new Group();
 		backgroundNode = new Rectangle(viewWidth, viewHeight, colorMap.get(0));
 		root.getChildren().add(backgroundNode);
-		//TODO: notify GUI of maps
-		//notifyObservers();
+		notifyObservers();
 	}
 
 	public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
@@ -171,7 +170,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	public int setPalette(double index, double r, double g, double b) {
 		Color color = Color.rgb((int) r, (int) g, (int) b, .99);
 		colorMap.put((int) index, color);
-		//notifyObservers();
+		notifyObservers();
 		return (int) index;
 	}
 
@@ -213,7 +212,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		currentImageIndexMap.put(currID, (double) imageMap.size());
 		imageMap.put(currentImageIndexMap.get(currID).intValue(), imgFile);
 		currSprite.setImage(imgFile);
-		//notifyObservers();
+		notifyObservers();
 	}
 
 	public void addImage(File imgFile) {
@@ -223,7 +222,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		} catch (FileNotFoundException e) {
 			throw new ErrorPrompt(exceptionResources.getString("InvalidImageFile"));
 		}
-		//notifyObservers();
+		notifyObservers();
 	}
 
 	public void setPen(int currID, boolean newPen) {
@@ -246,7 +245,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		setPen(ID, (boolean) t.isPenDown());
 		newSprite.setDirection((int)t.getHeading());
 		setHidden(ID, !t.isTurtleShow());
-		//notifyObservers();
+		notifyObservers();
 	}
 
 	public Node getView() {
@@ -264,5 +263,13 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 			}
 		}
 		return 0;
+	}
+	
+	public Map<Integer,Color> getColorMap(){
+		return colorMap;
+	}
+
+	public Map<Integer,Image> getImageMap(){
+		return imageMap;
 	}
 }
