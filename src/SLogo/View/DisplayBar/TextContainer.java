@@ -1,14 +1,15 @@
 package SLogo.View.DisplayBar;
 
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 
 public class TextContainer implements VisualCommand{
-	private TextArea myTextArea;
+	private Label myLabel;
 
 	public TextContainer(String string) {
-		myTextArea = new TextArea(string);
+		myLabel = new Label(string);
 	}
+	
 	
 	@Override
 	public boolean equals(Object object){
@@ -16,16 +17,16 @@ public class TextContainer implements VisualCommand{
 			return false;
 		}
 		TextContainer text = (TextContainer) object;
-		return this.myTextArea.getText().equals(text);
+		return this.myLabel.getText().equals(text);
 	}
 
 	@Override
 	public Node getView() {
-		return myTextArea;
+		return myLabel;
 	}
 	
 	@Override
 	public String getCommand() {
-		return myTextArea.getText();
+		return myLabel.getText();
 	}
 }

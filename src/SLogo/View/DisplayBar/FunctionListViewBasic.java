@@ -17,7 +17,7 @@ public class FunctionListViewBasic extends ItemList<TextContainer> {
 	public FunctionListViewBasic(CommandLineView commandLineView) {
 		initializeResources();
 		myCommandLineView = commandLineView;
-		getMyListView().getChildren().add(new TextContainer(getMyResources().getString("FunctionTab")).getView());
+		addItem(new TextContainer(getMyResources().getString("FunctionTab")));
 	}
 
 	@Override
@@ -33,5 +33,11 @@ public class FunctionListViewBasic extends ItemList<TextContainer> {
 	@Override
 	protected void onClick(TextContainer item) {
 		myCommandLineView.setText(item.getCommand());
+	}
+
+	@Override
+	protected void addItem(TextContainer toAddItem) {
+		getMyListView().getChildren().add(toAddItem.getView());
+		toAddItem.getView().setOnMouseClicked(e -> onClick(toAddItem));
 	}
 }

@@ -1,10 +1,7 @@
 package SLogo.View.DisplayBar;
 
-import java.util.Map;
 import java.util.Observable;
 
-import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.View.CommandLineView;
 
 public class ColorListViewBasic extends ItemList<IndexNode> {
@@ -29,5 +26,11 @@ public class ColorListViewBasic extends ItemList<IndexNode> {
 	@Override
 	protected void onClick(IndexNode item) {
 		myCommandLineView.setText(item.getCommand());
+	}
+
+	@Override
+	protected void addItem(IndexNode toAddItem) {
+		getMyListView().getChildren().add(toAddItem.getView());
+		toAddItem.getView().setOnMouseClicked(e -> onClick(toAddItem));
 	}
 }
