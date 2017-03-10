@@ -2,6 +2,7 @@ package SLogo.View.DisplayBar;
 
 import java.util.HashSet;
 import java.util.Observer;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import SLogo.View.CommandLineView;
@@ -11,13 +12,16 @@ import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
-public abstract class MenuItemBox implements Observer, SLogoGUIElement {
+public abstract class TextItemList implements Observer, SLogoGUIElement {
 	private VBox myListView = new VBox();
 	private Set<String> myItems = new HashSet<String>();
 	private CommandLineView myCommandLineView;
+	private final static String RESOURCES_PATH = "resources/View/";
+	private final static String PROPERTIES_FILENAME = "ItemList";
+	private ResourceBundle myResources;
 	
-	
-	public MenuItemBox(CommandLineView commandLineView){
+	public TextItemList(CommandLineView commandLineView){
+		initializeResources();
 		myCommandLineView = commandLineView;		
 	}
 	
@@ -65,5 +69,11 @@ public abstract class MenuItemBox implements Observer, SLogoGUIElement {
 		for(String s: itemsToRemove){removeItem(s);}
 	}
 	
+	private void initializeResources() {
+		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
+	}
 	
+	protected ResourceBundle getMyResources() {
+		return myResources;
+	}
 }

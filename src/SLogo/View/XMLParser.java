@@ -23,7 +23,6 @@ public class XMLParser {
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(mapPropertiesFile);
-			System.out.println("yo");
 			NodeList colors = doc.getElementsByTagName("Color");
 			for (int i = 0; i < colors.getLength(); i++){
 				String RGB = colors.item(i).getTextContent();

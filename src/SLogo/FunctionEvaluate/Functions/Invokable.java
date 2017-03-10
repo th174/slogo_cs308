@@ -32,7 +32,7 @@ public interface Invokable {
      * @param expr Array of arguments
      * @return Result of the command as a variable
      */
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable invoke(Environment env, Expression... expr)  {
         if (expr.length < minimumArity()) {
             throw new UnexpectedArgumentException(minimumArity(), expr.length);
         }

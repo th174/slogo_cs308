@@ -7,7 +7,10 @@ import SLogo.Parse.Expression;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,14 +22,14 @@ import java.util.stream.Collectors;
  */
 public final class PredefinedCommandList {
     //Variable argument Length
-    public static final Accumulator LIST = Variable::list;
+    public static final Accumulator LIST = (env, var1, var2) -> var1.list(var2);
     public static final Accumulator $DEFAULT_OPERATION$ = LIST;
-    public static final Accumulator SUM = Variable::sum;
-    public static final Accumulator DIFFERENCE = Variable::difference;
-    public static final Accumulator PRODUCT = Variable::product;
-    public static final Accumulator QUOTIENT = Variable::quotient;
-    public static final Accumulator REMAINDER = Variable::remainder;
-    public static final Accumulator POWER = Variable::power;
+    public static final Accumulator SUM = (env, var1, var2) -> var1.sum(var2);
+    public static final Accumulator DIFFERENCE = (env, var1, var2) -> var1.difference(var2);
+    public static final Accumulator PRODUCT = (env, var1, var2) -> var1.product(var2);
+    public static final Accumulator QUOTIENT = (env, var1, var2) -> var1.quotient(var2);
+    public static final Accumulator REMAINDER = (env, var1, var2) -> var1.remainder(var2);
+    public static final Accumulator POWER = (env, var1, var2) -> var1.power(var2);
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
     public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle.id())));
@@ -54,7 +57,7 @@ public final class PredefinedCommandList {
         }
 
         @Override
-        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+        public Variable operation(Environment env, Expression... vargs) {
             env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
             return vargs[0].eval(env);
         }
@@ -71,6 +74,18 @@ public final class PredefinedCommandList {
         System.exit((int) var.toNumber());
         return var;
     };
+    public static final IterableInvokable READFILE = new IterableInvokable() {
+        @Override
+        public int minimumArity() {
+            return 1;
+        }
+
+        @Override
+        public Variable operation(Environment env, Expression... vargs) throws IOException {
+            return Invokable.parser.parse(env, new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/data/" + vargs[0].eval(env).toContentString())))).eval(env);
+        }
+    };
+
 
     //Fixed argument length (Accepts multiple arguments, but please don't use them because they're confusing as fuck)
     public static final UnaryIterable RANDOM = Variable::random;
@@ -81,6 +96,10 @@ public final class PredefinedCommandList {
     public static final UnaryIterable TANGENT = Variable::tangent;
     public static final UnaryIterable ARCTANGENT = Variable::atangent;
     public static final UnaryIterable NATURALLOG = Variable::log;
+    public static final UnaryIterable USE = var -> {
+        Invokable.parser.setLocale(var.toContentString());
+        return var;
+    };
     public static final BinaryIterable LESSTHAN = Variable::lessThan;
     public static final BinaryIterable GREATERTHAN = Variable::greaterThan;
     public static final BinaryIterable EQUAL = Variable::equalTo;
@@ -118,7 +137,7 @@ public final class PredefinedCommandList {
         }
 
         @Override
-        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+        public Variable operation(Environment env, Expression... vargs) {
             if (vargs[0].eval(env).toBoolean()) {
                 return vargs[1].eval(env);
             } else {
@@ -133,16 +152,13 @@ public final class PredefinedCommandList {
         }
 
         @Override
-        public Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+        public Variable operation(Environment env, Expression... vargs) {
             ListVariable turtlesIDs = (ListVariable) LIST.invoke(env, vargs[0]);
             env.filterTurtles(turtle -> turtlesIDs.contains(Variable.newInstance(turtle.id())).toBoolean());
             return turtlesIDs;
         }
     };
-    public static final UnaryIterable USE = var -> {
-        Invokable.parser.setLocale(var.toContentString());
-        return var;
-    };
+
 
     /**
      * You should never instantiate this class.

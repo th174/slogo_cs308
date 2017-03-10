@@ -27,12 +27,12 @@ public final class UserFunction implements Invokable {
     }
 
     @Override
-    public Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    public Variable invoke(Environment env, Expression... expr)  {
         return Invokable.super.invoke(env, expr);
     }
 
     @Override
-    public Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    public Variable eval(Environment env, Expression... expr)  {
         return PredefinedCommandList.LIST.invoke(new EnvironmentImpl(env, params, expr), body);
     }
 

@@ -52,7 +52,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         selectTurtles(turtleIDs);
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
+    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr)  {
         this(outer);
         for (int i = 0; i < expr.length; i++) {
             scopeVariables.put(params.get(i), expr[i].eval(outer));

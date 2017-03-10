@@ -19,12 +19,12 @@ public interface TurtleProperties extends Invokable, TurtleIterable {
     }
 
     @Override
-    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable eval(Environment env, Expression... expr)  {
         return forEachTurtle(env.getActiveTurtleList(), env, expr);
     }
 
     @Override
-    default Object doTurtle(Turtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+    default Object doTurtle(Turtle turtle, Environment env, Expression... vargs)  {
         return operation(turtle);
     }
 }

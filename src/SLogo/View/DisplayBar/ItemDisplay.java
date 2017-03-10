@@ -19,39 +19,36 @@ public class ItemDisplay implements SLogoGUIElement{
 	public ItemDisplay(CommandLineView commandLine, EnvironmentImpl environment, double width, double height) {
 		initializeResources();
 		
-		MenuItemBox variableListView = new VariableListViewBasic(commandLine);
+		TextItemList variableListView = new VariableListViewBasic(commandLine);
 		environment.addObserver(variableListView);
     	Node variableListViewNode = variableListView.getView();
     	Tab variableListTab = new Tab();
     	variableListTab.setClosable(false);
-    	variableListTab.setText(myResources.getString("VariableTab"));
+//    	variableListTab.setText(myResources.getString("VariableTab"));
     	variableListTab.setContent(variableListViewNode);
     	
-    	MenuItemBox functionListView = new FunctionListViewBasic(commandLine);
+    	TextItemList functionListView = new FunctionListViewBasic(commandLine);
     	environment.addObserver(functionListView);
     	Node functionListViewNode = functionListView.getView();
     	Tab functionListTab = new Tab();
     	functionListTab.setClosable(false);
-    	functionListTab.setText(myResources.getString("FunctionTab"));
+//    	functionListTab.setText(myResources.getString("FunctionTab"));
     	functionListTab.setContent(functionListViewNode);
     	
-    	MenuItemBox colorListView = new ColorListViewBasic(commandLine);
+    	TextItemList colorListView = new ColorListViewBasic(commandLine);
     	environment.addObserver(colorListView);
     	Node colorListViewNode = colorListView.getView();
     	Tab colorListTab = new Tab();
     	colorListTab.setClosable(false);
-    	colorListTab.setText(myResources.getString("ColorTab"));
+//    	colorListTab.setText(myResources.getString("ColorTab"));
     	colorListTab.setContent(colorListViewNode);
     	
-    	
-    	
-    	//myTabPane.setPrefSize(width, height);
+    	myTabPane.setPrefSize(width, height);
     	myTabPane.getTabs().addAll(variableListTab,functionListTab,colorListTab);
-    	
 	}
 	
 	private void initializeResources() {
-		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
+		//myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
 	}
 	
 	@Override

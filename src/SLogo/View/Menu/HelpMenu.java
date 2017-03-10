@@ -1,16 +1,13 @@
 package SLogo.View.Menu;
 
-import java.io.File;
+import java.awt.Desktop;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.web.WebView;
 
 public class HelpMenu implements SLogoMenu{
 
@@ -30,31 +27,28 @@ public class HelpMenu implements SLogoMenu{
 	
 	private void initializeHelpMenu() {
 		myHelpMenu.setText(myResources.getString("HelpMenu"));
+		initializeMenuItem("CommandList",true);
+		initializeMenuItem("JavaDoc", true);
+		initializeMenuItem("ReadMe", false);
+	}
+
+	private void initializeMenuItem(String itemName, Boolean local) {
 		MenuItem helpMenuItem = new MenuItem();
-		helpMenuItem.setText(myResources.getString("CommandList"));
-		helpMenuItem.setOnAction(e -> helpAlert());	
+		helpMenuItem.setText(myResources.getString(itemName));
+		helpMenuItem.setOnAction(e -> openHTML((local ? "file://" + System.getProperty("user.dir").replace('\\', '/') : "") + myResources.getString(itemName+"Path")));
 		myHelpMenu.getItems().add(helpMenuItem);
 	}
 	
-	private void helpAlert() {
-		System.out.println("Hey");
-		Alert commandInfoAlert = new Alert(AlertType.INFORMATION);
-		commandInfoAlert.setTitle(myResources.getString("AlertTitle"));
-		commandInfoAlert.setHeaderText(myResources.getString("AlertHeader"));
-		commandInfoAlert.setContentText(myResources.getString("AlertContent"));
-		WebView HTMLView = new WebView();
-	    String HTMLContent;
+	private void openHTML(String path) {
 		try {
-			HTMLContent = new String(Files.readAllBytes(Paths.get(myResources.getString("HTMLPath"))));
-		} catch (IOException e) {
-			HTMLContent = "Error Reading HTML";
+			Desktop.getDesktop().browse(new URI(path));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		HTMLView.getEngine().loadContent(HTMLContent);
-		commandInfoAlert.setGraphic(HTMLView);
-		commandInfoAlert.showAndWait();
 	}
-
+	
 	@Override
 	public Menu getMenu() {
 		return myHelpMenu;

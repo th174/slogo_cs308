@@ -1,9 +1,9 @@
 package SLogo;
 
-import java.util.List;
-
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.View.CanvasView;
+import SLogo.Parse.Parser;
+
+import java.util.List;
 
 /**
  * Created by th174 on 2/16/2017.
@@ -20,9 +20,14 @@ public interface Repl {
      * @return list of all previous commands run
      */
     List<String> getHistory();
-    
+
     /**
      * @return Environment
      */
     Environment getEnvironment();
+
+    /**
+     * @return Parser
+     */
+    Parser getParser();
 }
