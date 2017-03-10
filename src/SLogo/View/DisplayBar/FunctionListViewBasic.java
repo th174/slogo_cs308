@@ -1,7 +1,10 @@
 package SLogo.View.DisplayBar;
 
+import java.util.Map;
 import java.util.Observable;
 
+import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.View.CommandLineView;
 
 /**
@@ -19,9 +22,12 @@ public class FunctionListViewBasic extends ItemList<TextContainer> {
 
 	@Override
 	public void update(Observable o, Object arg) {
-//		@SuppressWarnings("unchecked")
-//		Map<String, Invokable> updatedFunctions = (Map<String, Invokable>)((Object[])arg)[0];
-//		updateContents(updatedFunctions.keySet());
+		Environment environment = (Environment) o;
+		Map<String, Invokable> currentVariableMap = environment.getAllFunctions();
+		getMyListView().getChildren().clear();
+		for(String string : currentVariableMap.keySet()){
+			getMyListView().getChildren().add(new TextContainer(string + " = " + currentVariableMap.get(string)).getView());
+		}
 	}
 
 	@Override

@@ -1,7 +1,11 @@
 package SLogo.View.DisplayBar;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 
+import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.View.CommandLineView;
 
 public class VariableListViewBasic extends ItemList<TextContainer> {
@@ -14,9 +18,13 @@ public class VariableListViewBasic extends ItemList<TextContainer> {
 
 	@Override
 	public void update(Observable o, Object arg) {
-//		@SuppressWarnings("unchecked")
-//		Map<String, Invokable> updatedFunctions = (Map<String, Invokable>)((Object[])arg)[0];
-//		updateContents(updatedFunctions.keySet());
+		Environment environment = (Environment) o;
+		@SuppressWarnings("rawtypes")
+		Map<String, Variable> currentVariableMap = environment.getAllVars();
+		getMyListView().getChildren().clear();
+		for(String string : currentVariableMap.keySet()){
+			getMyListView().getChildren().add(new TextContainer(string + " = " + currentVariableMap.get(string)).getView());
+		}
 	}
 
 	@Override
