@@ -21,7 +21,6 @@ public class ReplImpl implements Repl {
     private Environment userEnv;
 
     public ReplImpl() throws IOException {
-
         history = new ArrayList<>();
         currentIndex = 0;
         userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(1));

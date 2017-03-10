@@ -9,8 +9,8 @@ public interface Turtle {
     double DEFAULT_X_POS = 0;
     double DEFAULT_Y_POS = 0;
     double DEFAULT_HEADING = 90;
-    boolean DEFAULT_IS_SHOWING = false;
-    boolean DEFAULT_IS_PEN_DOWN = false;
+    boolean DEFAULT_IS_SHOWING = true;
+    boolean DEFAULT_IS_PEN_DOWN = true;
 
     /**
      * @return current ID of turtle
