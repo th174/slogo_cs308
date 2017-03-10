@@ -1,8 +1,7 @@
 package SLogo.View.DisplayBar;
 
 
-import java.util.ResourceBundle;
-
+//import java.util.ResourceBundle;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.View.CommandLineView;
 import SLogo.View.SLogoGUIElement;
@@ -12,14 +11,14 @@ import javafx.scene.control.TabPane;
 
 public class ItemDisplay implements SLogoGUIElement{
 	TabPane myTabPane = new TabPane();
-	private final static String RESOURCES_PATH = "resources/View/";
-	private final static String PROPERTIES_FILENAME = "ItemDisplay";
-	private ResourceBundle myResources;
+//	private final static String RESOURCES_PATH = "resources/View/";
+//	private final static String PROPERTIES_FILENAME = "ItemDisplay";
+//	private ResourceBundle myResources;
 	
 	public ItemDisplay(CommandLineView commandLine, EnvironmentImpl environment, double width, double height) {
 		initializeResources();
 		
-		TextItemList variableListView = new VariableListViewBasic(commandLine);
+		ItemList<TextContainer> variableListView = new VariableListViewBasic(commandLine);
 		environment.addObserver(variableListView);
     	Node variableListViewNode = variableListView.getView();
     	Tab variableListTab = new Tab();
@@ -27,7 +26,7 @@ public class ItemDisplay implements SLogoGUIElement{
 //    	variableListTab.setText(myResources.getString("VariableTab"));
     	variableListTab.setContent(variableListViewNode);
     	
-    	TextItemList functionListView = new FunctionListViewBasic(commandLine);
+    	ItemList<TextContainer> functionListView = new FunctionListViewBasic(commandLine);
     	environment.addObserver(functionListView);
     	Node functionListViewNode = functionListView.getView();
     	Tab functionListTab = new Tab();
@@ -35,7 +34,7 @@ public class ItemDisplay implements SLogoGUIElement{
 //    	functionListTab.setText(myResources.getString("FunctionTab"));
     	functionListTab.setContent(functionListViewNode);
     	
-    	TextItemList colorListView = new ColorListViewBasic(commandLine);
+    	ItemList<IndexNode> colorListView = new ColorListViewBasic(commandLine);
     	environment.addObserver(colorListView);
     	Node colorListViewNode = colorListView.getView();
     	Tab colorListTab = new Tab();
@@ -55,11 +54,4 @@ public class ItemDisplay implements SLogoGUIElement{
 	public Node getView() {
 		return myTabPane;
 	}
-
-	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

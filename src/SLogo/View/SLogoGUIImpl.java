@@ -16,7 +16,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 
 public class SLogoGUIImpl implements SLogoGUI {
 	
@@ -41,9 +40,6 @@ public class SLogoGUIImpl implements SLogoGUI {
 		GridPane gridPane = new GridPane();
 		double menuBarHeight = Integer.parseInt(myResources.getString("MenuBarHeight"));
     	// Heights | Rows
-    	double menuBarHeightRatio = menuBarHeight / height;
-    	double tabPaneHeightRatio = (1 - menuBarHeightRatio);
-    	setGridConstraints(gridPane, menuBarHeightRatio, tabPaneHeightRatio);
     	
     	MenuBarItems menuBarItems = new MenuBarItemsBasic(myRepl.getParser(), e->addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project"))),
     													  this::saveFile,this::loadFile);
@@ -116,25 +112,5 @@ public class SLogoGUIImpl implements SLogoGUI {
 
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
-	}
-	
-	private void setGridConstraints(GridPane gridPane, double menuBarHeightRatio, double tabPaneHeightRatio) {
-//		RowConstraints menuBarRow = new RowConstraints();
-//		menuBarRow.setPercentHeight(menuBarHeightRatio);
-//		RowConstraints tabPaneRow = new RowConstraints();
-//		tabPaneRow.setPercentHeight(tabPaneHeightRatio);
-//    	gridPane.getRowConstraints().addAll(menuBarRow,tabPaneRow);
-	}
-
-	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setTurtleBackgroundColor(Color color) {
-		// TODO Auto-generated method stub
-		
 	}
 }

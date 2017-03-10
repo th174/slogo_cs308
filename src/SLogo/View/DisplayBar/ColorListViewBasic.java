@@ -4,23 +4,23 @@ import java.util.Observable;
 
 import SLogo.View.CommandLineView;
 
-public class ColorListViewBasic extends TextItemList {
-
+public class ColorListViewBasic extends ItemList<IndexNode> {
+	private CommandLineView myCommandLineView;
 	public ColorListViewBasic(CommandLineView commandLineView) {
-		super(commandLineView);
-		addItem(getMyResources().getString("ColorTab"));
-	}
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		
+		initializeResources();
+		myCommandLineView = commandLineView;
+		getMyListView().getChildren().add(new TextContainer(getMyResources().getString("ColorTab")).getView());
 	}
 
-	public void addItem(){
-		
+	@Override
+	public void update(Observable o, Object arg) {
+//		@SuppressWarnings("unchecked")
+//		Map<String, Invokable> updatedFunctions = (Map<String, Invokable>)((Object[])arg)[0];
+//		updateContents(updatedFunctions.keySet());
 	}
-	
-	public void removeItem() {
-		
+
+	@Override
+	protected void onClick(IndexNode item) {
+		myCommandLineView.setText(item.getCommand());
 	}
 }

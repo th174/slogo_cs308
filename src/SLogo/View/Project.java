@@ -10,8 +10,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class Project implements SLogoGUIElement {
 	
@@ -37,35 +35,26 @@ public class Project implements SLogoGUIElement {
     	double canvasHeightWeight = Integer.parseInt(myResources.getString("CanvasHeightWeight"));
     	double commandLineHeightWeight = Integer.parseInt(myResources.getString("CommandLineHeightWeight"));
     	double canvasHeightRatio = canvasHeightWeight / (canvasHeightWeight + commandLineHeightWeight);
-    	double commandLineHeightRatio = commandLineHeightWeight / (canvasHeightWeight + commandLineHeightWeight);
+    	//double commandLineHeightRatio = commandLineHeightWeight / (canvasHeightWeight + commandLineHeightWeight);
     	// Widths | Columns
     	double canvasWidthWeight = Integer.parseInt(myResources.getString("CanvasWidthWeight"));
     	double displayWidthWeight = Integer.parseInt(myResources.getString("DisplayWidthWeight"));
     	double canvasWidthRatio = canvasWidthWeight/(canvasWidthWeight + displayWidthWeight);
     	double displayWidthRatio = displayWidthWeight/(canvasWidthWeight + displayWidthWeight);
-    	setGridConstraints(gridPane, canvasHeightRatio, commandLineHeightRatio, canvasWidthRatio, displayWidthRatio);
     	
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio));
-    	myRepl.setCanvas(myCanvasView);
+    	myEnv.setCanvas(myCanvasView);
     	Node canvasViewNode = myCanvasView.getView();
-    	
-    	Rectangle rectangleCanvasView = new Rectangle(myWidth * canvasWidthRatio,myHeight * canvasHeightRatio);
-    	GridPane.setConstraints(rectangleCanvasView, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
-    	rectangleCanvasView.setFill(Color.AQUAMARINE);
     	
     	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myCanvasView, myWidth,myHeight*.2);
     	Node commandLineNode = commandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1, HPos.CENTER, VPos.TOP);
-//    	
-//    	Rectangle rectangleMenuView = new Rectangle(myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
-//    	rectangleMenuView.setFill(Color.GREENYELLOW);
-//    	GridPane.setConstraints(rectangleMenuView, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
     	SLogoGUIElement menuItemTabPane = new ItemDisplay(commandLine, myEnv, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
     	Node menuItemTabPaneNode = menuItemTabPane.getView();
     	GridPane.setConstraints(menuItemTabPaneNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	gridPane.getChildren().addAll(rectangleCanvasView,menuItemTabPaneNode,commandLineNode);
+    	gridPane.getChildren().addAll(menuItemTabPaneNode,commandLineNode);
         myRoot.getChildren().addAll(gridPane,canvasViewNode);
 	}
 	
@@ -76,25 +65,5 @@ public class Project implements SLogoGUIElement {
 
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
-	}
-	
-	private void setGridConstraints(GridPane gridPane, double canvasHeightRatio, double commandLineHeightRatio, double canvasWidthRatio, double displayWidthRatio) {
-//		RowConstraints canvasRow = new RowConstraints();
-//		canvasRow.setPercentHeight(canvasHeightRatio);
-//    	RowConstraints commandLineRow = new RowConstraints();
-//    	commandLineRow.setPercentHeight(commandLineHeightRatio);
-//    	gridPane.getRowConstraints().addAll(canvasRow,commandLineRow);
-//    	
-//    	ColumnConstraints canvasColumn = new ColumnConstraints();
-//    	canvasColumn.setPercentWidth(canvasWidthRatio+.01);
-//    	ColumnConstraints displayColumn = new ColumnConstraints();
-//    	displayColumn.setPercentWidth(displayWidthRatio);
-//    	gridPane.getColumnConstraints().addAll(canvasColumn,displayColumn);
-	}
-
-	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
 	}
 }
