@@ -4,6 +4,11 @@ import SLogo.View.TurtleMath;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * This class is the Sprite object used by CanvasView to be able to keep track of Turtles (and their properties0 on the front end
+ * @author Riley Nisbet
+ */
+
 public class Sprite {
 	private int myID;
 	private Image defaultSpriteIMG;
@@ -39,6 +44,10 @@ public class Sprite {
 		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay(e));
 	}
 
+	/**
+	 * Set the image of this sprite to the given image
+	 * @param newSpriteIMG
+	 */
 	public void setImage(Image newSpriteIMG){
 		spriteImg = newSpriteIMG;
 		spriteIV.setImage(spriteImg);
@@ -46,6 +55,10 @@ public class Sprite {
 		spriteIV.setFitHeight(spriteHeight);
 	}
 
+	/**
+	 * Set the pen to up (false) or down (true)
+	 * @param newPen
+	 */
 	public void setPen(boolean newPen){
 		penDown = newPen;
 	}

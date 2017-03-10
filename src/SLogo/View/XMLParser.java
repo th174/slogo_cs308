@@ -15,8 +15,20 @@ import org.xml.sax.SAXException;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+/**
+ * This class parses an XML file to populate the default values for CanvasView
+ * @author Riley Nisbet
+ */
+
 public class XMLParser {
 	
+	/**
+	 * Parses XML and saves values to CanvasView's objects
+	 * @param spriteDimensions
+	 * @param colorMap
+	 * @param imageMap
+	 * @param XMLFilename
+	 */
 	public void populateMaps(int[] spriteDimensions, Map<Integer,Color> colorMap, Map<Integer,Image> imageMap, String XMLFilename) {
 		File mapPropertiesFile = new File(XMLFilename);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
