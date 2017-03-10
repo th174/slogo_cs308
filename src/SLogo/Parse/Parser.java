@@ -2,6 +2,7 @@ package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
 
+import java.util.Deque;
 import java.util.ResourceBundle;
 
 /**
@@ -18,6 +19,8 @@ public interface Parser {
      * @return Expression built from command
      */
     Expression parse(Environment env, String command);
+
+    Expression readTokens(Environment env, Deque tokens);
 
     /**
      * @param locale Desired Locale of commands

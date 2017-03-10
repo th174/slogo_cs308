@@ -26,11 +26,11 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         launch(args);
-        ReplImpl repl = new ReplImpl();
-        Scanner input = new Scanner(System.in);
-        while (true) {
-            System.out.print("SLogo >> ");
-            repl.read(input.nextLine());
-        }
+//        ReplImpl repl = new ReplImpl();
+//        Scanner input = new Scanner(System.in);
+//        while (true) {
+//            System.out.print("SLogo >> ");
+//            repl.read(input.nextLine());
+//        }
     }
 }

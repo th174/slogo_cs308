@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 
 import java.util.Arrays;
 
@@ -21,17 +22,16 @@ public interface Accumulator extends Invokable {
         return 2;
     }
 
-    @Override
-    default Variable eval(Environment env, Expression... expr) {
+    default Variable eval(Repl repl, Environment env, Expression... expr) {
         if (expr.length == 0) {
             return Variable.FALSE;
         }
         Expression total = expr[expr.length - 1];
         if (expr.length == 1) {
-            return total.eval(env);
+            return total.eval(repl,env);
         } else {
             try {
-                return accumulate(eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
+                return accumulate(eval(repl, env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(repl,env));
             } catch (Exception e) {
                 throw new Expression.EvaluationTargetException(e);
             }
@@ -39,10 +39,10 @@ public interface Accumulator extends Invokable {
     }
 
     @Override
-    default Variable invoke(Environment env, Expression... expr) {
+    default Variable invoke(Repl repl, Environment env, Expression... expr) {
         if (expr.length < 1) {
             throw new UnexpectedArgumentException(minimumArity(), expr.length);
         }
-        return eval(env, expr);
+        return eval(repl, env, expr);
     }
 }

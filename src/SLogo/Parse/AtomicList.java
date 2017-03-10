@@ -3,6 +3,7 @@ package SLogo.Parse;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Repl;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +21,7 @@ public final class AtomicList extends LinkedList<String> implements Expression {
     }
 
     @Override
-    public Variable eval(Environment env) throws EvaluationTargetException, Environment.VariableNotFoundException {
+    public Variable eval(Repl repl, Environment env) throws EvaluationTargetException, Environment.VariableNotFoundException {
         return env.getVariableByName(get());
     }
 

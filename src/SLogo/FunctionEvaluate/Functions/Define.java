@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.AtomicList;
 import SLogo.Parse.Expression;
+import SLogo.Parse.Parser;
 
 import java.util.Arrays;
 import java.util.Deque;
@@ -20,21 +21,13 @@ public interface Define extends Invokable {
     }
 
     @Override
-    default Variable invoke(Environment env, Expression... expr)  {
-        if (expr.length < minimumArity()) {
-            throw new UnexpectedArgumentException(minimumArity(), expr.length);
-        }
-        return eval(env, expr);
-    }
-
-    @Override
-    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens) {
+    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens, Parser parser) {
         if (numArgs == 2) {
             Expression[] exprs = new Expression[]{new AtomicList(tokens.removeFirst().toString()), parser.readTokens(env, tokens)};
             env.addUserFunction(exprs[0].toString(), new UserFunction(exprs[1], null));
             return Arrays.asList(exprs);
         } else {
-            return Invokable.super.readArgs(numArgs, env, tokens);
+            return Invokable.super.readArgs(numArgs, env, tokens,parser);
         }
     }
 }

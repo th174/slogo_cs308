@@ -4,13 +4,11 @@ import SLogo.FunctionEvaluate.Functions.*;
 import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 import SLogo.Turtles.Turtle;
 import SLogo.View.CanvasView;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,19 +32,19 @@ public final class PredefinedCommandList {
             AND = Variable::and,
             OR = Variable::or;
     public static final MultiTurtleSet
-            ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle.id()))),
-            ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
+            ASKWITH = (repl, env, turtle, expr) -> expr.eval(repl, new EnvironmentImpl(env, Collections.singletonList(turtle.id()))),
+            ASK = (repl, env, turtle, expr) -> ((ListVariable) $DEFAULT_OPERATION$.eval(repl, env, expr)).contains(Variable.newInstance(turtle.id()));
     public static final Loop
-            REPEAT = (env, expr) -> {
+            REPEAT = (repl, env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
         int loopArity = loopParams.size();
         String loopVar = loopArity >= 2 ? loopParams.remove(0).toString() : ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
-        env.addUserVariable(loopVar, loopArity >= 4 ? loopParams.remove(0).eval(env) : Variable.newInstance(1));
-        Variable limit = loopParams.remove(0).eval(env);
+        env.addUserVariable(loopVar, loopArity >= 4 ? loopParams.remove(0).eval(repl, env) : Variable.newInstance(1));
+        Variable limit = loopParams.remove(0).eval(repl, env);
         Variable last = Variable.FALSE;
         while (env.getVariableByName(loopVar).greaterThan(limit) == Variable.FALSE) {
-            last = $DEFAULT_OPERATION$.invoke(env, Arrays.copyOfRange(expr, 1, expr.length));
-            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(loopArity >= 3 ? loopParams.get(0).eval(env) : Variable.newInstance(1)));
+            last = $DEFAULT_OPERATION$.eval(repl, env, Arrays.copyOfRange(expr, 1, expr.length));
+            env.addUserVariable(loopVar, env.getVariableByName(loopVar).sum(loopArity >= 3 ? loopParams.get(0).eval(repl, env) : Variable.newInstance(1)));
         }
         return last;
     },
@@ -54,7 +52,7 @@ public final class PredefinedCommandList {
             FOR = REPEAT,       //There's actually only one loop function, it just behaves differently depending on the loop arguments
             IF = REPEAT;        //If statement is actually just a loop, boolean expressions eval to 0 or 1 lol
     public static final Define
-            MAKEUSERINSTRUCTION = (env, expr) -> {
+            MAKEUSERINSTRUCTION = (repl, env, expr) -> {
         env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));
         return Variable.TRUE;
     };
@@ -66,10 +64,6 @@ public final class PredefinedCommandList {
             TANGENT = Variable::tangent,
             ARCTANGENT = Variable::atangent,
             NATURALLOG = Variable::log,
-            USE = var -> {
-                Invokable.parser.setLocale(var.toContentString());
-                return var;
-            },
             ECHO = var -> {
                 System.out.println(var);
                 return var;
@@ -112,7 +106,19 @@ public final class PredefinedCommandList {
     public static final CanvasPalette
             SETPALETTE = CanvasView::setPalette;
     public static final CanvasProperty
-            CLEARSCREEN = CanvasView::clearScreen,
+            CLEARSCREEN = new CanvasProperty() {
+        @Override
+        public Object operation(CanvasView canvas) {
+//            return canvas.clearScreen();
+            return true;
+        }
+
+        @Override
+        public Variable eval(Repl repl, Environment env, Expression... expr) {
+            env.getAllTurtles().clear();
+            return Variable.newInstance(operation(repl.getCanvas()));
+        }
+    },
             GETPENCOLOR = CanvasView::getPenColor,
             GETSHAPE = CanvasView::getShape;
     public static final IterableInvokable
@@ -123,11 +129,11 @@ public final class PredefinedCommandList {
         }
 
         @Override
-        public Variable operation(Environment env, Expression... vargs) {
-            if (vargs[0].eval(env).toBoolean()) {
-                return vargs[1].eval(env);
+        public Variable operation(Repl repl, Environment env, Expression... vargs) {
+            if (vargs[0].eval(repl, env).toBoolean()) {
+                return vargs[1].eval(repl, env);
             } else {
-                return vargs[2].eval(env);
+                return vargs[2].eval(repl, env);
             }
         }
     },
@@ -138,8 +144,8 @@ public final class PredefinedCommandList {
                 }
 
                 @Override
-                public Variable operation(Environment env, Expression... vargs) {
-                    List<Integer> turtleIDs = vargs[0].getBody().stream().map(e -> Math.round((float) e.eval(env).toNumber())).collect(Collectors.toList());
+                public Variable operation(Repl repl, Environment env, Expression... vargs) {
+                    List<Integer> turtleIDs = vargs[0].getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList());
                     env.selectTurtles(turtleIDs);
                     return Variable.newInstance(turtleIDs.get(turtleIDs.size() - 1));
                 }
@@ -151,20 +157,9 @@ public final class PredefinedCommandList {
                 }
 
                 @Override
-                public Variable operation(Environment env, Expression... vargs) {
-                    env.addUserVariable(vargs[0].toString(), vargs[1].eval(env));
-                    return vargs[0].eval(env);
-                }
-            },
-            READFILE = new IterableInvokable() {
-                @Override
-                public int minimumArity() {
-                    return 1;
-                }
-
-                @Override
-                public Variable operation(Environment env, Expression... vargs) throws IOException {
-                    return Invokable.parser.parse(env, new String(Files.readAllBytes(Paths.get(vargs[0].eval(env).toContentString())))).eval(env);
+                public Variable operation(Repl repl, Environment env, Expression... vargs) {
+                    env.addUserVariable(vargs[0].toString(), vargs[1].eval(repl, env));
+                    return vargs[0].eval(repl, env);
                 }
             };
 

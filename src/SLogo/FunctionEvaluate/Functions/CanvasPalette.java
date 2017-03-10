@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 import SLogo.View.CanvasView;
 
 /**
@@ -17,7 +18,7 @@ public interface CanvasPalette extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Environment env, Expression... vargs)  {
-        return Variable.newInstance(operation(env.getCanvas(), vargs[0].eval(env).toNumber(), vargs[1].eval(env).toNumber(), vargs[2].eval(env).toNumber(), vargs[3].eval(env).toNumber()));
+    default Variable operation(Repl repl, Environment env, Expression... vargs) {
+        return Variable.newInstance(operation(repl.getCanvas(), vargs[0].eval(repl,env).toNumber(), vargs[1].eval(repl,env).toNumber(), vargs[2].eval(repl,env).toNumber(), vargs[3].eval(repl,env).toNumber()));
     }
 }

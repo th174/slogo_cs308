@@ -11,6 +11,10 @@ import java.util.Objects;
  */
 public class PolishParser extends AbstractParser {
 
+    public PolishParser() {
+        super();
+    }
+
     public Expression readTokens(Environment env, Deque tokens) {
         String token = tokens.removeFirst().toString();
         SExpression subList = new SExpression();
@@ -24,7 +28,7 @@ public class PolishParser extends AbstractParser {
             Invokable fn = env.getFunctionByName(getTranslator().get(token));
             if (Objects.nonNull(fn)) {
                 subList.add(new AtomicList(getTranslator().get(token)));
-                subList.addAll(fn.readArgs(fn.minimumArity(), env, tokens));
+                subList.addAll(fn.readArgs(fn.minimumArity(), env, tokens, this));
                 return subList;
             } else {
                 return new AtomicList(getTranslator().get(token));

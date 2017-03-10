@@ -26,7 +26,6 @@ public class ConfigurationWriter implements FileWriter {
 		myProperty = prop;
 		myTag = myCommands.getString("configWriterTag");
 	}
-
 	
 	@Override
 	public void write(File file) {

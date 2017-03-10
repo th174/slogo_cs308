@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 
 import java.util.Arrays;
 
@@ -14,17 +15,17 @@ public interface ShortCircuit extends Invokable {
     Variable test(Variable var1, Variable var2);
 
     @Override
-    default Variable eval(Environment env, Expression... expr)  {
+    default Variable eval(Repl repl, Environment env, Expression... expr) {
         if (expr.length == 0) {
             return Variable.FALSE;
         }
         Expression total = expr[expr.length - 1];
         if (expr.length == 1) {
-            return total.eval(env);
+            return total.eval(repl,env);
         } else {
-            Variable eval = eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1));
+            Variable eval = eval(repl, env, Arrays.copyOfRange(expr, 0, expr.length - 1));
             return (eval.toBoolean() == test(Variable.TRUE, Variable.FALSE).toBoolean()) ? eval :
-                    test(eval, total.eval(env));
+                    test(eval, total.eval(repl,env));
         }
     }
 

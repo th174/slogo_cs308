@@ -64,11 +64,6 @@ public interface Environment {
     ObservableMap<Integer, Turtle> getAllTurtles();
 
     /**
-     * @return CanvasView
-     */
-    CanvasView getCanvas();
-
-    /**
      * @param name Name of variable
      * @param var  Variable
      */
@@ -90,10 +85,6 @@ public interface Environment {
      */
     void selectTurtles(List<Integer> turtleIDs);
 
-    /**
-     * @param canvas CanvasView to be used
-     */
-    void setCanvas(CanvasView canvas);
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {

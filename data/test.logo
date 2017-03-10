@@ -1,10 +1,9 @@
 USE "English"
 to fibonacci n
-    put 
-        ifelse < n 3
-            1
-            +
-                fibonacci
-                    - n 1
-                fibonacci
-                    - n 2
+    ifelse < n 3
+        1
+        +
+            fibonacci
+                - n 1
+            fibonacci
+                - n 2
