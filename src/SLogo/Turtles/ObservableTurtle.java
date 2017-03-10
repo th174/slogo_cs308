@@ -106,14 +106,17 @@ public class ObservableTurtle extends Observable implements Turtle {
 
 	@Override
 	public Property toProperty() {
-		HashMap<String, Property> data = new HashMap<String, Property>();
+		HashMap<String, Property> attributes = new HashMap<String, Property>();	
+		HashMap<String, Property> returnData = new HashMap<String, Property>();
 		
-		data.put(myResources.getString("ID"), new PropertyString("" + id));
-		data.put(myResources.getString("xPos"), new PropertyString("" + xPos));
-		data.put(myResources.getString("yPos"), new PropertyString("" + yPos));
-		data.put(myResources.getString("Heading"), new PropertyString("" + headingAngle));
-		data.put(myResources.getString("PenDown"), new PropertyString(new Boolean(isPenDown).toString()));
+		attributes.put(myResources.getString("ID"), new PropertyString("" + id));
+		attributes.put(myResources.getString("xPos"), new PropertyString("" + xPos));
+		attributes.put(myResources.getString("yPos"), new PropertyString("" + yPos));
+		attributes.put(myResources.getString("Heading"), new PropertyString("" + headingAngle));
+		attributes.put(myResources.getString("PenDown"), new PropertyString(new Boolean(isPenDown).toString()));
 		
-		return new PropertyMap(data);
+		returnData.put(myResources.getString("Turtle"), new PropertyMap(attributes));
+		
+		return new PropertyMap(returnData);
 	}
 }
