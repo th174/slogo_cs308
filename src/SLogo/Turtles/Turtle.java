@@ -2,6 +2,8 @@ package SLogo.Turtles;
 
 import java.util.Observer;
 
+import SLogo.FileHandling.Property;
+
 /**
  * Created by th174 on 3/2/2017.
  */
@@ -173,4 +175,12 @@ public interface Turtle {
      * @author Riley Nisbet
      */
     void addObserver(Observer o);
+    
+    /**
+     * Put all Turtle configuration data into a Property object to be written into an XML file.
+     * 
+     * @return Property containing all data necessary to convert Turtle properties to XML.
+     * @author Stone Mathers
+     */
+    Property toProperty();
 }

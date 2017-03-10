@@ -1,19 +1,26 @@
 package SLogo.View.Menu;
 
-import SLogo.Parse.Parser;
+import java.util.Map;
+
+import SLogo.View.Project;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TabPane;
 
 public class MenuBarItemsBasic implements MenuBarItems{
 
-	MenuBar myMenuBar = new MenuBar();
+	private MenuBar myMenuBar = new MenuBar();
+	private TabPane myTabPane;
+	private Map<Node, Project> myProjectMap;
 	
-	public MenuBarItemsBasic(Parser parser, EventHandler<ActionEvent> addProject,EventHandler<ActionEvent> saveProject,EventHandler<ActionEvent> loadProject) {
+	public MenuBarItemsBasic(TabPane tabPane, Map<Node, Project> projectMap, EventHandler<ActionEvent> addProject,EventHandler<ActionEvent> saveProject,EventHandler<ActionEvent> loadProject) {
+		myTabPane = tabPane;
+		myProjectMap = projectMap;
 		initializeFileMenu(addProject,saveProject,loadProject);
-		initializeLanguageMenu(parser);
+		initializeLanguageMenu();
 		initializeHelpMenu();
 	}
 
@@ -22,8 +29,8 @@ public class MenuBarItemsBasic implements MenuBarItems{
 		myMenuBar.getMenus().add(fileMenu);
 	}
 
-	private void initializeLanguageMenu(Parser parser) {
-		Menu languageMenu = new LanguageMenu(parser).getMenu();
+	private void initializeLanguageMenu() {
+		Menu languageMenu = new LanguageMenu(myTabPane,myProjectMap).getMenu();
 		myMenuBar.getMenus().add(languageMenu);
 	}
 
@@ -35,12 +42,6 @@ public class MenuBarItemsBasic implements MenuBarItems{
 	@Override
 	public Node getView() {
 		return myMenuBar;
-	}
-
-	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

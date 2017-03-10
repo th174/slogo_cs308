@@ -1,9 +1,10 @@
 package SLogo.View;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
-import SLogo.Repl;
 import SLogo.View.Menu.MenuBarItems;
 import SLogo.View.Menu.MenuBarItemsBasic;
 import javafx.event.ActionEvent;
@@ -16,11 +17,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 
 public class SLogoGUIImpl implements SLogoGUI {
 	
-	private Repl myRepl;
 	TabPane myTabPane = new TabPane();
 	private Group myRoot;
 	private double myWidth;
@@ -29,10 +28,10 @@ public class SLogoGUIImpl implements SLogoGUI {
 	private final static String PROPERTIES_FILENAME = "SLogoGUI";
 	private ResourceBundle myResources;
 	private ReaderWriter<Node> myProjectReaderWriter;
+	private Map<Node,Project> myProjectMap = new HashMap<Node,Project>();
 	
 	
-	public SLogoGUIImpl(Repl repl,double width,double height){
-		myRepl = repl;
+	public SLogoGUIImpl(double width,double height){
 		myRoot = new Group();
 		myWidth = width;
 		myHeight = height;
@@ -41,16 +40,12 @@ public class SLogoGUIImpl implements SLogoGUI {
 		GridPane gridPane = new GridPane();
 		double menuBarHeight = Integer.parseInt(myResources.getString("MenuBarHeight"));
     	// Heights | Rows
-    	double menuBarHeightRatio = menuBarHeight / height;
-    	double tabPaneHeightRatio = (1 - menuBarHeightRatio);
-    	setGridConstraints(gridPane, menuBarHeightRatio, tabPaneHeightRatio);
-    	
-    	MenuBarItems menuBarItems = new MenuBarItemsBasic(myRepl.getParser(), e->addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project"))),
+    	MenuBarItems menuBarItems = new MenuBarItemsBasic(myTabPane, myProjectMap, e->addNewProjectTab(createNewProjectTab(menuBarHeight,myResources.getString("Project"))),
     													  this::saveFile,this::loadFile);
     	Node menuBarItemsNode = menuBarItems.getView();
     	GridPane.setConstraints(menuBarItemsNode, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	addNewProjectTab(createNewProjectTab(myRepl,menuBarHeight,myResources.getString("Project")));
+    	addNewProjectTab(createNewProjectTab(menuBarHeight,myResources.getString("Project")));
     	GridPane.setConstraints(myTabPane, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	gridPane.getChildren().addAll(menuBarItemsNode,myTabPane);
         myRoot.getChildren().addAll(gridPane);
@@ -102,10 +97,12 @@ public class SLogoGUIImpl implements SLogoGUI {
     	myTabPane.getTabs().add(tab);
 	}
 	
-	private Tab createNewProjectTab(Repl repl, double menuBarHeight,String title) {
+	private Tab createNewProjectTab(double menuBarHeight,String title) {
 		Tab defaultProject = new Tab();
 		defaultProject.setText(title);
-    	defaultProject.setContent(new Project(repl, myWidth, myHeight-menuBarHeight*2).getView());
+		Project newProject = new Project(myWidth,myHeight-menuBarHeight*2);
+    	defaultProject.setContent(newProject.getView());
+    	myProjectMap.put(newProject.getView(), newProject);
     	return defaultProject;
 	}
 	
@@ -116,25 +113,5 @@ public class SLogoGUIImpl implements SLogoGUI {
 
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
-	}
-	
-	private void setGridConstraints(GridPane gridPane, double menuBarHeightRatio, double tabPaneHeightRatio) {
-//		RowConstraints menuBarRow = new RowConstraints();
-//		menuBarRow.setPercentHeight(menuBarHeightRatio);
-//		RowConstraints tabPaneRow = new RowConstraints();
-//		tabPaneRow.setPercentHeight(tabPaneHeightRatio);
-//    	gridPane.getRowConstraints().addAll(menuBarRow,tabPaneRow);
-	}
-
-	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setTurtleBackgroundColor(Color color) {
-		// TODO Auto-generated method stub
-		
 	}
 }

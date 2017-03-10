@@ -9,7 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 /**
- * The purpose of this class is to obtain a file from the user, then return a String containing 
+ * Obtains a file from the user, then return a String containing 
  * the commands that the file holds. It first creates and displays a FileChooser in the given
  * Scene, which prompts the user to select a file, then returns the commands as a String.
  * 
