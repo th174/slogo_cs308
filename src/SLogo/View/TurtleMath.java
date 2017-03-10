@@ -1,6 +1,6 @@
 package SLogo.View;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class handles all math associated with the turtle moving in its environment.
@@ -107,7 +107,7 @@ public class TurtleMath {
      * @param vector
      * @param linesToMake
      */
-    public void addLinesToMake(int viewWidth, int viewHeight, double[] currentLocation, double[] vector, ArrayList<double[]> linesToMake) {
+    public void addLinesToMake(int viewWidth, int viewHeight, double[] currentLocation, double[] vector, List<double[]> linesToMake) {
         //yVector is conventionally facing (+ is up), but this class uses unconventional (+ is down)
         double[] currLocation = currentLocation;
         double[] nextLocation;
