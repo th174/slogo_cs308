@@ -9,6 +9,8 @@ import SLogo.Parse.Expression;
 import SLogo.Repl;
 import SLogo.Turtles.Turtle;
 
+import java.util.stream.Collectors;
+
 /**
  * Created by th174 on 2/28/2017.
  */

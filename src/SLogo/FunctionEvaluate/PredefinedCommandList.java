@@ -1,7 +1,6 @@
 package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.*;
-import SLogo.FunctionEvaluate.Variables.ListVariable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Repl;
@@ -32,8 +31,8 @@ public final class PredefinedCommandList {
             AND = Variable::and,
             OR = Variable::or;
     public static final MultiTurtleSet
-            ASKWITH = (repl, env, turtle, expr) -> expr.eval(repl, new EnvironmentImpl(env, Collections.singletonList(turtle.id()))),
-            ASK = (repl, env, turtle, expr) -> ((ListVariable) $DEFAULT_OPERATION$.eval(repl, env, expr)).contains(Variable.newInstance(turtle.id()));
+            ASKWITH = (repl, env, turtle, expr) -> expr.eval(repl, new EnvironmentImpl(env, Collections.singletonList(turtle.id()))).toBoolean(),
+            ASK = (repl, env, turtle, expr) -> expr.getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList()).contains(turtle.id());
     public static final Loop
             REPEAT = (repl, env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();

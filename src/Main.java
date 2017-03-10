@@ -1,11 +1,8 @@
-import SLogo.ReplImpl;
 import SLogo.View.SLogoGUIImpl;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.util.Scanner;
 
 public class Main extends Application {
 
@@ -13,9 +10,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        ReplImpl repl = new ReplImpl();
         int SIZE = 800;
-        SLogoGUIImpl gui = new SLogoGUIImpl(repl, SIZE, SIZE);
+        SLogoGUIImpl gui = new SLogoGUIImpl(SIZE, SIZE);
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(gui.getView());
         Scene scene = new Scene(GUIPane, SIZE, SIZE);

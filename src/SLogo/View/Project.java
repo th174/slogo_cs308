@@ -44,7 +44,8 @@ public class Project implements SLogoGUIElement {
     	double displayWidthRatio = displayWidthWeight/(canvasWidthWeight + displayWidthWeight);
     	
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio),myRepl.getEnvironment().getAllTurtles());
-    	Node canvasViewNode = myCanvasView.getView();
+		myRepl.setCanvas(myCanvasView);
+		Node canvasViewNode = myCanvasView.getView();
     	GridPane.setConstraints(canvasViewNode, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
     	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myCanvasView, myWidth,myHeight*.2);

@@ -16,15 +16,15 @@ import java.util.Arrays;
 @FunctionalInterface
 public interface MultiTurtleSet extends IterableInvokable {
 
-    Variable filter(Repl repl, Environment env, Turtle turtle, Expression expr);
+    boolean filter(Repl repl, Environment env, Turtle turtle, Expression expr);
 
     @Override
     default Variable operation(Repl repl, Environment env, Expression... expr) {
-        return PredefinedCommandList.$DEFAULT_OPERATION$.eval(repl, new EnvironmentImpl(env, turtle -> filter(repl, env, turtle, expr[0]).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
+        return PredefinedCommandList.$DEFAULT_OPERATION$.eval(repl, new EnvironmentImpl(env, turtle -> filter(repl, env, turtle, expr[0])), Arrays.copyOfRange(expr, 1, expr.length));
     }
 
     @Override
     default int minimumArity() {
-        return 1;
+        return 2;
     }
 }
