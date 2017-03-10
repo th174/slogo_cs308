@@ -47,6 +47,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		viewHeight = aviewHeight;
 		colorMap = new HashMap<Double, Color>();
 		imageMap = new HashMap<Double, File>();
+		currentImageIndexMap = new HashMap<Integer,Double>();
 		XMLParser.populateMaps(colorMap, imageMap, defaultMapPropertiesFilename);
 		currentShapeIndex = 0;
 		defaultTurtleFile = currentShapeIndex;
