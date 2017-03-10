@@ -157,7 +157,6 @@ public class EnvironmentImpl extends Observable implements Environment {
         notifyObservers();
     }
 
-    @Deprecated
     @Override
     public void addUserFunction(String name, Invokable function) {
         scopeFunctions.put(name, function);
@@ -175,5 +174,11 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     private Map<String, Variable> initVariableDictonary() {
         return Variable.getPredefinedVariables();
+    }
+    
+    @Override
+    public void notifyObservers() {
+        setChanged();
+        super.notifyObservers();
     }
 }
