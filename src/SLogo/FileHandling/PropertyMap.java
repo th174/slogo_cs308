@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  */
 public class PropertyMap implements Property {
 
-	private static final String COMMAND_BUNDLE = "resources/files/writerCommands";
+	private static final String COMMAND_BUNDLE = "resources/files/writing";
 	public ResourceBundle myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
 	Map<String, Property> myMap;
 	

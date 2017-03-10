@@ -1,0 +1,19 @@
+<Config>
+	<heading>
+		50.0
+	</heading>
+	<x>
+		15.0
+	</x>
+	<y>
+		10.0
+	</y>
+	<penDown>
+		false
+	</penDown>
+	<id>
+		3
+	</id>
+
+</Config>
+

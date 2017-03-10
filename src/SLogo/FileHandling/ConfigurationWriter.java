@@ -10,12 +10,13 @@ import java.util.ResourceBundle;
 
 /**
  * @author Stone Mathers
- *
+ * Created 3/10/2017
  */
 public class ConfigurationWriter implements FileWriter {
 
+	private static final String NO_INDENT = "";
 	private static final int INDENTS = 0;
-	private static final String COMMAND_BUNDLE = "resources/files/writerCommands";
+	private static final String COMMAND_BUNDLE = "resources/files/writing";
 	public ResourceBundle myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
 	private static final String ERROR_BUNDLE = "resources/View/Exceptions";
 	public ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_BUNDLE);
@@ -47,8 +48,8 @@ public class ConfigurationWriter implements FileWriter {
 	 * @return
 	 */
 	private String generateXML(){
-		String data = myProperty.getXML(INDENTS+ + 1);
-		return String.format(myCommands.getString("tag"), INDENTS, myTag, data, INDENTS, myTag);
+		String data = myProperty.getXML(INDENTS + 1);
+		return String.format(myCommands.getString("tag"), NO_INDENT, myTag, data, NO_INDENT, myTag);
 	}
 
 }
