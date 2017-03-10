@@ -208,8 +208,12 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     private void instantializeSprite(int ID, Turtle t) {
         currentImageIndexMap.put(ID, (double) currentTurtleIMGIndex);
         System.out.println(spriteDimensions[0]);
-        spriteMap.put(ID, new Sprite(ID, imageMap.get(currentTurtleIMGIndex), spriteDimensions[0], spriteDimensions[1], viewWidth, viewHeight));
+        Sprite newSprite = new Sprite(ID, imageMap.get(currentTurtleIMGIndex), spriteDimensions[0], spriteDimensions[1], viewWidth, viewHeight);
+        spriteMap.put(ID, newSprite);
         root.getChildren().add(spriteMap.get(ID).getImageView());
+        setPen(ID, (boolean) t.isPenDown());
+        newSprite.setDirection((int)t.getHeading());
+        setHidden(ID, !t.isTurtleShow());
         //notifyObservers();
     }
 
