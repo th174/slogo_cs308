@@ -19,7 +19,6 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
 	private ResourceBundle exceptionResources;
 	private static final String RESOURCE_FILEPATH = "resources/View/";
-	private SLogoGUI gui;
 	private Group root;
 	private int viewWidth;
 	private int viewHeight;
@@ -40,13 +39,14 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	private HashMap<Integer, Double> currentImageIndexMap;
 
 	public CanvasViewImpl(int aviewWidth, int aviewHeight) {
-		//TODO: get SlogoGUI instance to change background
-		//gui = SLogoGUI;
 		exceptionResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "Exceptions");
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
 		colorMap = new HashMap<Double, Color>();
 		imageMap = new HashMap<Double, File>();
+		spriteMap = new HashMap<Integer, Sprite>();
+		turtleHiddenMap = new HashMap<Integer, Boolean>();
+		penDownMap = new HashMap<Integer, Boolean>();
 		currentImageIndexMap = new HashMap<Integer,Double>();
 		XMLParser.populateMaps(colorMap, imageMap, defaultMapPropertiesFilename);
 		currentShapeIndex = 0;
