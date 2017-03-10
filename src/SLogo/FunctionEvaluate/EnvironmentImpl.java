@@ -51,7 +51,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         selectTurtles(turtleIDs);
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr)  {
+    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) {
         this(outer);
         for (int i = 0; i < expr.length; i++) {
             scopeVariables.put(params.get(i), expr[i].eval(outer));
@@ -73,8 +73,8 @@ public class EnvironmentImpl extends Observable implements Environment {
         if (Objects.isNull(outer)) {
             return Collections.unmodifiableMap(getLocalVars());
         } else {
-            HashMap<String, Variable> vars = new HashMap<>(getLocalVars());
-            vars.putAll(outer.getLocalVars());
+            HashMap<String, Variable> vars = new HashMap<>(outer.getLocalVars());
+            vars.putAll(getLocalVars());
             return Collections.unmodifiableMap(vars);
         }
     }
@@ -84,8 +84,8 @@ public class EnvironmentImpl extends Observable implements Environment {
         if (Objects.isNull(outer)) {
             return Collections.unmodifiableMap(getLocalFunctions());
         } else {
-            HashMap<String, Invokable> funcs = new HashMap<>(getLocalFunctions());
-            funcs.putAll(outer.getLocalFunctions());
+            HashMap<String, Invokable> funcs = new HashMap<>(outer.getLocalFunctions());
+            funcs.putAll(getLocalFunctions());
             return Collections.unmodifiableMap(funcs);
         }
     }
@@ -153,7 +153,6 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public void addUserVariable(String name, Variable var) {
-        scopeVariables.put(name, var);
         scopeVariables.put(name, var);
         notifyObservers();
     }
