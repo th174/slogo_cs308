@@ -3,6 +3,7 @@ package SLogo.View;
 import java.util.ResourceBundle;
 
 import SLogo.Repl;
+import SLogo.ReplImpl;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.View.DisplayBar.ItemDisplay;
 import javafx.geometry.HPos;
@@ -23,8 +24,8 @@ public class Project implements SLogoGUIElement {
 	private final static String PROPERTIES_FILENAME = "Project";
 	private ResourceBundle myResources;
 	
-	public Project(Repl repl,double width,double height){
-		myRepl = repl;
+	public Project(double width,double height){
+		myRepl = new ReplImpl();
 		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
 		myRoot = new Group();
 		myWidth = width;
@@ -44,6 +45,7 @@ public class Project implements SLogoGUIElement {
     	
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio),myRepl.getEnvironment().getAllTurtles());
     	Node canvasViewNode = myCanvasView.getView();
+    	GridPane.setConstraints(canvasViewNode, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
     	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myCanvasView, myWidth,myHeight*.2);
     	Node commandLineNode = commandLine.getView();
@@ -53,8 +55,8 @@ public class Project implements SLogoGUIElement {
     	Node menuItemTabPaneNode = menuItemTabPane.getView();
     	GridPane.setConstraints(menuItemTabPaneNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	gridPane.getChildren().addAll(menuItemTabPaneNode,commandLineNode);
-        myRoot.getChildren().addAll(gridPane,canvasViewNode);
+    	gridPane.getChildren().addAll(menuItemTabPaneNode,commandLineNode,canvasViewNode);
+        myRoot.getChildren().addAll(gridPane);
 	}
 	
     @Override
@@ -64,5 +66,9 @@ public class Project implements SLogoGUIElement {
 
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
+	}
+	
+	public Repl getRepl(){
+		return myRepl;
 	}
 }

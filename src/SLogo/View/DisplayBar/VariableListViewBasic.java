@@ -1,6 +1,5 @@
 package SLogo.View.DisplayBar;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
@@ -13,7 +12,6 @@ public class VariableListViewBasic extends ItemList<TextContainer> {
 	public VariableListViewBasic(CommandLineView commandLineView) {
 		initializeResources();
 		myCommandLineView = commandLineView;
-		getMyListView().getChildren().add(new TextContainer(getMyResources().getString("VariableTab")).getView());
 	}
 
 	@Override
@@ -23,12 +21,19 @@ public class VariableListViewBasic extends ItemList<TextContainer> {
 		Map<String, Variable> currentVariableMap = environment.getAllVars();
 		getMyListView().getChildren().clear();
 		for(String string : currentVariableMap.keySet()){
-			getMyListView().getChildren().add(new TextContainer(string + " = " + currentVariableMap.get(string)).getView());
+			addItem(new TextContainer(string + " = " + currentVariableMap.get(string)));
 		}
 	}
 
 	@Override
 	protected void onClick(TextContainer item) {
-		myCommandLineView.setText(item.getCommand());
+		String [] commandInfo = item.getCommand().split(" = ");
+		myCommandLineView.setText("MAKEVARIABLE " + commandInfo[0] + " " + commandInfo[1]);
+	}
+
+	@Override
+	protected void addItem(TextContainer toAddItem) {
+		getMyListView().getChildren().add(toAddItem.getView());
+		toAddItem.getView().setOnMouseClicked(e -> onClick(toAddItem));
 	}
 }
