@@ -14,7 +14,7 @@ public class Sprite {
 	private int viewWidth;
 	private int viewHeight;
 	private int direction;
-	private int position[];
+	private double[] position;
 	private boolean hidden;
 	private boolean penDown;
 	private PropertiesDisplay propDisp;
@@ -28,7 +28,7 @@ public class Sprite {
 		defaultSpriteIMG = adefaultSpriteIMG;
 		spriteIV = new ImageView();
 		setImage(defaultSpriteIMG);
-		position = new int[] {viewWidth/2, viewHeight/2};
+		position = new double[] {viewWidth/2, viewHeight/2};
 		setPosition(position);
 		setDirection(90);
 		setHidden(false);
@@ -55,17 +55,17 @@ public class Sprite {
 	/**
 	 * @return Array of length 2: First element is the X-coordinate, second element is the Y-coordinate. Center is (0,0)
 	 */
-	public int[] getPosition(){
+	public double[] getPosition(){
 		return position;
 	}
 	
-	public void setPosition(int[] newPos){
+	public void setPosition(double[] newPos){
 		position = newPos;
 		spriteIV.setX(position[0] - spriteWidth/2);
 		spriteIV.setY(position[1] - spriteHeight/2);
 	}
 	
-	public int getDirection(){
+	public double getDirection(){
 		return direction - 90;
 	}
 	

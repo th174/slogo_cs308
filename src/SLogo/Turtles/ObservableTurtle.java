@@ -70,6 +70,7 @@ public class ObservableTurtle extends Observable implements Turtle {
     public double moveForward(double distance) {
         xPos += Math.cos(headingAngle) * distance;
         yPos += Math.sin(headingAngle) * distance;
+        System.out.println("forward");
         notifyObservers(new Pair<>(Math.cos(headingAngle) * distance, Math.sin(headingAngle) * distance));
         return distance;
     }
@@ -103,5 +104,12 @@ public class ObservableTurtle extends Observable implements Turtle {
     @Override
     public boolean isTurtleShow() {
         return isTurtleShowing;
+    }
+
+    @Override
+    public void notifyObservers(Object coordinates) {
+        setChanged();
+        System.out.println(this.hasChanged());
+        super.notifyObservers(coordinates);
     }
 }
