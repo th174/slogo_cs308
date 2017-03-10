@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 @FunctionalInterface
 public interface Accumulator extends Invokable {
-    Variable accumulate(Environment env, Variable var1, Variable var2) throws Exception;
+    Variable accumulate(Variable var1, Variable var2);
 
     @Override
     default int minimumArity() {
@@ -31,7 +31,7 @@ public interface Accumulator extends Invokable {
             return total.eval(env);
         } else {
             try {
-                return accumulate(env, eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
+                return accumulate(eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
             } catch (Exception e) {
                 throw new Expression.EvaluationTargetException(e);
             }
