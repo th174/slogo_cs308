@@ -1,0 +1,25 @@
+<Config>
+	<backColor>123,201,24</backColor>
+	<turtle>
+		<id>11</id>
+		<image>data/Images/DefaultTurtle.png<image>
+		<x>100</x>
+		<y>-200</y>
+		<heading>75</heading>
+		<pen>true</pen>
+	</turtle>
+	<penColor>0,0,0</penColor>
+	<penWidth>10</penWidth>
+	<colors>
+		<color>255,255,255</color>
+		<color>0,0,0</color>
+		<color>0,0,255</color>
+		<color>0,255,0</color>
+		<color>255,0,0</color>
+	<colors>
+	<images>
+		<image>data/Images/Circle.png</image>
+	</images>
+	<file>startFile.logo</file>
+	<lang>english</lang>
+</Config>

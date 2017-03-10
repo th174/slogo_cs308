@@ -8,6 +8,7 @@ import java.io.File;
  * class. 
  * 
  * @author Stone Mathers
+ * Created 3/10/2017
  */
 public interface FileWriter {
 
