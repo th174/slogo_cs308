@@ -1,18 +1,12 @@
 package SLogo.View.Sprite;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import SLogo.View.TurtleMath;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Sprite {
 	private int myID;
-	private File defaultSpriteFile;
+	private Image defaultSpriteIMG;
 	private ImageView spriteIV;
 	private Image spriteImg;
 	private int spriteWidth;
@@ -25,15 +19,15 @@ public class Sprite {
 	private boolean penDown;
 	private PropertiesDisplay propDisp;
 	
-	public Sprite(int ID, File adefaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+	public Sprite(int ID, Image adefaultSpriteIMG, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
 		myID = ID;
 		spriteWidth = aspriteWidth;
 		spriteHeight = aspriteHeight;
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
-		defaultSpriteFile = adefaultSpriteFile;
+		defaultSpriteIMG = adefaultSpriteIMG;
 		spriteIV = new ImageView();
-		setImage(defaultSpriteFile);
+		setImage(defaultSpriteIMG);
 		position = new int[] {viewWidth/2, viewHeight/2};
 		setPosition(position);
 		setDirection(90);
@@ -42,28 +36,17 @@ public class Sprite {
 				getDirection(), getHidden(), penDown);
 		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay(e));
 	}
-	
-	public void setImage(File newSpriteFile){
-		try {
-			spriteImg = new Image(new FileInputStream(newSpriteFile));
-			spriteIV.setImage(spriteImg);
-			spriteIV.setFitWidth(spriteWidth);
-			spriteIV.setFitHeight(spriteHeight);
-		} catch (IOException e) {
-	    	showError("Invalid Image File or Index");
-		}
+
+	public void setImage(Image newSpriteIMG){
+		spriteImg = newSpriteIMG;
+		spriteIV.setImage(spriteImg);
+		spriteIV.setFitWidth(spriteWidth);
+		spriteIV.setFitHeight(spriteHeight);
 	}
-	
+
 	public void setPen(boolean newPen){
 		penDown = newPen;
 	}
-	
-	private void showError (String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Image File Error");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 	
 	public ImageView getImageView(){
 		return spriteIV;
