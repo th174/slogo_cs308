@@ -18,6 +18,7 @@ public class Sprite {
 	private boolean hidden;
 	private boolean penDown;
 	private PropertiesDisplay propDisp;
+	private TurtleMath tMath;
 	
 	public Sprite(int ID, Image adefaultSpriteIMG, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
 		myID = ID;
@@ -32,7 +33,8 @@ public class Sprite {
 		setPosition(position);
 		setDirection(90);
 		setHidden(false);
-		propDisp = new PropertiesDisplay(myID, TurtleMath.absoluteToZero(viewWidth, viewHeight, getPosition()), 
+		tMath = new TurtleMath();
+		propDisp = new PropertiesDisplay(myID, tMath.absoluteToZero(viewWidth, viewHeight, getPosition()), 
 				getDirection(), getHidden(), penDown);
 		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay(e));
 	}
