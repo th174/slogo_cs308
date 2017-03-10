@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
-    private static final int DEFAULT_TURTLE_ID = 1;
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
@@ -29,7 +28,7 @@ public class EnvironmentImpl extends Observable implements Environment {
     private EnvironmentImpl() {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
-        myTurtles = FXCollections.observableMap(new HashMap<>(Collections.singletonMap(DEFAULT_TURTLE_ID, new ObservableTurtle(DEFAULT_TURTLE_ID))));
+        myTurtles = FXCollections.observableHashMap();
         outer = null;
     }
 
@@ -52,7 +51,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         selectTurtles(turtleIDs);
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr)  {
+    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) {
         this(outer);
         for (int i = 0; i < expr.length; i++) {
             scopeVariables.put(params.get(i), expr[i].eval(outer));

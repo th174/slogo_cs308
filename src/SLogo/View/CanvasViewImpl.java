@@ -81,6 +81,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	}
 	
 	private void onTurtleMapChange(MapChangeListener.Change<? extends Integer, ? extends Turtle> turtlesChange) {
+		System.out.println("mapchange");
         int id = turtlesChange.getKey();
         Turtle t = turtlesChange.getValueAdded();
         Turtle r = turtlesChange.getValueRemoved();

@@ -82,7 +82,7 @@ public final class PredefinedCommandList {
 
         @Override
         public Variable operation(Environment env, Expression... vargs) throws IOException {
-            return Invokable.parser.parse(env, new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/data/" + vargs[0].eval(env).toContentString())))).eval(env);
+            return Invokable.parser.parse(env, new String(Files.readAllBytes(Paths.get(vargs[0].eval(env).toContentString())))).eval(env);
         }
     };
 
@@ -153,9 +153,9 @@ public final class PredefinedCommandList {
 
         @Override
         public Variable operation(Environment env, Expression... vargs) {
-            ListVariable turtlesIDs = (ListVariable) LIST.invoke(env, vargs[0]);
-            env.filterTurtles(turtle -> turtlesIDs.contains(Variable.newInstance(turtle.id())).toBoolean());
-            return turtlesIDs;
+            List<Integer> turtleIDs = vargs[0].getBody().stream().map(e -> Math.round((float) e.eval(env).toNumber())).collect(Collectors.toList());
+            env.selectTurtles(turtleIDs);
+            return Variable.newInstance(turtleIDs.get(turtleIDs.size() - 1));
         }
     };
 
