@@ -57,8 +57,8 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         penColor = 1;
         penWidth = 1;
         root = new Group();
-        backgroundNode = new Rectangle(viewWidth, viewHeight, colorMap.get(0));
-        root.getChildren().add(backgroundNode);
+        //backgroundNode = new Rectangle(viewWidth, viewHeight, colorMap.get(0));
+        //root.getChildren().add(backgroundNode);
         //TODO: notify GUI of maps
         //notifyObservers();
     }
@@ -75,7 +75,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         int currID = (int) turtle.id();
         Sprite currSprite = spriteMap.get(currID);
         setPen(currID, (boolean) turtle.isPenDown());
-        currSprite.setDirection(((Double) turtle.getHeading()).intValue());
+        currSprite.setDirection((int)turtle.getHeading());
         move(currID, new double[]{changeLoc.getKey(), changeLoc.getValue()});
         setHidden(currID, !turtle.isTurtleShow());
         //TODO: need to set pen Color/Width at some point
@@ -178,6 +178,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
             finalPosition = new double[]{coordinates[2], coordinates[3]};
         }
         currSprite.setPosition(finalPosition);
+        System.out.println(finalPosition[0] + " " + finalPosition[1]);
     }
 
     public void setImage(int currID, Image imgFile) throws FileNotFoundException {
