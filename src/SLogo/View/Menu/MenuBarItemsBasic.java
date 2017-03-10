@@ -36,11 +36,5 @@ public class MenuBarItemsBasic implements MenuBarItems{
 	public Node getView() {
 		return myMenuBar;
 	}
-
-	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 }

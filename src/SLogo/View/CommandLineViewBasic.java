@@ -55,22 +55,7 @@ public class CommandLineViewBasic implements CommandLineView {
 	}
 
 	private void initializeRunButton() {
-		myRunButton = new Button();
-		
-//		String imagePath = (myResources.getString("RunButtonImagePath"));
-//		File runImgFile = new File(imagePath);
-//		Image buttonImage = null;
-//		try {
-//			buttonImage = new Image(new FileInputStream(runImgFile));
-//		} catch (FileNotFoundException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//        ImageView buttonImageView = new ImageView(buttonImage);
-//        buttonImageView.setFitWidth((((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH) *.9);
-//        buttonImageView.setFitHeight(myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8 *.9);
-//   		myRunButton.setGraphic(buttonImageView);
-        
+		myRunButton = new Button();        
    		myRunButton.setText(myResources.getString("RunButtonText"));
    		myRunButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
         GridPane.setConstraints(myRunButton, 1, 0);
@@ -81,7 +66,6 @@ public class CommandLineViewBasic implements CommandLineView {
         try {
 			myRepl.read(myCommandText.getText());
         }catch (Exception e) {
-            e.printStackTrace();
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle(myResources.getString("AlertError"));
         	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
@@ -99,7 +83,6 @@ public class CommandLineViewBasic implements CommandLineView {
         GridPane.setConstraints(myCommandText, 0, 0, 1, 2);
     }
 
-
     private void initializeGridPane() {
         myCommandLine = new GridPane();
     }
@@ -108,11 +91,6 @@ public class CommandLineViewBasic implements CommandLineView {
     @Override
     public Node getView() {
         return myCommandLine;
-    }
-
-    @Override
-    public void setSize(double width, double height) {
-
     }
 
 	@Override

@@ -1,6 +1,7 @@
 package SLogo.View.Menu;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,17 +36,27 @@ public class HelpMenu implements SLogoMenu{
 	private void initializeMenuItem(String itemName, Boolean local) {
 		MenuItem helpMenuItem = new MenuItem();
 		helpMenuItem.setText(myResources.getString(itemName));
-		helpMenuItem.setOnAction(e -> openHTML((local ? "file://" + System.getProperty("user.dir").replace('\\', '/') : "") + myResources.getString(itemName+"Path")));
+		helpMenuItem.setOnAction(e -> openHTML(getURI(itemName, local)));
 		myHelpMenu.getItems().add(helpMenuItem);
 	}
 	
-	private void openHTML(String path) {
+	private URI getURI(String itemName, Boolean local){
+		if(local){
+			return new File(System.getProperty("user.dir") + myResources.getString(itemName+"Path")).toURI();
+		}else{
+			try {
+				return new URI(myResources.getString(itemName+"Path"));
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
+	private void openHTML(URI uri) {
 		try {
-			Desktop.getDesktop().browse(new URI(path));
+			Desktop.getDesktop().browse(uri);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
 		}
 	}
 	

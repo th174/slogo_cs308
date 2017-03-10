@@ -1,11 +1,10 @@
 package SLogo.View.DisplayBar;
 
-import SLogo.View.SLogoGUIElement;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-public class IndexNode implements Comparable<IndexNode>, SLogoGUIElement {
+public class IndexNode implements Comparable<IndexNode>, VisualCommand {
 	private int myIndex;
 	private Node myNode;
 	private GridPane myRoot = new GridPane();
@@ -26,12 +25,19 @@ public class IndexNode implements Comparable<IndexNode>, SLogoGUIElement {
 	@Override
 	public Node getView() {
 		return myRoot;
+	}	
+	
+	@Override
+	public boolean equals(Object object){
+		if(!(object instanceof IndexNode)){
+			return true;
+		}
+		IndexNode indexNode = (IndexNode) object;
+		return this.myIndex == indexNode.myIndex;
 	}
 
 	@Override
-	public void setSize(double width, double height) {
-		// TODO Auto-generated method stub
-		
+	public String getCommand() {
+		return "" + myIndex;
 	}
-	
 }
