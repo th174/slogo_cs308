@@ -8,6 +8,7 @@ import javafx.collections.ObservableMap;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -27,7 +28,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
 	private ResourceBundle exceptionResources;
 	private static final String RESOURCE_FILEPATH = "resources/View/";
-	private Group root;
+	private Pane root;
 	private int viewWidth;
 	private int viewHeight;
 	private int[] spriteDimensions;
@@ -63,7 +64,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		backgroundColorIndex = 0;
 		penColor = 1;
 		penWidth = 1;
-		root = new Group();
+		root = new Pane();
 		backgroundNode = new Rectangle(viewWidth, viewHeight, colorMap.get(0));
 		root.getChildren().add(backgroundNode);
 		notifyObservers();
@@ -106,8 +107,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 			removeSprite(id, r);
 		}
 	}
-
-
+	
 	/**
 	 * Remove references to sprite from front end
 	 * @param id
