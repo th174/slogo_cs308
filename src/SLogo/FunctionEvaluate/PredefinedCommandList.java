@@ -29,7 +29,7 @@ public final class PredefinedCommandList {
     public static final Accumulator POWER = Variable::power;
     public static final ShortCircuit AND = Variable::and;
     public static final ShortCircuit OR = Variable::or;
-    public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle)));
+    public static final MultiTurtleSet ASKWITH = (env, turtle, expr) -> expr.eval(new EnvironmentImpl(env, Collections.singletonList(turtle.id())));
     public static final MultiTurtleSet ASK = (env, turtle, expr) -> ((ListVariable) LIST.invoke(env, expr)).contains(Variable.newInstance(turtle.id()));
     public static final Conditional REPEAT = (env, expr) -> {
         List<Expression> loopParams = expr[0].getBody();
@@ -138,6 +138,10 @@ public final class PredefinedCommandList {
             env.filterTurtles(turtle -> turtlesIDs.contains(Variable.newInstance(turtle.id())).toBoolean());
             return turtlesIDs;
         }
+    };
+    public static final UnaryIterable USE = var -> {
+        Invokable.parser.setLocale(var.toContentString());
+        return var;
     };
 
     /**

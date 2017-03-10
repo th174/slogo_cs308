@@ -16,20 +16,10 @@ public interface Repl {
      */
     void read(String input) throws Exception;
 
-   /* *//**
-     * Give feedback to user based on evaluated results
-     *//*
-    void print();*/
-
     /**
      * @return list of all previous commands run
      */
     List<String> getHistory();
-    
-    /**
-     * @param canvas to be contained in the Repl's Environment
-     */
-    void setCanvas(CanvasView canvas);
     
     /**
      * @return Environment

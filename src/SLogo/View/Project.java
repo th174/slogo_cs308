@@ -46,7 +46,6 @@ public class Project implements SLogoGUIElement {
     	setGridConstraints(gridPane, canvasHeightRatio, commandLineHeightRatio, canvasWidthRatio, displayWidthRatio);
     	
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio));
-    	myRepl.setCanvas(myCanvasView);
     	Node canvasViewNode = myCanvasView.getView();
     	
     	Rectangle rectangleCanvasView = new Rectangle(myWidth * canvasWidthRatio,myHeight * canvasHeightRatio);
