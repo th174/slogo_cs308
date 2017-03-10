@@ -42,6 +42,11 @@ public interface CanvasView extends Observer {
      * @return given index
      */
     int setBackground(double index);
+    
+    /**
+     * @return current index representing the background color
+     */
+    int getBackground();
 
     /**
      * @param index sets color of the pen to that represented by index

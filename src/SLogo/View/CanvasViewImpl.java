@@ -164,6 +164,10 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		return (int) index;
 	}
 	
+	public int getBackground() {
+		return (int) backgroundColorIndex;
+	}
+	
 	public int setPalette(double index, double r, double g, double b) {
 		Color color = Color.rgb((int) r, (int) g, (int) b, .99);
 		colorMap.put((int) index, color);
