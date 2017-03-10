@@ -7,7 +7,7 @@ import javafx.stage.Popup;
 
 public class PropertiesDisplay {
 	
-	public PropertiesDisplay(int ID, int[] pos, int heading, boolean hidden, boolean penDown){
+	public PropertiesDisplay(int ID, double[] pos, double heading, boolean hidden, boolean penDown){
 		//Label moreInfo = new Label("ID: " + ID + "\nLocation: " + pos[0] + "-" + pos[1] + "\nHeading: " + heading + 
 		//		"\nHidden: " + hidden + "\nPenDown: " + penDown);
 		createPopup();

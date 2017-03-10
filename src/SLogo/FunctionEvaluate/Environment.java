@@ -29,7 +29,6 @@ public interface Environment {
     /**
      * @return Get unmodifiable view all defined user functions
      */
-    @Deprecated
     Map<String, Invokable> getLocalFunctions();
 
     /**

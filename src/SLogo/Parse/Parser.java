@@ -14,7 +14,7 @@ public interface Parser {
 
     /**
      * @param command User written command
-     * @param env, Current runtime environmental variables
+     * @param env,    Current runtime environmental variables
      * @return Expression built from command
      */
     Expression parse(Environment env, String command);
@@ -22,11 +22,17 @@ public interface Parser {
     /**
      * @param locale Desired Locale of commands
      */
-    void setLocale(String locale);
+    void setLocale(String locale) throws UnsupportedLanguageException;
 
     class SyntaxException extends RuntimeException {
-        public SyntaxException(String s) {
+        protected SyntaxException(String s) {
             super("Error parsing syntax: " + s);
+        }
+    }
+
+    class UnsupportedLanguageException extends RuntimeException {
+        protected UnsupportedLanguageException(String s) {
+            super("Error Unsupported Language" + s);
         }
     }
 }

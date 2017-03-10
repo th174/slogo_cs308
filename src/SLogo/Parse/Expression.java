@@ -19,7 +19,7 @@ public interface Expression {
     int size();
 
     class EvaluationTargetException extends RuntimeException {
-        EvaluationTargetException(Exception e) {
+        public EvaluationTargetException(Exception e) {
             super("Error in function evaluation!", e);
         }
     }

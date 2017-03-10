@@ -19,12 +19,12 @@ public interface TurtlePosition extends IterableInvokable, TurtleIterable {
     }
 
     @Override
-    default Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+    default Variable operation(Environment env, Expression... vargs)  {
         return forEachTurtle(env.getActiveTurtleList(), env, vargs);
     }
 
     @Override
-    default Object doTurtle(Turtle turtle, Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+    default Object doTurtle(Turtle turtle, Environment env, Expression... vargs)  {
         return operation(turtle, vargs[0].eval(env).toNumber(), vargs[1].eval(env).toNumber());
     }
 }

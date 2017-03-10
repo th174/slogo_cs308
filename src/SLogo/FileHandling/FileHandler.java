@@ -1,9 +1,9 @@
-package SLogo.Parse;
+package SLogo.FileHandling;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -22,9 +22,6 @@ public class FileHandler {
 	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	private Window myWindow;
 	
-	/**
-	 * 
-	 */
 	public FileHandler(Window userWindow) {
 		myWindow = userWindow;
 	}
@@ -35,20 +32,10 @@ public class FileHandler {
 		return readFile(chooser.showOpenDialog(myWindow));
 	}
 	
-	private String readFile(File file){
-		StringBuilder commands = new StringBuilder();
-		String nextLine = "";
-		
+	public String readFile(File file){
 		try{
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			while((nextLine=reader.readLine()) != null){
-				commands.append("\n" + nextLine);
-			}
-			reader.close();
-			return commands.toString();
-		}catch(FileNotFoundException e){
-			throw new RuntimeException(String.format(myResources.getString("FileNotFound"), file.getName()));
-		}catch(Exception e){
+			return new String((Files.readAllBytes(Paths.get(file.toURI()))));
+		}catch(IOException e){
 			throw new RuntimeException(String.format(myResources.getString("FileReadingError"), file.getName()));
 		}
 	}

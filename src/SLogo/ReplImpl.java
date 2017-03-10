@@ -5,8 +5,6 @@ import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.Parse.Expression;
 import SLogo.Parse.Parser;
 import SLogo.Parse.PolishParser;
-import SLogo.Turtles.ObservableTurtle;
-import SLogo.View.CanvasView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,34 +21,28 @@ public class ReplImpl implements Repl {
     private Environment userEnv;
 
     public ReplImpl() throws IOException {
-
         history = new ArrayList<>();
         currentIndex = 0;
-        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(new ObservableTurtle(1)));
+        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(1));
         parser = new PolishParser();
     }
 
     @Override
     public void read(String input) throws Exception {
         Expression currentCommand = parser.parse(userEnv, input);
+        eval(currentCommand);
         history.add(currentCommand.toString().substring(1, currentCommand.toString().length() - 1));
         System.out.println(history.get(currentIndex));
         currentIndex++;
     }
 
-//    private Variable eval(Expression expression) throws Expression.EvaluationTargetException {
-//        return expression.eval(userEnv);
-//    }
+    private void eval(Expression command) {
+        command.eval(userEnv);
+    }
 
     @Override
     public List<String> getHistory() {
         return history;
-    }
-
-    @Override
-    public void setCanvas(CanvasView canvas) {
-        userEnv.setCanvas(canvas);
-        userEnv.getActiveTurtleList().forEach(t -> t.addObserver(canvas));
     }
 
     @Override

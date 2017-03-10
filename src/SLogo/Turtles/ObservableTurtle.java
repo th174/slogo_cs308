@@ -67,21 +67,6 @@ public class ObservableTurtle extends Observable implements Turtle {
     }
 
     @Override
-    public double moveForward(double distance) {
-        xPos += Math.cos(headingAngle) * distance;
-        yPos += Math.sin(headingAngle) * distance;
-        notifyObservers(new Pair<>(Math.cos(headingAngle) * distance, Math.sin(headingAngle) * distance));
-        return distance;
-    }
-
-    @Override
-    public double rotateCCW(double angle) {
-        headingAngle += angle;
-        notifyObservers(NO_POS_CHANGE);
-        return 0;
-    }
-
-    @Override
     public boolean setPenDown(boolean isPenDown) {
         this.isPenDown = isPenDown;
         notifyObservers(NO_POS_CHANGE);
@@ -103,5 +88,11 @@ public class ObservableTurtle extends Observable implements Turtle {
     @Override
     public boolean isTurtleShow() {
         return isTurtleShowing;
+    }
+
+    @Override
+    public void notifyObservers(Object coordinates) {
+        setChanged();
+        super.notifyObservers(coordinates);
     }
 }

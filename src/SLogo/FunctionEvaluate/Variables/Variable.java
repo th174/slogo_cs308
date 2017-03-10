@@ -160,11 +160,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public static Variable fromString(String s) {
         if (s.matches(REGEX.getString("Constant"))) {
-            try {
-                return new NumberVariable(Double.parseDouble(s));
-            } catch (NumberFormatException e) {
-                throw new NotANumberException(s);
-            }
+            return new NumberVariable(s);
         } else if (s.matches(REGEX.getString("StringLiteral"))) {
             return new StringVariable(s.substring(1, s.length() - 1));
         } else {

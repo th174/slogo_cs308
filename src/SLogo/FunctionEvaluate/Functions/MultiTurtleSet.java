@@ -15,10 +15,10 @@ import java.util.Arrays;
 @FunctionalInterface
 public interface MultiTurtleSet extends IterableInvokable {
 
-    Variable filter(Environment env, Turtle turtle, Expression expr) throws Expression.EvaluationTargetException;
+    Variable filter(Environment env, Turtle turtle, Expression expr);
 
     @Override
-    default Variable operation(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable operation(Environment env, Expression... expr) {
         return PredefinedCommandList.$DEFAULT_OPERATION$.invoke(new EnvironmentImpl(env, turtle -> filter(env, turtle, expr[0]).toBoolean()), Arrays.copyOfRange(expr, 1, expr.length));
     }
 

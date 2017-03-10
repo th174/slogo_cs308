@@ -9,6 +9,7 @@ import java.util.Arrays;
 /**
  * This interface wraps operations that work by accumulating value over a number of arguments.
  * This recursively applies Accumulator::accumulate over each of its arguments.
+ *
  * @Author Created by th174 on 2/16/2017.
  */
 @FunctionalInterface
@@ -21,7 +22,7 @@ public interface Accumulator extends Invokable {
     }
 
     @Override
-    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable eval(Environment env, Expression... expr) {
         if (expr.length == 0) {
             return Variable.FALSE;
         }
@@ -29,15 +30,19 @@ public interface Accumulator extends Invokable {
         if (expr.length == 1) {
             return total.eval(env);
         } else {
-            return accumulate(eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
+            try {
+                return accumulate(eval(env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(env));
+            } catch (Exception e) {
+                throw new Expression.EvaluationTargetException(e);
+            }
         }
     }
 
     @Override
-    default Variable invoke(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable invoke(Environment env, Expression... expr) {
         if (expr.length < 1) {
             throw new UnexpectedArgumentException(minimumArity(), expr.length);
         }
-        return eval(env,expr);
+        return eval(env, expr);
     }
 }

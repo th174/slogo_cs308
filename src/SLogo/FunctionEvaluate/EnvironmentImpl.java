@@ -28,30 +28,31 @@ public class EnvironmentImpl extends Observable implements Environment {
     private EnvironmentImpl() {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
+        myTurtles = FXCollections.observableHashMap();
         outer = null;
     }
 
-    public EnvironmentImpl(Environment outer, Collection<Turtle> myTurtles) {
+    private EnvironmentImpl(Environment outer) {
         this.outer = outer;
         scopeFunctions = new HashMap<>();
         scopeVariables = new HashMap<>();
-        this.myTurtles = FXCollections.observableMap(myTurtles.stream().collect(Collectors.toMap(Turtle::id, t -> t)));
-        this.myActiveTurtles = new ArrayList<>(this.myTurtles.values());
+        myTurtles = null;
         notifyObservers();
+        this.myActiveTurtles = new ArrayList<>(outer.getAllTurtles().values());
     }
 
     public EnvironmentImpl(Environment outer, Predicate<Turtle> turtleFilter) {
-        this(outer, outer.getAllTurtles().values());
+        this(outer);
         filterTurtles(turtleFilter);
     }
 
     public EnvironmentImpl(Environment outer, List<Integer> turtleIDs) {
-        this(outer, outer.getAllTurtles().values());
+        this(outer);
         selectTurtles(turtleIDs);
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) throws Expression.EvaluationTargetException {
-        this(outer, outer.getActiveTurtleList());
+    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) {
+        this(outer);
         for (int i = 0; i < expr.length; i++) {
             scopeVariables.put(params.get(i), expr[i].eval(outer));
         }
@@ -72,8 +73,8 @@ public class EnvironmentImpl extends Observable implements Environment {
         if (Objects.isNull(outer)) {
             return Collections.unmodifiableMap(getLocalVars());
         } else {
-            HashMap<String, Variable> vars = new HashMap<>(getLocalVars());
-            vars.putAll(outer.getLocalVars());
+            HashMap<String, Variable> vars = new HashMap<>(outer.getLocalVars());
+            vars.putAll(getLocalVars());
             return Collections.unmodifiableMap(vars);
         }
     }
@@ -83,8 +84,8 @@ public class EnvironmentImpl extends Observable implements Environment {
         if (Objects.isNull(outer)) {
             return Collections.unmodifiableMap(getLocalFunctions());
         } else {
-            HashMap<String, Invokable> funcs = new HashMap<>(getLocalFunctions());
-            funcs.putAll(outer.getLocalFunctions());
+            HashMap<String, Invokable> funcs = new HashMap<>(outer.getLocalFunctions());
+            funcs.putAll(getLocalFunctions());
             return Collections.unmodifiableMap(funcs);
         }
     }
@@ -122,7 +123,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public ObservableMap<Integer, Turtle> getAllTurtles() {
-        return myTurtles;
+        return Objects.nonNull(myTurtles) ? myTurtles : outer.getAllTurtles();
     }
 
     @Override
@@ -132,16 +133,16 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public void filterTurtles(Predicate<Turtle> filter) {
-        myActiveTurtles = myTurtles.values().stream().sorted(Comparator.comparingInt(Turtle::id)).filter(filter).collect(Collectors.toList());
+        myActiveTurtles = getAllTurtles().values().stream().sorted(Comparator.comparingInt(Turtle::id)).filter(filter).collect(Collectors.toList());
     }
 
     @Override
     public void selectTurtles(List<Integer> turtleIDs) {
         myActiveTurtles = turtleIDs.stream().map(id -> {
-            if (!myTurtles.containsKey(id)) {
-                myTurtles.put(id, new ObservableTurtle(id));
+            if (!getAllTurtles().containsKey(id)) {
+                getAllTurtles().put(id, new ObservableTurtle(id));
             }
-            return myTurtles.get(id);
+            return getAllTurtles().get(id);
         }).collect(Collectors.toList());
     }
 
@@ -153,11 +154,9 @@ public class EnvironmentImpl extends Observable implements Environment {
     @Override
     public void addUserVariable(String name, Variable var) {
         scopeVariables.put(name, var);
-        scopeVariables.put(name, var);
         notifyObservers();
     }
 
-    @Deprecated
     @Override
     public void addUserFunction(String name, Invokable function) {
         scopeFunctions.put(name, function);
@@ -175,5 +174,11 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     private Map<String, Variable> initVariableDictonary() {
         return Variable.getPredefinedVariables();
+    }
+    
+    @Override
+    public void notifyObservers() {
+        setChanged();
+        super.notifyObservers();
     }
 }

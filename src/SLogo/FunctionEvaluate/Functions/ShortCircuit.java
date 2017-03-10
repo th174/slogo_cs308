@@ -14,7 +14,7 @@ public interface ShortCircuit extends Invokable {
     Variable test(Variable var1, Variable var2);
 
     @Override
-    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable eval(Environment env, Expression... expr)  {
         if (expr.length == 0) {
             return Variable.FALSE;
         }

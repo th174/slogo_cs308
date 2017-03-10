@@ -56,8 +56,9 @@ public class PolishParser extends AbstractParser {
             if (isGroup) {
                 subList.add(readFirstToken(env, tokens));
                 isGroup = false;
+            } else {
+                subList.add(readTokens(env, tokens));
             }
-            subList.add(readTokens(env, tokens));
         }
         tokens.pollFirst();
         return subList;

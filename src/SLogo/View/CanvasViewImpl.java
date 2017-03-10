@@ -1,38 +1,44 @@
 package SLogo.View;
 
-import SLogo.Turtles.Turtle;
 import SLogo.Turtles.ObservableTurtle;
+import SLogo.Turtles.Turtle;
 import SLogo.View.Sprite.Sprite;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
+
+/**
+ * This class implements CanvasView to handle all View properties and Turtle properties for SLogo
+ * @author Riley Nisbet
+ */
 
 public class CanvasViewImpl extends Observable implements CanvasView {
 	private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
 	private ResourceBundle exceptionResources;
 	private static final String RESOURCE_FILEPATH = "resources/View/";
-	private SLogoGUI gui;
 	private Group root;
 	private int viewWidth;
 	private int viewHeight;
-	private int spriteWidth;
-	private int spriteHeight;
-	private int defaultTurtleFile;
-	private Map<Double, Color> colorMap;
-	private Map<Double, File> imageMap;
+	private int[] spriteDimensions;
+	private int currentTurtleIMGIndex;
+	private Map<Integer, Color> colorMap;
+	private Map<Integer, Image> imageMap;
 	private Rectangle backgroundNode;
-	private double backgroundColor;
 	private double penColor;
 	private double penWidth;
-	private int currentShapeIndex;
+	private double backgroundColorIndex;
+	private TurtleMath tMath;
 
 	private HashMap<Integer, Sprite> spriteMap;
 	private HashMap<Integer, Boolean> turtleHiddenMap;
@@ -40,17 +46,21 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	private HashMap<Integer, Double> currentImageIndexMap;
 
 	public CanvasViewImpl(int aviewWidth, int aviewHeight) {
-		//TODO: get SlogoGUI instance to change background
-		//gui = SLogoGUI;
 		exceptionResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "Exceptions");
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
-		colorMap = new HashMap<Double, Color>();
-		imageMap = new HashMap<Double, File>();
-		XMLParser.populateMaps(colorMap, imageMap, defaultMapPropertiesFilename);
-		currentShapeIndex = 0;
-		defaultTurtleFile = currentShapeIndex;
-		backgroundColor = 0;
+		colorMap = new HashMap<Integer, Color>();
+		imageMap = new HashMap<Integer, Image>();
+		spriteMap = new HashMap<Integer, Sprite>();
+		turtleHiddenMap = new HashMap<Integer, Boolean>();
+		penDownMap = new HashMap<Integer, Boolean>();
+		currentImageIndexMap = new HashMap<Integer, Double>();
+		spriteDimensions = new int[2];
+		tMath = new TurtleMath();
+		XMLParser parser = new XMLParser();
+		parser.populateMaps(spriteDimensions, colorMap, imageMap, defaultMapPropertiesFilename);
+		currentTurtleIMGIndex = 0;
+		backgroundColorIndex = 0;
 		penColor = 1;
 		penWidth = 1;
 		root = new Group();
@@ -63,36 +73,47 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 	public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
 		this(aviewWidth, aviewHeight);
 		turtles.addListener(this::onTurtleMapChange);
+		for (Integer id : turtles.keySet()){
+			instantializeSprite(id, turtles.get(id));
+			turtles.get(id).addObserver(this);
+		}
 	}
 
-
-	//theoretically, when Stone makes first turtle, it will create an instance using instantializeSprite
-	public void update(Observable o, Object n){
-		System.out.println("update");
+	public void update(Observable o, Object n) {
 		ObservableTurtle turtle = (ObservableTurtle) o;
-		Pair<Integer, Integer> changeLoc = (Pair<Integer, Integer>) n;
+		Pair<Double, Double> changeLoc = (Pair<Double, Double>) n;
 		int currID = (int) turtle.id();
 		Sprite currSprite = spriteMap.get(currID);
 		setPen(currID, (boolean) turtle.isPenDown());
-		currSprite.setDirection(((Double) turtle.getHeading()).intValue());
-		move(currID, new int[] {changeLoc.getKey(), changeLoc.getValue()});
+		currSprite.setDirection((int)turtle.getHeading());
+		move(currID, new double[]{changeLoc.getKey(), changeLoc.getValue()});
 		setHidden(currID, !turtle.isTurtleShow());
 		//TODO: need to set pen Color/Width at some point
 	}
-	
-	private void onTurtleMapChange(MapChangeListener.Change<? extends Integer, ? extends Turtle> turtlesChange) {
-        int id = turtlesChange.getKey();
-        Turtle t = turtlesChange.getValueAdded();
-        Turtle r = turtlesChange.getValueRemoved();
-        if (t != null){
-        	instantializeSprite(id, t);
-        	t.addObserver(this);
-        }
-        if (r != null){
-        	removeSprite(id, r);
-        }
-    }
 
+	/**
+	 * Listener that provides a turtle that is added or removed from the back-end list of turtles
+	 * @param turtlesChange	turtle that is changed
+	 */
+	private void onTurtleMapChange(MapChangeListener.Change<? extends Integer, ? extends Turtle> turtlesChange) {
+		int id = turtlesChange.getKey();
+		Turtle t = turtlesChange.getValueAdded();
+		Turtle r = turtlesChange.getValueRemoved();
+		if (t != null) {
+			instantializeSprite(id, t);
+			t.addObserver(this);
+		}
+		if (r != null) {
+			removeSprite(id, r);
+		}
+	}
+
+
+	/**
+	 * Remove references to sprite from front end
+	 * @param id
+	 * @param r
+	 */
 	private void removeSprite(int id, Turtle r) {
 		Sprite toRemove = spriteMap.remove(id);
 		turtleHiddenMap.remove(id);
@@ -112,67 +133,67 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 		return (int) index;
 	}
 
-	public int getPenColor(){
-		for (HashMap.Entry<Double, Color> e : colorMap.entrySet()) {
-			Double indexEntry = (Double) e.getKey();
+	public int getPenColor() {
+		for (HashMap.Entry<Integer, Color> e : colorMap.entrySet()) {
+			Integer indexEntry = e.getKey();
 			Color colorEntry = (Color) e.getValue();
-			if (colorEntry.equals(colorMap.get(penColor))){
+			if (colorEntry.equals(colorMap.get(penColor))) {
 				return indexEntry.intValue();
 			}
 		}
-		//TODO: Learn how to throw exceptions
 		throw new ErrorPrompt(exceptionResources.getString("InvalidColorIndex"));
 	}
 
-	public int setPenSize(double index){
+	public int setPenSize(double index) {
 		penWidth = (int) index;
 		return (int) index;
 	}
 
-	public int setShape(int currID, double index){
-		Sprite currSprite = spriteMap.get(currID);
-		currSprite.setImage(imageMap.get(index));
-		currentImageIndexMap.put(currID, index);
-		return (int) index;
+	public int setShape(double index) {
+		currentTurtleIMGIndex = (int) index;
+		return currentTurtleIMGIndex;
 	}
 
-	public int setShape(double index){
-		currentShapeIndex = (int) index;
-		defaultTurtleFile = (int) index;
-		return currentShapeIndex;
+	public int getShape() {
+		return currentTurtleIMGIndex;
 	}
-
-	public int getShape(){
-		return currentShapeIndex;
-	}
-
-	public int setBackground(double index){
-		backgroundColor = index;
+	
+	public int setBackground(double index) {
+		backgroundColorIndex = index;
 		backgroundNode.setFill(colorMap.get(index));
 		return (int) index;
 	}
-
-	public int setPalette(double index, double r, double g, double b){
+	
+	public int getBackground() {
+		return (int) backgroundColorIndex;
+	}
+	
+	public int setPalette(double index, double r, double g, double b) {
 		Color color = Color.rgb((int) r, (int) g, (int) b, .99);
-		colorMap.put(index, color);
-		notifyObservers();
+		colorMap.put((int) index, color);
+		//notifyObservers();
 		return (int) index;
 	}
 
-	public int[] getPalette(double index){
+	public int[] getPalette(double index) {
 		Color color = colorMap.get(index);
-		return new int[] { (int) color.getRed(), (int) color.getGreen(),  (int) color.getBlue()};
+		return new int[]{(int) color.getRed(), (int) color.getGreen(), (int) color.getBlue()};
 	}
 
-	private void move(int currID, int[] vector){
+	/**
+	 * Move the turtle with the associated ID along the given vector
+	 * @param currID
+	 * @param vector
+	 */
+	private void move(int currID, double[] vector) {
 		Sprite currSprite = spriteMap.get(currID);
 		vector[0] = Math.round(vector[0]);
 		vector[1] = Math.round(vector[1]);
-		ArrayList<int[]> linesToMake = new ArrayList<int[]>();
-		TurtleMath.addLinesToMake(viewWidth, viewHeight, currSprite.getPosition(), vector, linesToMake);
-		int[] finalPosition = currSprite.getPosition();
-		for (int[] coordinates : linesToMake){
-			if (penDownMap.get(currID)){
+		ArrayList<double[]> linesToMake = new ArrayList<double[]>();
+		tMath.addLinesToMake(viewWidth, viewHeight, currSprite.getPosition(), vector, linesToMake);
+		double[] finalPosition = currSprite.getPosition();
+		for (double[] coordinates : linesToMake) {
+			if (penDownMap.get(currID)) {
 				Line line = new Line();
 				line.setStartX(coordinates[0]);
 				line.setStartY(coordinates[1]);
@@ -182,55 +203,64 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 				line.setStrokeWidth(penWidth);
 				root.getChildren().add(line);
 			}
-			finalPosition = new int[] {coordinates[2], coordinates[3]};
+			finalPosition = new double[]{coordinates[2], coordinates[3]};
 		}
 		currSprite.setPosition(finalPosition);
 	}
 
-	public void setImage(int currID, File imgFile){
+	public void setImage(int currID, Image imgFile){
 		Sprite currSprite = spriteMap.get(currID);
 		currentImageIndexMap.put(currID, (double) imageMap.size());
-		imageMap.put((double) currentImageIndexMap.get(currID), imgFile);
+		imageMap.put(currentImageIndexMap.get(currID).intValue(), imgFile);
 		currSprite.setImage(imgFile);
-		notifyObservers();
+		//notifyObservers();
 	}
 
-	public void addImage(File imgFile){
+	public void addImage(File imgFile) {
 		int ID = imageMap.size();
-		imageMap.put((double) ID, imgFile);
-		notifyObservers();
+		try {
+			imageMap.put(ID, new Image(new FileInputStream(imgFile)));
+		} catch (FileNotFoundException e) {
+			throw new ErrorPrompt(exceptionResources.getString("InvalidImageFile"));
+		}
+		//notifyObservers();
 	}
 
-	public void setPen(int currID, boolean newPen){
+	public void setPen(int currID, boolean newPen) {
 		penDownMap.put(currID, newPen);
 		Sprite currSprite = spriteMap.get(currID);
 		currSprite.setPen(newPen);
 	}
 
-	private void instantializeSprite(int ID, Turtle t){
-		currentImageIndexMap.put(ID, (double) defaultTurtleFile);
-		spriteMap.put(ID, new Sprite(ID, imageMap.get(defaultTurtleFile), spriteWidth, spriteHeight, viewWidth, viewHeight));
+	/**
+	 * Creates an instance of the sprite (with given ID) on the front end with all relevent properties
+	 * @param ID
+	 * @param t
+	 */
+	private void instantializeSprite(int ID, Turtle t) {
+		currentImageIndexMap.put(ID, (double) currentTurtleIMGIndex);
+		System.out.println(spriteDimensions[0]);
+		Sprite newSprite = new Sprite(ID, imageMap.get(currentTurtleIMGIndex), spriteDimensions[0], spriteDimensions[1], viewWidth, viewHeight);
+		spriteMap.put(ID, newSprite);
 		root.getChildren().add(spriteMap.get(ID).getImageView());
-		notifyObservers();
+		setPen(ID, (boolean) t.isPenDown());
+		newSprite.setDirection((int)t.getHeading());
+		setHidden(ID, !t.isTurtleShow());
+		//notifyObservers();
 	}
 
-	public Node getView(){
+	public Node getView() {
 		return root;
 	}
 
-	/**
-	 * 
-	 * @return	Sprite's absolute location
-	 */
-	public int[] getSpritePosition(int currID){
-		return TurtleMath.absoluteToZero(viewWidth, viewHeight, spriteMap.get(currID).getPosition());
+	public double[] getSpritePosition(int currID) {
+		return tMath.absoluteToZero(viewWidth, viewHeight, spriteMap.get(currID).getPosition());
 	}
 
-	@Override
-	public double clearScreen(){
-		for (Node n : root.getChildren()){
-			if (n.getClass().isInstance(new Rectangle())){
-				
+	public double clearScreen() {
+		for (Node n : root.getChildren()) {
+			if (n instanceof Line) {
+				root.getChildren().remove(n);
 			}
 		}
 		return 0;

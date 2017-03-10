@@ -9,8 +9,8 @@ public interface Turtle {
     double DEFAULT_X_POS = 0;
     double DEFAULT_Y_POS = 0;
     double DEFAULT_HEADING = 90;
-    boolean DEFAULT_IS_SHOWING = false;
-    boolean DEFAULT_IS_PEN_DOWN = false;
+    boolean DEFAULT_IS_SHOWING = true;
+    boolean DEFAULT_IS_PEN_DOWN = true;
 
     /**
      * @return current ID of turtle
@@ -18,12 +18,12 @@ public interface Turtle {
     int id();
 
     /**
-     * @return Angle at which the Turtle is facing
+     * @return Angle at which the Turtle is facing in degrees
      */
     double getHeading();
 
     /**
-     * @param angle Angle at which to set heading
+     * @param angle Angle at which to set heading in degrees
      * @return change in heading angle
      */
     double setHeading(double angle);
@@ -62,7 +62,10 @@ public interface Turtle {
      * @param distance amount to move forward
      * @return distance moved
      */
-    double moveForward(double distance);
+    default double moveForward(double distance) {
+        setXY(getX() + Math.cos(Math.toRadians(getHeading())) * distance, getY() + Math.sin(Math.toRadians(getHeading())) * distance);
+        return distance;
+    }
 
     /**
      * @param distance amount to move backward
@@ -76,7 +79,10 @@ public interface Turtle {
      * @param angle to rotate left
      * @return angle moved
      */
-    double rotateCCW(double angle);
+    default double rotateCCW(double angle) {
+        setHeading(getHeading() + angle);
+        return angle;
+    }
 
     /**
      * @param angle to rotate left

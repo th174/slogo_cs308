@@ -17,7 +17,7 @@ public interface CanvasPalette extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+    default Variable operation(Environment env, Expression... vargs)  {
         return Variable.newInstance(operation(env.getCanvas(), vargs[0].eval(env).toNumber(), vargs[1].eval(env).toNumber(), vargs[2].eval(env).toNumber(), vargs[3].eval(env).toNumber()));
     }
 }

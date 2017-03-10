@@ -12,17 +12,32 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+
+/**
+ * This class parses an XML file to populate the default values for CanvasView
+ * @author Riley Nisbet
+ */
 
 public class XMLParser {
 	
-	public static void populateMaps(Map<Double,Color> colorMap, Map<Double,File> imageMap, String XMLFilename) {
+	/**
+	 * Parses XML and saves values to CanvasView's objects
+	 * @param spriteDimensions
+	 * @param colorMap
+	 * @param imageMap
+	 * @param XMLFilename
+	 */
+	public void populateMaps(int[] spriteDimensions, Map<Integer,Color> colorMap, Map<Integer,Image> imageMap, String XMLFilename) {
 		File mapPropertiesFile = new File(XMLFilename);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(mapPropertiesFile);
+			spriteDimensions[0] = Integer.parseInt(doc.getElementsByTagName("SpriteWidth").item(0).getTextContent());
+			spriteDimensions[1] = Integer.parseInt(doc.getElementsByTagName("SpriteHeight").item(0).getTextContent());
 			NodeList colors = doc.getElementsByTagName("Color");
 			for (int i = 0; i < colors.getLength(); i++){
 				String RGB = colors.item(i).getTextContent();
@@ -31,12 +46,12 @@ public class XMLParser {
 				for (int j = 0; j < 3; j++){
 					rgbValue[j] = Integer.parseInt(rgbValue_str[j]);
 				}
-				colorMap.put((double) i, Color.rgb(rgbValue[0], rgbValue[1], rgbValue[2]));
+				colorMap.put(i, Color.rgb(rgbValue[0], rgbValue[1], rgbValue[2]));
 			}
 			NodeList images = doc.getElementsByTagName("Image");
 			for (int i = 0; i < images.getLength(); i++){
 				String filenameValue = images.item(i).getTextContent();
-				imageMap.put((double) i, new File(filenameValue));
+				imageMap.put(i, new Image("file:" + filenameValue));
 			}
 		} catch (ParserConfigurationException e) {
 			throw new ErrorPrompt("MapProperties XML file not formatted correctly");

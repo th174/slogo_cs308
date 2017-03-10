@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,13 +42,15 @@ public abstract class AbstractParser implements Parser {
 
     public Expression parse(Environment env, String input) {
         LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
-        Expression temp = readTokens(env, tokens);
-        temp.eval(env);
-        return temp;
+        return readTokens(env, tokens);
     }
 
     @Override
-    public void setLocale(String locale) {
-        myTranslator = new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
+    public void setLocale(String locale) throws UnsupportedLanguageException {
+        try {
+            myTranslator = new Translator(ResourceBundle.getBundle(RESOURCES_LOCATION + locale));
+        } catch (MissingResourceException e) {
+            throw new UnsupportedLanguageException(locale);
+        }
     }
 }

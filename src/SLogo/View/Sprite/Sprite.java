@@ -1,18 +1,17 @@
 package SLogo.View.Sprite;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import SLogo.View.TurtleMath;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * This class is the Sprite object used by CanvasView to be able to keep track of Turtles (and their properties0 on the front end
+ * @author Riley Nisbet
+ */
+
 public class Sprite {
 	private int myID;
-	private File defaultSpriteFile;
+	private Image defaultSpriteIMG;
 	private ImageView spriteIV;
 	private Image spriteImg;
 	private int spriteWidth;
@@ -20,50 +19,49 @@ public class Sprite {
 	private int viewWidth;
 	private int viewHeight;
 	private int direction;
-	private int position[];
+	private double[] position;
 	private boolean hidden;
 	private boolean penDown;
 	private PropertiesDisplay propDisp;
+	private TurtleMath tMath;
 	
-	public Sprite(int ID, File adefaultSpriteFile, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+	public Sprite(int ID, Image adefaultSpriteIMG, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
 		myID = ID;
 		spriteWidth = aspriteWidth;
 		spriteHeight = aspriteHeight;
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
-		defaultSpriteFile = adefaultSpriteFile;
+		defaultSpriteIMG = adefaultSpriteIMG;
 		spriteIV = new ImageView();
-		setImage(defaultSpriteFile);
-		position = new int[] {viewWidth/2, viewHeight/2};
+		setImage(defaultSpriteIMG);
+		position = new double[] {viewWidth/2, viewHeight/2};
 		setPosition(position);
 		setDirection(90);
 		setHidden(false);
-		propDisp = new PropertiesDisplay(myID, TurtleMath.absoluteToZero(viewWidth, viewHeight, getPosition()), 
+		tMath = new TurtleMath();
+		propDisp = new PropertiesDisplay(myID, tMath.absoluteToZero(viewWidth, viewHeight, getPosition()), 
 				getDirection(), getHidden(), penDown);
 		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay(e));
 	}
-	
-	public void setImage(File newSpriteFile){
-		try {
-			spriteImg = new Image(new FileInputStream(newSpriteFile));
-			spriteIV.setImage(spriteImg);
-			spriteIV.setFitWidth(spriteWidth);
-			spriteIV.setFitHeight(spriteHeight);
-		} catch (IOException e) {
-	    	showError("Invalid Image File or Index");
-		}
+
+	/**
+	 * Set the image of this sprite to the given image
+	 * @param newSpriteIMG
+	 */
+	public void setImage(Image newSpriteIMG){
+		spriteImg = newSpriteIMG;
+		spriteIV.setImage(spriteImg);
+		spriteIV.setFitWidth(spriteWidth);
+		spriteIV.setFitHeight(spriteHeight);
 	}
-	
+
+	/**
+	 * Set the pen to up (false) or down (true)
+	 * @param newPen
+	 */
 	public void setPen(boolean newPen){
 		penDown = newPen;
 	}
-	
-	private void showError (String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Image File Error");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 	
 	public ImageView getImageView(){
 		return spriteIV;
@@ -72,17 +70,17 @@ public class Sprite {
 	/**
 	 * @return Array of length 2: First element is the X-coordinate, second element is the Y-coordinate. Center is (0,0)
 	 */
-	public int[] getPosition(){
+	public double[] getPosition(){
 		return position;
 	}
 	
-	public void setPosition(int[] newPos){
+	public void setPosition(double[] newPos){
 		position = newPos;
 		spriteIV.setX(position[0] - spriteWidth/2);
 		spriteIV.setY(position[1] - spriteHeight/2);
 	}
 	
-	public int getDirection(){
+	public double getDirection(){
 		return direction - 90;
 	}
 	

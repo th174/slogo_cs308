@@ -18,7 +18,7 @@ public interface UnaryIterable extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Environment env, Expression... vargs) throws Expression.EvaluationTargetException {
+    default Variable operation(Environment env, Expression... vargs)  {
         return operation(vargs[0].eval(env));
     }
 }

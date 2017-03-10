@@ -18,7 +18,7 @@ public interface CanvasProperty extends Invokable {
     }
 
     @Override
-    default Variable eval(Environment env, Expression... expr) throws Expression.EvaluationTargetException {
+    default Variable eval(Environment env, Expression... expr)  {
         return Variable.newInstance(operation(env.getCanvas()));
     }
 }
