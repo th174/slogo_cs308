@@ -112,7 +112,7 @@ public class TurtleMath {
         double[] currLocation = currentLocation;
         double[] nextLocation;
         int count = 0;
-        while (count < 100) {
+        while (count < 2000) {
             count++;
             nextLocation = new double[]{currLocation[0] + vector[0], currLocation[1] - vector[1]};
             if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0) {
