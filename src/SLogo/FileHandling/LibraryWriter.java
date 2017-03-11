@@ -16,6 +16,13 @@ import SLogo.FunctionEvaluate.Functions.UserFunction;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
 /**
+ * Library writer takes in an Environment at instantiation and writes 
+ * its user-generated functions and variables to a file. This is done
+ * by creating a standard text file containing the commands necessary
+ * to create these functions and variables. Thus, when a file of this
+ * format is loaded into a project, it must simply be run to recreate
+ * all functions and variables.
+ * 
  * @author Stone Mathers
  * Created 3/10/2017
  */
@@ -25,18 +32,28 @@ public class LibraryWriter implements FileWriter{
 	private Map<String, Variable> varMap;
 	private Map<String, Invokable> funcMap;
 	private static final String COMMAND_BUNDLE = "resources/files/writing";
-	public ResourceBundle myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
 	private static final String ERROR_BUNDLE = "resources/View/Exceptions";
-	public ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_BUNDLE);
+	public ResourceBundle myCommands;
+	public ResourceBundle myErrors;
 	
+	/**
+	 * @param Environment containing the variables and functions that are desired to be written.
+	 */
 	public LibraryWriter(Environment env) {
 		myEnvironment = env;
-		varMap = myEnvironment.getAllVars();
+		varMap = myEnvironment.getLocalVars();
 		funcMap = myEnvironment.getLocalFunctions();
+		initializeResources();
+	}
+	
+	private void initializeResources(){
+		myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
+		myErrors = ResourceBundle.getBundle(ERROR_BUNDLE);
 	}
 
 	/**
-	 * Takes in a file and writes the current user functions and variables to it.
+	 * Takes in a file and writes to it the commands necessary to regenerate
+	 * all current user functions and variables.
 	 * 
 	 * @param file File to which library is written.
 	 */

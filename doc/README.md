@@ -5,7 +5,7 @@ SLogo
 ######Finished March 9, 2017
 ####Estimated hours worked:
 * Riley: 30
-* Stone: 35
+* Stone: 40
 * Alex:
 * Timmy:
 
@@ -34,7 +34,7 @@ SLogo
 * 
 
 ####Extra features:
-* 
+Many additional features related to files were implemented. The user can read in and run commands through a file. The user can also save the current functions and variable that they have defined to a file. Lastly, they can save the current configuration settings to an XML file. This includes the background color, pen color, pen width, available images, available colors, turtles and their states, and the language.
 
 
 ####Impressions of the assignment:
