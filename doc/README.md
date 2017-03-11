@@ -37,7 +37,7 @@ SLogo
 ####Extra features:
 * CanvasView: When clicking on a turtle, a pop-up display appears for the user to change the turtle’s properties. When clicking on the canvas, a pop-up display appears for the user to change the turtle environment's properties.
 * Clicking on items in the right side pane 
-* [Additional commands:](CommandList.html#AdditionalCommands)
+* [Additional commands:](CommandList.html)
     * `USE` changes language
     * `READ` reads file
     * `SETBW` changes toroidal vs infinite bounds mode
