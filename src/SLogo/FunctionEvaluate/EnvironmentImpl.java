@@ -29,7 +29,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
         myTurtles = FXCollections.observableHashMap();
-        myTurtles.put(DEFAULT_TURTLE_ID,new ObservableTurtle(DEFAULT_TURTLE_ID));
+        myTurtles.put(DEFAULT_TURTLE_ID, new ObservableTurtle(DEFAULT_TURTLE_ID));
         outer = null;
     }
 
@@ -61,12 +61,12 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Variable> getLocalVars() {
-        return scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return Collections.unmodifiableMap(scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override
     public Map<String, Invokable> getLocalFunctions() {
-        return Collections.unmodifiableMap(scopeFunctions);
+        return Collections.unmodifiableMap(scopeFunctions.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         } else if (scopeVariables.containsKey(name)) {
             return scopeVariables.get(name);
         } else if (Objects.isNull(outer)) {
-            return Variable.fromString(name);
+            return null;
         } else {
             return outer.getVariableByName(name);
         }
@@ -142,7 +142,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         }).collect(Collectors.toList());
     }
 
-    public double clearTurtles(){
+    public double clearTurtles() {
         getAllTurtles().keySet().retainAll(Collections.singleton(DEFAULT_TURTLE_ID));
         return getAllTurtles().get(DEFAULT_TURTLE_ID).reset();
     }

@@ -1,8 +1,8 @@
 package SLogo.Turtles;
 
-import java.util.Observer;
-
 import SLogo.FileHandling.Property;
+
+import java.util.Observer;
 
 /**
  * Created by th174 on 3/2/2017.
@@ -105,9 +105,8 @@ public interface Turtle {
      *
      * @return 0
      */
-    default int penUp() {
-        setPenDown(false);
-        return 0;
+    default boolean penUp() {
+        return setPenDown(false);
     }
 
     /**
@@ -115,9 +114,8 @@ public interface Turtle {
      *
      * @return 1
      */
-    default int penDown() {
-        setPenDown(true);
-        return 0;
+    default boolean penDown() {
+        return setPenDown(true);
     }
 
     /**
@@ -136,9 +134,8 @@ public interface Turtle {
      *
      * @return 1
      */
-    default int showTurtle() {
-        setTurtleShow(true);
-        return 1;
+    default boolean showTurtle() {
+        return setTurtleShow(true);
     }
 
     /**
@@ -146,9 +143,8 @@ public interface Turtle {
      *
      * @return 0
      */
-    default int hideTurtle() {
-        setTurtleShow(false);
-        return 0;
+    default boolean hideTurtle() {
+        return setTurtleShow(false);
     }
 
     /**
@@ -163,10 +159,12 @@ public interface Turtle {
      * @return distance moved
      */
     default double reset() {
-        setPenDown(DEFAULT_IS_PEN_DOWN);
+        setPenDown(false);
         setTurtleShow(DEFAULT_IS_SHOWING);
         setHeading(DEFAULT_HEADING);
-        return setXY(DEFAULT_X_POS, DEFAULT_Y_POS);
+        double ret = setXY(DEFAULT_X_POS, DEFAULT_Y_POS);
+        setPenDown(DEFAULT_IS_PEN_DOWN);
+        return ret;
     }
 
     /**
@@ -175,10 +173,10 @@ public interface Turtle {
      * @author Riley Nisbet
      */
     void addObserver(Observer o);
-    
+
     /**
      * Put all Turtle configuration data into a Property object to be written into an XML file.
-     * 
+     *
      * @return Property containing all data necessary to convert Turtle properties to XML.
      * @author Stone Mathers
      */

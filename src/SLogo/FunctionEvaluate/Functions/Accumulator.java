@@ -31,7 +31,9 @@ public interface Accumulator extends Invokable {
             return total.eval(repl,env);
         } else {
             try {
-                return accumulate(eval(repl, env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(repl,env));
+                return accumulate(eval(repl, env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(repl, env));
+            } catch (Expression.EvaluationTargetException e){
+                throw e;
             } catch (Exception e) {
                 throw new Expression.EvaluationTargetException(e);
             }

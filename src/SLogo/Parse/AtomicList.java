@@ -5,10 +5,7 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Repl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by th174 on 2/21/2017.
@@ -22,7 +19,8 @@ public final class AtomicList extends LinkedList<String> implements Expression {
 
     @Override
     public Variable eval(Repl repl, Environment env) throws EvaluationTargetException, Environment.VariableNotFoundException {
-        return env.getVariableByName(get());
+        Variable ret = env.getVariableByName(get());
+        return Objects.nonNull(ret) ? ret : Variable.fromString(get());
     }
 
     @Override

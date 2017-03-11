@@ -1,6 +1,9 @@
 package SLogo.FileHandling;
 
 /**
+ * PropertyString is a wrapper class for any String of data that needs to be written into XML format.
+ * In XML format, the String is the data contained within a tag.
+ * 
  * @author Stone Mathers
  * Created 3/10/2017
  */

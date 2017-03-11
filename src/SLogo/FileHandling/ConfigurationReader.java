@@ -13,6 +13,9 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 /**
+ * Parses an XML file containing configuration data for a SLogo project.
+ * This data is then put into a ConfigurationData data structure.
+ * 
  * @author Stone Mathers
  * Created 3/10/2017
  */
@@ -20,10 +23,14 @@ public class ConfigurationReader {
 
 	private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
 	private static final String COMMAND_BUNDLE = "resources/files/writing";
-	public ResourceBundle myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
+	public ResourceBundle myCommands;
 	
 	public ConfigurationReader() {
-		// TODO Auto-generated constructor stub
+		initializeResources();
+	}
+	
+	private void initializeResources(){
+		myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
 	}
 	
 	public ConfigurationData getConfiguration(File file){

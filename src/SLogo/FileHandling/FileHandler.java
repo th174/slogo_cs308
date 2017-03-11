@@ -1,6 +1,7 @@
 package SLogo.FileHandling;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,20 +20,65 @@ import javafx.stage.Window;
 public class FileHandler {
 	
 	private static final String ERROR_BUNDLE = "resources/View/Exceptions";
-	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
+	public ResourceBundle myResources;
 	private Window myWindow;
 	
 	public FileHandler(Window userWindow) {
 		myWindow = userWindow;
+		initializeResources();
 	}
 	
-	public String getFileData(){
+	/**
+	 * Prompts user to select a file, then reads the chosen file 
+	 * and returns its contents as a String.
+	 * 
+	 * @return String of data contained within the file.
+	 */
+	public String getFileData(String title){
+		try{
+			return readFile(getFile(title));
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Prompts user to select a file and returns whichever file is chosen.
+	 * 
+	 * @return User-selected File
+	 */
+	public File getFile(String title) throws FileNotFoundException{
 		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Select SLogo File");
-		return readFile(chooser.showOpenDialog(myWindow));
+		chooser.setTitle(title);
+		File chosen = chooser.showOpenDialog(myWindow);
+		if(chosen != null){
+			return chosen;
+		}else{
+			throw new FileNotFoundException();
+		}
 	}
 	
-	public String readFile(File file){
+	/**
+	 * Prompts user to select a file and returns whichever file is chosen.
+	 * 
+	 * @return User-selected File
+	 */
+	public File saveNewFile(String title) throws FileNotFoundException{
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle(title);
+		File chosen = chooser.showSaveDialog(myWindow);
+		if(chosen != null){
+			return chosen;
+		}else{
+			throw new FileNotFoundException();
+		}
+	}
+	
+	private void initializeResources(){
+		myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
+	}
+	
+	private String readFile(File file){
 		try{
 			return new String((Files.readAllBytes(Paths.get(file.toURI()))));
 		}catch(IOException e){
