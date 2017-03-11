@@ -13,6 +13,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+/**
+ * This class creates a popup for the user to change the Turtle Environment's properties
+ * @author Riley Nisbet
+ */
+
 public class CanvasPropertiesDisplay {
 	Stage myStage;
 	Popup myPopup;
@@ -33,6 +38,9 @@ public class CanvasPropertiesDisplay {
 		createStage();
 	}
 	
+	/**
+	 * Show Display
+	 */
 	public void toggleDisplay(){
 		myStage.setScene(getScene());
 	    myStage.show();
@@ -94,7 +102,7 @@ public class CanvasPropertiesDisplay {
 	    return myPopup;
 	}
 
-	public void setSliderProperties(HBox box, Label label, Slider slider, int minorTickCount) {
+	private void setSliderProperties(HBox box, Label label, Slider slider, int minorTickCount) {
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(true);
 		slider.setMajorTickUnit(1.0);

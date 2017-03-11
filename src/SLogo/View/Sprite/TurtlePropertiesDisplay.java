@@ -12,6 +12,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+/**
+ * This class creates a popup for the user to change a turtle's properties
+ * @author Riley Nisbet
+ */
+
 public class TurtlePropertiesDisplay {
 	Stage myStage;
 	Popup myPopup;
@@ -37,6 +42,9 @@ public class TurtlePropertiesDisplay {
 		myStage.setScene(getScene());
 	}
 	
+	/**
+	 * Show Display
+	 */
 	public void toggleDisplay(){
 	    myStage.show();
 	}
