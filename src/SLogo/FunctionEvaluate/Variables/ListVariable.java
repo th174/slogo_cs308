@@ -49,6 +49,11 @@ public final class ListVariable extends Variable<List<Variable>> {
     }
 
     @Override
+    public int size() {
+        return value().size();
+    }
+
+    @Override
     public boolean toBoolean() {
         return last().toBoolean();
     }
@@ -65,6 +70,11 @@ public final class ListVariable extends Variable<List<Variable>> {
     @Override
     public String toContentString() {
         return last().toContentString();
+    }
+
+    @Override
+    public List<Variable> toList() {
+        return value();
     }
 
     @Override

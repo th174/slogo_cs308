@@ -35,16 +35,22 @@ public final class PredefinedCommandList {
             ASKWITH = (repl, env, turtle, expr) -> expr.eval(repl, new EnvironmentImpl(env, Collections.singletonList(turtle.id()))).toBoolean(),
             ASK = (repl, env, turtle, expr) -> expr.getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList()).contains(turtle.id());
     public static final Loop
-            REPEAT = (repl, env, loopParams) -> {
+            FOR = (repl, env, expr) -> {
+        List<Expression> loopParams = expr.getBody();
         String loopVar = loopParams.size() >= 2 ? loopParams.remove(0).toString() : ":" + ResourceBundle.getBundle("resources/variables/variable").getString("repcount");
-        Variable start = loopParams.size() >= 2 ? loopParams.remove(0).eval(repl, env) : Variable.newInstance(1);
+        Variable start = loopParams.size() >= 2 ? loopParams.remove(0).eval(repl, env) : Variable.newInstance(0);
         Variable end = loopParams.remove(0).eval(repl, env);
         Expression increment = loopParams.size() >= 1 ? loopParams.remove(0) : new AtomicList("1");
         return new Object[]{loopVar, start, end, increment};
     },
-            DOTIMES = REPEAT,   //There's actually only one loop function, it just behaves differently depending on the loop arguments
-            FOR = REPEAT,       //There's actually only one loop function, it just behaves differently depending on the loop arguments
-            IF = (repl, env, loopParams) -> new Object[]{"$_", Variable.TRUE, loopParams.remove(0).eval(repl, env).notEqualTo(Variable.FALSE), new AtomicList("1")}; //Literally a loop lol
+            DOTIMES = (repl, env, expr) -> {
+                List<Expression> loopParams = expr.getBody();
+                String loopVar = loopParams.remove(0).toString();
+                Variable end = loopParams.remove(0).eval(repl, env).sum(Variable.newInstance(.00001));
+                return new Object[]{loopVar, Variable.newInstance(1), end, new AtomicList("1")};
+            },
+            REPEAT = (repl, env, expr) -> new Object[]{ResourceBundle.getBundle("resources/variables/variable").getString("repcount"), Variable.newInstance(1), expr.eval(repl, env).sum(Variable.newInstance(.00001)), new AtomicList("1")},
+            IF = (repl, env, loopParams) -> new Object[]{"$_", Variable.TRUE, loopParams.eval(repl, env).equalTo(Variable.FALSE), new AtomicList("1")}; //Literally a loop lol
     public static final Define
             MAKEUSERINSTRUCTION = (repl, env, expr) -> {
         env.addUserFunction(expr[0].toString(), new UserFunction(Arrays.copyOfRange(expr, 1, expr.length)));

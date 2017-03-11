@@ -1,14 +1,11 @@
 package SLogo.FunctionEvaluate.Variables;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * All implementations must be immutable
+ * All implementations must be immutable please
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
@@ -38,7 +35,7 @@ public abstract class Variable<T> implements Comparable<Variable> {
         }
     }
 
-    final T value() {
+    T value() {
         return value;
     }
 
@@ -152,6 +149,10 @@ public abstract class Variable<T> implements Comparable<Variable> {
 
     public String toContentString() {
         return value.toString();
+    }
+
+    public List<Variable> toList(){
+        return Collections.singletonList(this);
     }
 
     @Override

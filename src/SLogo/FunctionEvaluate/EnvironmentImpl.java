@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Parse.Parser;
 import SLogo.Repl;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.Turtles.Turtle;
@@ -61,12 +62,12 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Variable> getLocalVars() {
-        return Collections.unmodifiableMap(scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        return Collections.unmodifiableMap(scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override
     public Map<String, Invokable> getLocalFunctions() {
-        return Collections.unmodifiableMap(scopeFunctions.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        return Collections.unmodifiableMap(scopeFunctions.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override

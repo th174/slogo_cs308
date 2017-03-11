@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 @FunctionalInterface
 public interface Loop extends Invokable {
 
-    Object[] getLoopParams(Repl repl, Environment env, List<Expression> loopParams);
+    Object[] getLoopParams(Repl repl, Environment env, Expression loopParams);
 
     @Override
     default int minimumArity() {
@@ -25,13 +25,13 @@ public interface Loop extends Invokable {
 
     @Override
     default Variable eval(Repl repl, Environment env, Expression... expr) {
-        Object[] loopParams = getLoopParams(repl, env, expr[0].getBody());
+        Object[] loopParams = getLoopParams(repl, env, expr[0]);
         String loopVar = (String) loopParams[0];
         Variable loopStart = (Variable) loopParams[1];
         Variable loopEnd = (Variable) loopParams[2];
         Expression onChange = (Expression) loopParams[3];
         env.addUserVariable(loopVar, loopStart);
-        Predicate<Variable> condition = variable -> variable.lessThan(loopStart).and(variable.lessThan(loopEnd)).or(variable.greaterThan(loopStart).and(variable.greaterThan(loopEnd))).not().toBoolean();
+        Predicate<Variable> condition = variable -> variable.lessThan(loopStart).not().and(variable.lessThan(loopEnd)).or(variable.greaterThan(loopStart).not().and(variable.greaterThan(loopEnd))).toBoolean();
         return operation(repl, env, Variable.FALSE, loopVar, condition, onChange, Arrays.copyOfRange(expr, 1, expr.length));
     }
 
