@@ -3,9 +3,9 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.Turtles.Turtle;
-import SLogo.View.CanvasView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -18,17 +18,18 @@ import java.util.stream.Collectors;
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
+    public static final int DEFAULT_TURTLE_ID = 1;
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
     private ObservableMap<Integer, Turtle> myTurtles;
     private List<Turtle> myActiveTurtles;
-    private CanvasView myCanvas;
 
     private EnvironmentImpl() {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
         myTurtles = FXCollections.observableHashMap();
+        myTurtles.put(DEFAULT_TURTLE_ID,new ObservableTurtle(DEFAULT_TURTLE_ID));
         outer = null;
     }
 
@@ -51,16 +52,16 @@ public class EnvironmentImpl extends Observable implements Environment {
         selectTurtles(turtleIDs);
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Expression... expr) {
+    public EnvironmentImpl(Environment outer, List<String> params, Repl repl, Expression... expr) {
         this(outer);
         for (int i = 0; i < expr.length; i++) {
-            scopeVariables.put(params.get(i), expr[i].eval(outer));
+            scopeVariables.put(params.get(i), expr[i].eval(repl, outer));
         }
     }
 
     @Override
     public Map<String, Variable> getLocalVars() {
-        return Collections.unmodifiableMap(scopeVariables);
+        return scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
@@ -81,7 +82,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Invokable> getAllFunctions() {
-        if (Objects.isNull(outer)) {
+        if (outer.equals(GLOBAL_ENVIRONMENT)) {
             return Collections.unmodifiableMap(getLocalFunctions());
         } else {
             HashMap<String, Invokable> funcs = new HashMap<>(outer.getLocalFunctions());
@@ -127,11 +128,6 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
-    public CanvasView getCanvas() {
-        return myCanvas;
-    }
-
-    @Override
     public void filterTurtles(Predicate<Turtle> filter) {
         myActiveTurtles = getAllTurtles().values().stream().sorted(Comparator.comparingInt(Turtle::id)).filter(filter).collect(Collectors.toList());
     }
@@ -146,9 +142,9 @@ public class EnvironmentImpl extends Observable implements Environment {
         }).collect(Collectors.toList());
     }
 
-    @Override
-    public void setCanvas(CanvasView canvas) {
-        myCanvas = canvas;
+    public double clearTurtles(){
+        getAllTurtles().keySet().retainAll(Collections.singleton(DEFAULT_TURTLE_ID));
+        return getAllTurtles().get(DEFAULT_TURTLE_ID).reset();
     }
 
     @Override
@@ -175,7 +171,7 @@ public class EnvironmentImpl extends Observable implements Environment {
     private Map<String, Variable> initVariableDictonary() {
         return Variable.getPredefinedVariables();
     }
-    
+
     @Override
     public void notifyObservers() {
         setChanged();

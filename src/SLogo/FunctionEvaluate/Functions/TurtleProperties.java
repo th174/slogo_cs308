@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 import SLogo.Turtles.Turtle;
 
 /**
@@ -19,12 +20,12 @@ public interface TurtleProperties extends Invokable, TurtleIterable {
     }
 
     @Override
-    default Variable eval(Environment env, Expression... expr)  {
-        return forEachTurtle(env.getActiveTurtleList(), env, expr);
+    default Variable eval(Repl repl, Environment env, Expression... expr) {
+        return forEachTurtle(repl, env.getActiveTurtleList(), env, expr);
     }
 
     @Override
-    default Object doTurtle(Turtle turtle, Environment env, Expression... vargs)  {
+    default Object doTurtle(Repl repl, Turtle turtle, Environment env, Expression... vargs) {
         return operation(turtle);
     }
 }

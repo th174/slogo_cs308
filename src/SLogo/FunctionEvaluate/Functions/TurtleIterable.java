@@ -1,10 +1,13 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 import SLogo.Turtles.Turtle;
 
+import java.util.Collections;
 import java.util.List;
 
 import static SLogo.FunctionEvaluate.Variables.Variable.FALSE;
@@ -14,16 +17,16 @@ import static SLogo.FunctionEvaluate.Variables.Variable.FALSE;
  */
 @FunctionalInterface
 public interface TurtleIterable {
-    Object doTurtle(Turtle turtle, Environment env, Expression... vargs);
+    Object doTurtle(Repl repl, Turtle turtle, Environment env, Expression... vargs);
 
-    default Variable forEachTurtle(List<Turtle> turtleList, Environment env, Expression... vargs) {
+    default Variable forEachTurtle(Repl repl, List<Turtle> turtleList, Environment env, Expression... vargs) {
         if (turtleList.isEmpty()) {
             return FALSE;
         } else if (turtleList.size() == 1) {
-            return Variable.newInstance(doTurtle(turtleList.get(0), env, vargs));
+            return Variable.newInstance(doTurtle(repl, turtleList.get(0), new EnvironmentImpl(env, Collections.singletonList(turtleList.get(0).id())), vargs));
         } else {
-            Variable.newInstance(doTurtle(turtleList.get(0), env, vargs));
-            return forEachTurtle(turtleList.subList(1,turtleList.size()), env, vargs);
+            Variable.newInstance(doTurtle(repl, turtleList.get(0), new EnvironmentImpl(env, Collections.singletonList(turtleList.get(0).id())), vargs));
+            return forEachTurtle(repl, turtleList.subList(1, turtleList.size()), env, vargs);
         }
     }
 }

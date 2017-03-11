@@ -1,3 +1,4 @@
+
 package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
@@ -5,8 +6,8 @@ import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.Parse.Expression;
 import SLogo.Parse.Parser;
 import SLogo.Parse.PolishParser;
+import SLogo.View.CanvasView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ public class ReplImpl implements Repl {
     private ArrayList<String> history;
     private int currentIndex;
     private Environment userEnv;
+    private CanvasView myCanvas;
 
     public ReplImpl() {
         history = new ArrayList<>();
@@ -37,7 +39,7 @@ public class ReplImpl implements Repl {
     }
 
     private void eval(Expression command) {
-        command.eval(userEnv);
+        command.eval(this, userEnv);
     }
 
     @Override
@@ -49,9 +51,19 @@ public class ReplImpl implements Repl {
     public Environment getEnvironment() {
         return userEnv;
     }
-    
-	@Override
-	public Parser getParser(){
-		return parser;
-	}
+
+    @Override
+    public void setCanvas(CanvasView canvas) {
+        this.myCanvas = canvas;
+    }
+
+    @Override
+    public CanvasView getCanvas() {
+        return myCanvas;
+    }
+
+    @Override
+    public Parser getParser() {
+        return parser;
+    }
 }

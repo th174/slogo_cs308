@@ -3,7 +3,6 @@ package SLogo.FunctionEvaluate;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Turtles.Turtle;
-import SLogo.View.CanvasView;
 import javafx.collections.ObservableMap;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.function.Predicate;
  */
 
 /**
- * @author Stone Mathers
  * @author th174
  *         Created 2/19/2017
  */
@@ -64,11 +62,6 @@ public interface Environment {
     ObservableMap<Integer, Turtle> getAllTurtles();
 
     /**
-     * @return CanvasView
-     */
-    CanvasView getCanvas();
-
-    /**
      * @param name Name of variable
      * @param var  Variable
      */
@@ -91,9 +84,10 @@ public interface Environment {
     void selectTurtles(List<Integer> turtleIDs);
 
     /**
-     * @param canvas CanvasView to be used
+     * Clears all but 1 turtle
      */
-    void setCanvas(CanvasView canvas);
+    double clearTurtles();
+
 
     class VariableNotFoundException extends RuntimeException {
         public VariableNotFoundException(String variableName) {

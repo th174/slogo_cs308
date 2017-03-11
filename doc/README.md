@@ -5,25 +5,27 @@ SLogo
 ######Finished March 9, 2017
 ####Estimated hours worked:
 * Riley: 30
-* Stone:
+* Stone: 35
 * Alex:
 * Timmy:
 
 ####Roles in developing project:
 * Riley: CanvasView (turtle environment)
-* Stone:
+* Stone: Function Implementation, Backend Turtle design, file-handling
 * Alex: GUI
 * Timmy:
 
 ####Files to start project:
-* `Main.java` is all that's needed
+* `Main.java` must be run to start the application.
 
 ####Files used to test the project:
-* n/a
+* `ConfigurationWriterTester.java` to test the ConfigurationWriter (results are in "ConfigWriterTestFile.txt")
+* `FileHandlerTester.java` to test the FileHandler's ability to pull commands from a file
 
 ####Data or Resource Files:
 * Language property files contain translations from English to Foreign Languages
 * Variable and View property files contain respective properties
+*File property files contain information pertinent to file-handling. `turtle.properties` contains the tags needed to save a Turtle's state in an XML file. `writing.properties` contains strings needed to write the XML files.
 
 ####Information to use the program:
 * 

@@ -1,9 +1,10 @@
 package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.PredefinedCommandList;
 import SLogo.FunctionEvaluate.Functions.Invokable;
+import SLogo.FunctionEvaluate.PredefinedCommandList;
 import SLogo.FunctionEvaluate.Variables.Variable;
+import SLogo.Repl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         super();
     }
 
-    public Variable eval(Environment env) throws EvaluationTargetException {
+    public Variable eval(Repl repl, Environment env) throws EvaluationTargetException {
         if (size() == 0) {
             return Variable.FALSE;
         }
@@ -31,7 +32,7 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         } else {
             isOp = 1;
         }
-        return command.invoke(env, getBody().toArray(new Expression[0]));
+        return command.invoke(repl, env, getBody().toArray(new Expression[0]));
     }
 
     @Override

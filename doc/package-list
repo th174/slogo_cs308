@@ -1,7 +1,13 @@
 
 SLogo
+SLogo.FileHandling
 SLogo.FunctionEvaluate
 SLogo.FunctionEvaluate.Functions
 SLogo.FunctionEvaluate.Variables
 SLogo.Parse
-SLogo.SLogoView
+SLogo.Testing
+SLogo.Turtles
+SLogo.View
+SLogo.View.DisplayBar
+SLogo.View.Menu
+SLogo.View.Sprite

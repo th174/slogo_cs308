@@ -15,12 +15,16 @@ import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Functions.UserFunction;
 import SLogo.FunctionEvaluate.Variables.Variable;
 
+/**
+ * @author Stone Mathers
+ * Created 3/10/2017
+ */
 public class LibraryWriter implements FileWriter{
 
 	private Environment myEnvironment;
 	private Map<String, Variable> varMap;
 	private Map<String, Invokable> funcMap;
-	private static final String COMMAND_BUNDLE = "resources/files/writerCommands";
+	private static final String COMMAND_BUNDLE = "resources/files/writing";
 	public ResourceBundle myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
 	private static final String ERROR_BUNDLE = "resources/View/Exceptions";
 	public ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_BUNDLE);

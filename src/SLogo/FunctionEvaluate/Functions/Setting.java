@@ -3,14 +3,15 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 import SLogo.View.CanvasView;
 
 /**
  * Created by th174 on 3/4/2017.
  */
 @FunctionalInterface
-public interface CanvasSetting extends IterableInvokable {
-    Object operation(CanvasView canvas, double var1);
+public interface Setting extends IterableInvokable {
+    Object operation(Repl repl, Variable var1);
 
     @Override
     default int minimumArity() {
@@ -18,7 +19,7 @@ public interface CanvasSetting extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Environment env, Expression... vargs)  {
-        return Variable.newInstance(operation(env.getCanvas(), vargs[0].eval(env).toNumber()));
+    default Variable operation(Repl repl, Environment env, Expression... vargs)  {
+        return Variable.newInstance(operation(repl, vargs[0].eval(repl,env)));
     }
 }

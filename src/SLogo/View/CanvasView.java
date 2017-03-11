@@ -2,8 +2,10 @@ package SLogo.View;
 
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Observer;
 
 /**
@@ -95,9 +97,14 @@ public interface CanvasView extends Observer {
      * @return turtle's current shape index
      */
     int getShape();
+
+    /**
+     * @return	map of Indices to Colors
+     */
+    Map<Integer,Color> getColorMap();
     
     /**
-	 * @return Sprite's absolute location
-	 */
-	double[] getSpritePosition(int currID);
+     * @return	map of Indices to Image
+     */
+    Map<Integer,Image> getImageMap();
 }

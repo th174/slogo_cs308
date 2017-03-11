@@ -4,7 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Parse.Parser;
-import SLogo.Parse.PolishParser;
+import SLogo.Repl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,13 +17,12 @@ import java.util.stream.Stream;
  * Created by th174 on 2/16/2017.
  */
 public interface Invokable {
-    PolishParser parser = new PolishParser();
 
     /**
      * @param env Current runtime environment
      * @return Result of the command as a variable
      */
-    Variable eval(Environment env, Expression... expr);
+    Variable eval(Repl repl, Environment env, Expression... expr);
 
     /**
      * Invokes the method on its arguments in dynamic scope
@@ -32,11 +31,11 @@ public interface Invokable {
      * @param expr Array of arguments
      * @return Result of the command as a variable
      */
-    default Variable invoke(Environment env, Expression... expr)  {
+    default Variable invoke(Repl repl, Environment env, Expression... expr) {
         if (expr.length < minimumArity()) {
             throw new UnexpectedArgumentException(minimumArity(), expr.length);
         }
-        return eval(env, expr);
+        return eval(repl, env, expr);
     }
 
     /**
@@ -47,19 +46,20 @@ public interface Invokable {
      * @param tokens  Deque of tokenized inputs to parse
      * @return List of arguments for this invokable
      */
-    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens) {
+    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens, Parser parser) {
         if (numArgs == 0) {
             return new ArrayList<>(0);
         } else if (numArgs == 1) {
             return Collections.singletonList(parser.readTokens(env, tokens));
         } else {
             try {
-                return Stream.concat(readArgs(numArgs - 1, env, tokens).stream(), Stream.of(parser.readTokens(env, tokens))).collect(Collectors.toList());
+                return Stream.concat(readArgs(numArgs - 1, env, tokens, parser).stream(), Stream.of(parser.readTokens(env, tokens))).collect(Collectors.toList());
             } catch (Parser.SyntaxException e) {
                 throw new UnexpectedArgumentException(e.getMessage());
             }
         }
     }
+
 
     /**
      * @return Minimum number of arguments for this

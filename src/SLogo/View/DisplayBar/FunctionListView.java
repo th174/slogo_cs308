@@ -38,5 +38,5 @@ public class FunctionListView extends ItemList<TextContainer> {
 	protected void addItem(TextContainer toAddItem) {
 		getMyListView().getChildren().add(toAddItem.getView());
 		toAddItem.getView().setOnMouseClicked(e -> onClick(toAddItem));
-	}
+	}	
 }

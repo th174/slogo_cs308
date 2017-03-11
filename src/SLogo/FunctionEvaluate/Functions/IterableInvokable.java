@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 
 import java.util.Arrays;
 
@@ -12,15 +13,15 @@ import java.util.Arrays;
 public interface IterableInvokable extends Invokable {
 
     @Override
-    default Variable eval(Environment env, Expression... expr) {
+    default Variable eval(Repl repl, Environment env, Expression... expr) {
         try {
             if (expr.length == 0 || expr.length % minimumArity() != 0) {
                 throw new UnexpectedArgumentException(minimumArity(), expr.length);
             } else if (expr.length == minimumArity()) {
-                return operation(env, expr);
+                return operation(repl, env, expr);
             } else {
-                operation(env, expr);
-                return invoke(env, Arrays.copyOfRange(expr, minimumArity(), expr.length));
+                operation(repl, env, expr);
+                return eval(repl, env, Arrays.copyOfRange(expr, minimumArity(), expr.length));
             }
         } catch (Exception e) {
             throw new Expression.EvaluationTargetException(e);
@@ -29,5 +30,5 @@ public interface IterableInvokable extends Invokable {
 
     int minimumArity();
 
-    Variable operation(Environment env, Expression... vargs) throws Exception;
+    Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception;
 }

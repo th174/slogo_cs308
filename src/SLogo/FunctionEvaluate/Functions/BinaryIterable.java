@@ -3,6 +3,7 @@ package SLogo.FunctionEvaluate.Functions;
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 
 /**
  * Created by th174 on 2/16/2017.
@@ -18,7 +19,7 @@ public interface BinaryIterable extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Environment env, Expression... vargs)  {
-        return operation(vargs[0].eval(env), vargs[1].eval(env));
+    default Variable operation(Repl repl, Environment env, Expression... vargs) {
+        return operation(vargs[0].eval(repl,env), vargs[1].eval(repl,env));
     }
 }

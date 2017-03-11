@@ -5,6 +5,7 @@ import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.PredefinedCommandList;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
+import SLogo.Repl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,13 +28,8 @@ public final class UserFunction implements Invokable {
     }
 
     @Override
-    public Variable invoke(Environment env, Expression... expr)  {
-        return Invokable.super.invoke(env, expr);
-    }
-
-    @Override
-    public Variable eval(Environment env, Expression... expr)  {
-        return PredefinedCommandList.LIST.invoke(new EnvironmentImpl(env, params, expr), body);
+    public Variable eval(Repl repl, Environment env, Expression... expr) {
+        return PredefinedCommandList.$DEFAULT_OPERATION$.eval(repl, new EnvironmentImpl(env, params, repl, expr), body);
     }
 
     @Override

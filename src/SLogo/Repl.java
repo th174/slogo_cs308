@@ -2,6 +2,7 @@ package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
 import SLogo.Parse.Parser;
+import SLogo.View.CanvasView;
 
 import java.util.List;
 
@@ -25,6 +26,10 @@ public interface Repl {
      * @return Environment
      */
     Environment getEnvironment();
+
+    void setCanvas(CanvasView canvas);
+
+    CanvasView getCanvas();
 
     /**
      * @return Parser
