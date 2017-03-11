@@ -114,7 +114,8 @@ public final class PredefinedCommandList {
             },
             GETPENCOLOR = repl -> repl.getCanvas().getPenColor(),
             GETSHAPE = repl -> repl.getCanvas().getShape(),
-            GETUSERHISTORY = repl -> "\n" + repl.getHistory().stream().map(Object::toString).collect(Collectors.joining("\n")) + "\n";
+            GETUSERHISTORY = repl -> "\n" + repl.getHistory().stream().map(Object::toString).collect(Collectors.joining("\n")) + "\n",
+            LASTCOMMAND = repl -> repl.lastCommand().toString();
     public static final IterableInvokable
             IFELSE = new IterableInvokable() {
         @Override

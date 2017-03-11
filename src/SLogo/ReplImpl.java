@@ -45,6 +45,10 @@ public class ReplImpl implements Repl {
         return myHistory;
     }
 
+    public Expression lastCommand() {
+        return myHistory.get(currentIndex - 1);
+    }
+
     @Override
     public Environment getEnvironment() {
         return userEnv;

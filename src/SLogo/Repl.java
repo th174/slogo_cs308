@@ -25,6 +25,8 @@ public interface Repl {
 
     List<Expression> getHistory();
 
+    Expression lastCommand();
+
     void setCanvas(CanvasView canvas);
 
     CanvasView getCanvas();

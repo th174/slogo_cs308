@@ -22,17 +22,23 @@ public class SExpression extends LinkedList<Expression> implements Expression {
     }
 
     public Variable eval(Repl repl, Environment env) throws EvaluationTargetException {
-        if (size() == 0) {
-            return Variable.FALSE;
+        try {
+            if (size() == 0) {
+                return Variable.FALSE;
+            }
+            Invokable command = peek().getCommand(env);
+            if (Objects.isNull(command)) {
+                command = PredefinedCommandList.$DEFAULT_OPERATION$;
+                isOp = 0;
+            } else {
+                isOp = 1;
+            }
+            return command.invoke(repl, env, getBody().toArray(new Expression[0]));
+        } catch (EvaluationTargetException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationTargetException(e);
         }
-        Invokable command = peek().getCommand(env);
-        if (Objects.isNull(command)) {
-            command = PredefinedCommandList.$DEFAULT_OPERATION$;
-            isOp = 0;
-        } else {
-            isOp = 1;
-        }
-        return command.invoke(repl, env, getBody().toArray(new Expression[0]));
     }
 
     @Override
