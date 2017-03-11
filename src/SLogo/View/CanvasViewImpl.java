@@ -70,6 +70,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         propDisp = new CanvasPropertiesDisplay(this, colorMap);
         backgroundNode.setOnMouseClicked(e -> propDisp.toggleDisplay());
         root.getChildren().add(backgroundNode);
+        notifyObservers();
     }
 
     public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
@@ -91,7 +92,6 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         currSprite.setDirection((int) turtle.getHeading());
         move(currID, new double[]{changeLoc.getKey(), changeLoc.getValue()});
         setHidden(currID, !turtle.isTurtleShow());
-        //TODO: need to set pen Color/Width at some point
     }
 
     /**
@@ -179,6 +179,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     public int setPalette(double index, double r, double g, double b) {
         Color color = Color.rgb((int) r, (int) g, (int) b, .99);
         colorMap.put((int) index, color);
+        notifyObservers();
         return (int) index;
     }
 
@@ -219,6 +220,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         currentImageIndexMap.put(currID, (double) imageMap.size());
         imageMap.put(currentImageIndexMap.get(currID).intValue(), imgFile);
         currSprite.setImage(imgFile);
+        notifyObservers();
     }
 
     public void addImage(File imgFile) {
