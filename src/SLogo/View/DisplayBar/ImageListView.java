@@ -10,10 +10,19 @@ import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Keeps track of Turtle Images
+ * @author Alex
+ *
+ */
 public class ImageListView extends ItemList<IndexNode> {
 	private CommandLineView myCommandLineView;
 	private CanvasViewImpl myCanvasView;
 	
+	/**
+	 * Creates new Image list
+	 * @param project
+	 */
 	public ImageListView(Project project) {
 		initializeResources();
 		myCommandLineView = project.getCommandLineView();
@@ -23,6 +32,9 @@ public class ImageListView extends ItemList<IndexNode> {
 		getMyListView().setPadding(new Insets(Integer.parseInt(getMyResources().getString("ItemSpacing"))));
 	}
 
+	/**
+	 * Updates content
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		Map<Integer, Image> imageMap = myCanvasView.getImageMap();
@@ -35,11 +47,17 @@ public class ImageListView extends ItemList<IndexNode> {
 		}
 	}
 
+	/**
+	 * Says what to do on click
+	 */
 	@Override
 	protected void onClick(IndexNode item) {
 		myCommandLineView.setText("SETSHAPE " + item.getCommand());
 	}
 
+	/**
+	 * Add item
+	 */
 	@Override
 	protected void addItem(IndexNode toAddItem) {
 		getMyListView().getChildren().add(toAddItem.getView());
