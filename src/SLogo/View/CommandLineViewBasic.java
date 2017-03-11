@@ -29,11 +29,11 @@ public class CommandLineViewBasic implements CommandLineView {
 	private TextArea myHistoryText;
 
 
-    public CommandLineViewBasic(Repl repl, CanvasView canvasView, double width, double height) {
-        myRepl = repl;
+    public CommandLineViewBasic(Project project, double width, double height) {
+        myRepl = project.getRepl();
         myWidth = width;
         myHeight = height;
-        myCanvasView = canvasView;
+        myCanvasView = project.getCanvasView();
 		initializeResources();
         initializeGridPane();
         initializeCommandPrompt();
@@ -69,13 +69,16 @@ public class CommandLineViewBasic implements CommandLineView {
     private void sendCommand() {
     	String historyText = "Failed Command... \n";
         try {
-            myRepl.read(myCommandText.getText());
+			myRepl.read(myCommandText.getText());
+			historyText = myCommandText.getText().trim() + "\n";
         }catch (Exception e) {
-            e.printStackTrace();
-            Alert commandErrorAlert = new Alert(AlertType.ERROR);
-            commandErrorAlert.setTitle(myResources.getString("AlertError"));
-            commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
-            commandErrorAlert.setContentText(e.getClass().getSimpleName()+"\n"+e.getMessage());
+        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
+        	commandErrorAlert.setTitle(myResources.getString("AlertError"));
+        	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
+        	commandErrorAlert.setContentText(e.getClass().getSimpleName()+"\n"+e.getMessage());
+            DialogPane stackTraceView = new DialogPane();
+            stackTraceView.setContentText(Arrays.toString(e.getStackTrace()));
+        	commandErrorAlert.setDialogPane(stackTraceView);
             commandErrorAlert.showAndWait();
         }
         myHistoryText.setText(myHistoryText.getText() + myResources.getString("CommandBreak") + historyText);

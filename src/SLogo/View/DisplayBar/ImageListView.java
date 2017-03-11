@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import SLogo.View.CanvasViewImpl;
 import SLogo.View.CommandLineView;
+import SLogo.View.Project;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,10 +14,10 @@ public class ImageListView extends ItemList<IndexNode> {
 	private CommandLineView myCommandLineView;
 	private CanvasViewImpl myCanvasView;
 	
-	public ImageListView(CanvasViewImpl canvasView, CommandLineView commandLineView) {
+	public ImageListView(Project project) {
 		initializeResources();
-		myCommandLineView = commandLineView;
-		myCanvasView = canvasView;
+		myCommandLineView = project.getCommandLineView();
+		myCanvasView = project.getCanvasView();
 		update(myCanvasView,null);
 		getMyListView().setSpacing(Integer.parseInt(getMyResources().getString("ItemSpacing")));
 		getMyListView().setPadding(new Insets(Integer.parseInt(getMyResources().getString("ItemSpacing"))));

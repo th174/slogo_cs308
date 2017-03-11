@@ -7,6 +7,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.View.CommandLineView;
+import SLogo.View.Project;
 
 /**
  * 
@@ -17,10 +18,10 @@ public class FunctionListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
 	private EnvironmentImpl myEnvironment;
 	
-	public FunctionListView(EnvironmentImpl environment, CommandLineView commandLineView) {
+	public FunctionListView(Project project) {
 		initializeResources();
-		myEnvironment = environment;
-		myCommandLineView = commandLineView;
+		myCommandLineView = project.getCommandLineView();
+		myEnvironment = (EnvironmentImpl) project.getRepl().getEnvironment();
 		update(myEnvironment,null);
 	}
 
