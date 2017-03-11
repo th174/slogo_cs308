@@ -19,20 +19,31 @@ import javafx.stage.Window;
 public class FileHandler {
 	
 	private static final String ERROR_BUNDLE = "resources/View/Exceptions";
-	public ResourceBundle myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
+	public ResourceBundle myResources;
 	private Window myWindow;
 	
 	public FileHandler(Window userWindow) {
 		myWindow = userWindow;
+		initializeResources();
 	}
 	
+	/**
+	 * Prompts user to select a file, then reads the chosen file 
+	 * and returns its contents as a String.
+	 * 
+	 * @return String of data contained within the file.
+	 */
 	public String getFileData(){
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Select SLogo File");
 		return readFile(chooser.showOpenDialog(myWindow));
 	}
 	
-	public String readFile(File file){
+	private void initializeResources(){
+		myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
+	}
+	
+	private String readFile(File file){
 		try{
 			return new String((Files.readAllBytes(Paths.get(file.toURI()))));
 		}catch(IOException e){
