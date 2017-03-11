@@ -79,8 +79,8 @@ public final class PredefinedCommandList {
             EQUAL = Variable::equalTo,
             NOTEQUAL = Variable::notEqualTo,
             WRITE = (var1, var2) -> {
-                Files.write(Paths.get(var1.toContentString()), Collections.singletonList(var2.toContentString()), Charset.defaultCharset());
-                return Variable.TRUE;
+                Files.write(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()), Collections.singletonList(var2.toContentString()), Charset.defaultCharset());
+                return var2;
             };
     public static final TurtleMovement
             FORWARD = Turtle::moveForward,
@@ -110,7 +110,9 @@ public final class PredefinedCommandList {
             SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.toNumber()),
             SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber()),
             EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getEnvironment(), var1.toContentString()),
-            READFILE = (repl,var1) -> new String(Files.readAllBytes(Paths.get(var1.toContentString())));
+            CD = (repl, var1) -> System.setProperty("user.dir", Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()).normalize().toAbsolutePath().toString()),
+            READFILE = (repl, var1) -> new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString())));
+
     public static final Property
             GETBOUNDSWRAP = repl -> repl.getCanvas().getBoundsWrap(),
             TURTLES = repl -> repl.getEnvironment().getAllTurtles().size(),
@@ -121,7 +123,9 @@ public final class PredefinedCommandList {
             GETPENCOLOR = repl -> repl.getCanvas().getPenColor(),
             GETSHAPE = repl -> repl.getCanvas().getShape(),
             GETUSERHISTORY = repl -> "\n" + repl.getHistory().stream().map(Object::toString).collect(Collectors.joining("\n")) + "\n",
-            LASTCOMMAND = repl -> repl.lastCommand().toString();
+            LASTCOMMAND = repl -> repl.lastCommand().toString(),
+            PWD = repl -> Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + ".").normalize().toAbsolutePath().toString(),
+            LS = repl -> "\n" + String.join("\n", Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + ".").toFile().list()) + "\n";
     public static final IterableInvokable
             IFELSE = new IterableInvokable() {
         @Override

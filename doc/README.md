@@ -48,6 +48,9 @@ SLogo
     * `EXECUTE` reads a String as SLogo code and executes it
     * `WRITE` writes a String to a file
     * `READ` reads a file and executes the contents
+    * `CD` changes working directory
+    * `LS` return all files in current working directory as a string
+    * `PWD` returns absolute path of working directory as a string
 
 ####Impressions of the assignment:
 Having the team design API's at the beginning of the project and making changes to those API's throughout gave us a good understanding of the importance of API's. Especially when working in larger teams, it is vital to establish what methods are available between portions of the project. Any change to the API's may effect how other portions work, thus a change in one area can elicit change throughout the program. 

@@ -733,7 +733,7 @@ Lists evaluate to their final element in scalar context.<br><br>
         <td><code>HISTORY</code>
         </td>
         <td>
-            returns all previously executed commands as a string, one per line
+            returns all previously executed commands as a string, delimited by line break
         </td>
     </tr>
     <tr>
@@ -768,6 +768,25 @@ Lists evaluate to their final element in scalar context.<br><br>
         <td>returns a string containing the contents of the file located at <em>path</em><br>
             uses relative path from working directory
         </td>
+    </tr>
+    <tr>
+        <td><code>CD</code> <em>path</em><br>
+        </td>
+        <td>changes current working directory to <em>path</em><br>
+            uses relative path from working directory
+        </td>
+    </tr>
+    <tr>
+        <td><code>LS</code><br>
+        </td>
+        <td>returns names of all files in working directory as a String, delimited by line break<br>
+            uses relative path from working directory
+        </td>
+    </tr>
+    <tr>
+        <td><code>PWD</code><br>
+        </td>
+        <td>returns absolute path of current working directory as a String</td>
     </tr>
     </tbody>
 </table>

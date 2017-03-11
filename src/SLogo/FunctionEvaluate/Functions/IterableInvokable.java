@@ -23,6 +23,8 @@ public interface IterableInvokable extends Invokable {
                 operation(repl, env, expr);
                 return eval(repl, env, Arrays.copyOfRange(expr, minimumArity(), expr.length));
             }
+        } catch (Expression.EvaluationTargetException e) {
+            throw e;
         } catch (Exception e) {
             throw new Expression.EvaluationTargetException(e);
         }
