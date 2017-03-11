@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import SLogo.View.CanvasViewImpl;
 import SLogo.View.CommandLineView;
+import SLogo.View.Project;
 import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,10 +14,10 @@ public class ColorListView extends ItemList<IndexNode> {
 	private CommandLineView myCommandLineView;
 	private CanvasViewImpl myCanvasView;
 	
-	public ColorListView(CanvasViewImpl canvasView, CommandLineView commandLineView) {
+	public ColorListView(Project project) {
 		initializeResources();
-		myCanvasView = canvasView;
-		myCommandLineView = commandLineView;
+		myCommandLineView = project.getCommandLineView();
+		myCanvasView = project.getCanvasView();
 		update(myCanvasView, null);
 		getMyListView().setSpacing(Integer.parseInt(getMyResources().getString("ItemSpacing")));
 		getMyListView().setPadding(new Insets(Integer.parseInt(getMyResources().getString("ItemSpacing"))));

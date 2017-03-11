@@ -15,7 +15,7 @@ public class ConfigurationWriterTester {
 		
 		ConfigurationWriter cw = new ConfigurationWriter(turt.toProperty());
 		
-		cw.write(new File("data/ConfigWriterTestFile.txt"));
+		cw.write(new File("data/ConfigWriterTestFile1.txt"));
 
 	}
 

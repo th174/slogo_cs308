@@ -32,8 +32,8 @@ public class ConfigurationWriter implements FileWriter {
 	 */
 	public ConfigurationWriter(Property prop) {
 		myProperty = prop;
-		myTag = myCommands.getString("configWriterTag");
 		initializeResources();
+		myTag = myCommands.getString("configWriterTag");
 	}
 	
 	private void initializeResources(){

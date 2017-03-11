@@ -4,7 +4,6 @@ import java.util.ResourceBundle;
 
 import SLogo.Repl;
 import SLogo.ReplImpl;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.View.DisplayBar.ItemDisplay;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -16,17 +15,16 @@ public class Project implements SLogoGUIElement {
 	
 	private Repl myRepl;
 	private CanvasViewImpl myCanvasView;
-	private EnvironmentImpl myEnv;
 	private Group myRoot;
 	private double myWidth;
 	private double myHeight;
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "Project";
 	private ResourceBundle myResources;
+	private CommandLineView myCommandLine;
 	
 	public Project(double width,double height){
 		myRepl = new ReplImpl();
-		myEnv = (EnvironmentImpl) myRepl.getEnvironment();
 		myRoot = new Group();
 		myWidth = width;
 		myHeight = height;
@@ -47,11 +45,11 @@ public class Project implements SLogoGUIElement {
     	Node canvasViewNode = myCanvasView.getView();
     	GridPane.setConstraints(canvasViewNode, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myCanvasView, myWidth,myHeight*commandLineHeightRatio);
-    	Node commandLineNode = commandLine.getView();
+    	myCommandLine = new CommandLineViewBasic(this, myWidth,myHeight*commandLineHeightRatio);
+    	Node commandLineNode = myCommandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1, HPos.CENTER, VPos.TOP);
     	
-    	SLogoGUIElement itemDisplay = new ItemDisplay(commandLine, myEnv, myCanvasView, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
+    	SLogoGUIElement itemDisplay = new ItemDisplay(this, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
     	Node itemDisplayNode = itemDisplay.getView();
     	GridPane.setConstraints(itemDisplayNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
@@ -70,5 +68,13 @@ public class Project implements SLogoGUIElement {
 	
 	public Repl getRepl(){
 		return myRepl;
+	}
+	
+	public CommandLineView getCommandLineView() {
+		return myCommandLine;
+	}
+	
+	public CanvasViewImpl getCanvasView(){
+		return myCanvasView;
 	}
 }
