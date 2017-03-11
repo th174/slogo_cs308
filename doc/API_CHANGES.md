@@ -11,3 +11,5 @@
 * `setPenColor()`, `getPenColor()` and `setPenSize()` were implemented to be able to affect the pen color/width in the turtle environment. The arguments changed from Color to Index when the colors became indexed in the front end
 * `setPalette()` and `getPalette()` were implemented so that the user could add new colors and see current colors saved in the front end
 * `getColorMap()` and `getImageMap()` were implemented so that the GUI could get the image and color maps when they were changed to reflect that change in the front view of those respective maps
+###SLogoGUI 
+*Started with just `getNode()` and did not add anything to its API. Subclasses contained within all communicate with each other within SLogoGUI and do not change exterior things.

@@ -11,6 +11,11 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 
+/**
+ * Main project that contains all of the items necessary for running SLogo code
+ * @author Alex
+ *
+ */
 public class Project implements SLogoGUIElement {
 	
 	private Repl myRepl;
@@ -23,6 +28,11 @@ public class Project implements SLogoGUIElement {
 	private ResourceBundle myResources;
 	private CommandLineView myCommandLine;
 	
+	/**
+	 * Creates a new project 
+	 * @param width
+	 * @param height
+	 */
 	public Project(double width,double height){
 		myRepl = new ReplImpl();
 		myRoot = new Group();
@@ -57,23 +67,41 @@ public class Project implements SLogoGUIElement {
         myRoot.getChildren().addAll(gridPane);
 	}
 	
+	/**
+	 * Gets node
+	 */
     @Override
     public Node getView() {
     	return myRoot;
     }
-
+    
+    /**
+     * Initialize resources
+     */
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
 	}
 	
+	/**
+	 * Get REPL
+	 * @return
+	 */
 	public Repl getRepl(){
 		return myRepl;
 	}
 	
+	/**
+	 * Get command line 
+	 * @return
+	 */
 	public CommandLineView getCommandLineView() {
 		return myCommandLine;
 	}
 	
+	/**
+	 * Get Canvas
+	 * @return
+	 */
 	public CanvasViewImpl getCanvasView(){
 		return myCanvasView;
 	}

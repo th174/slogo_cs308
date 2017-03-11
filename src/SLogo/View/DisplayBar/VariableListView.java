@@ -9,10 +9,19 @@ import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.View.CommandLineView;
 import SLogo.View.Project;
 
+/**
+ * Keeps track of variables
+ * @author Alex
+ *
+ */
 public class VariableListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
 	private EnvironmentImpl myEnvironment;
 	
+	/**
+	 * Creates new variableListView
+	 * @param project
+	 */
 	public VariableListView(Project project) {
 		initializeResources();
 		myCommandLineView = project.getCommandLineView();
@@ -20,6 +29,9 @@ public class VariableListView extends ItemList<TextContainer> {
 		update(myEnvironment,null);
 	}
 
+	/**
+	 * Updates content
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		Environment environment = (Environment) o;
@@ -31,12 +43,18 @@ public class VariableListView extends ItemList<TextContainer> {
 		}
 	}
 
+	/**
+	 * Sets onClickAction
+	 */
 	@Override
 	protected void onClick(TextContainer item) {
 		String [] commandInfo = item.getCommand().split(" = ");
 		myCommandLineView.setText("MAKEVARIABLE " + commandInfo[0] + " " + commandInfo[1]);
 	}
 
+	/**
+	 * Adds item
+	 */
 	@Override
 	protected void addItem(TextContainer toAddItem) {
 		getMyListView().getChildren().add(toAddItem.getView());

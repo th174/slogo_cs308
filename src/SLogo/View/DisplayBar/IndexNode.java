@@ -4,10 +4,21 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-public class IndexNode implements Comparable<IndexNode>, VisualCommand {
+/**
+ * Container of an index-node pair, returns a view
+ * @author Alex
+ *
+ */
+public class IndexNode implements VisualCommand {
 	private int myIndex;
 	private Node myNode;
 	private GridPane myRoot = new GridPane();
+	
+	/**
+	 * Creates new index node to put in a list somewhere
+	 * @param index
+	 * @param node
+	 */
 	public IndexNode(int index, Node node) {
 		myIndex = index;
 		Text myIndexText = new Text("" + myIndex);
@@ -16,17 +27,18 @@ public class IndexNode implements Comparable<IndexNode>, VisualCommand {
 		GridPane.setConstraints(myNode, 1, 0);
 		myRoot.getChildren().addAll(myIndexText,myNode);
 	}
-	
-	@Override
-	public int compareTo(IndexNode o) {
-		return myIndex-o.myIndex;
-	}
 
+	/**
+	 * Gets node
+	 */
 	@Override
 	public Node getView() {
 		return myRoot;
 	}	
 	
+	/**
+	 * Equals method
+	 */
 	@Override
 	public boolean equals(Object object){
 		if(!(object instanceof IndexNode)){
@@ -36,6 +48,9 @@ public class IndexNode implements Comparable<IndexNode>, VisualCommand {
 		return this.myIndex == indexNode.myIndex;
 	}
 
+	/**
+	 * Gets command representation
+	 */
 	@Override
 	public String getCommand() {
 		return "" + myIndex;
