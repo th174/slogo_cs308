@@ -16,7 +16,7 @@ import java.util.List;
  * Created by th174 on 2/16/2017.
  */
 public class ReplImpl implements Repl {
-    private PolishParser parser;
+    private Parser parser;
     private ArrayList<String> history;
     private int currentIndex;
     private Environment userEnv;

@@ -7,13 +7,13 @@ SLogo
 * Riley: 30
 * Stone: 40
 * Alex:
-* Timmy:
+* Timmy: idk way too many
 
 ####Roles in developing project:
 * Riley: CanvasView (turtle environment)
 * Stone: Function Implementation, Backend Turtle design, file-handling
 * Alex: GUI
-* Timmy:
+* Timmy: 
 
 ####Files to start project:
 * `Main.java` must be run to start the application.
