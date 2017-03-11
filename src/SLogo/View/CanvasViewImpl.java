@@ -5,7 +5,9 @@ import SLogo.Turtles.Turtle;
 import SLogo.View.Sprite.Sprite;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -28,7 +30,8 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
     private ResourceBundle exceptionResources;
     private static final String RESOURCE_FILEPATH = "resources/View/";
-    private Pane root;
+    private ScrollPane view;
+    private Group root;
     private int viewWidth;
     private int viewHeight;
     private int[] spriteDimensions;
@@ -65,11 +68,25 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         backgroundColorIndex = 0;
         penColor = 1;
         penWidth = 1;
-        root = new Pane();
-        backgroundNode = new Rectangle(viewWidth, viewHeight, colorMap.get(0));
+        root = new Group();
         propDisp = new CanvasPropertiesDisplay(this, colorMap);
-        backgroundNode.setOnMouseClicked(e -> propDisp.toggleDisplay());
-        root.getChildren().add(backgroundNode);
+        Pane test = new Pane();
+        test.setPrefSize(viewWidth, viewHeight);
+        root.getChildren().add(test);
+        view = new ScrollPane();
+        view.setOnMouseClicked(e -> propDisp.toggleDisplay());
+        view.setPrefSize(viewWidth, viewHeight);
+        view.setFitToHeight(true);
+        view.setFitToWidth(true);
+        view.setContent(root);
+        view.setStyle(String.format("-fx-background: %s; ", colorToHex(colorMap.get(0))));
+    }
+
+    private String colorToHex(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
     }
 
     public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
@@ -84,7 +101,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     public void update(Observable o, Object n) {
         ObservableTurtle turtle = (ObservableTurtle) o;
         @SuppressWarnings("unchecked")
-		Pair<Double, Double> changeLoc = (Pair<Double, Double>) n;
+        Pair<Double, Double> changeLoc = (Pair<Double, Double>) n;
         int currID = (int) turtle.id();
         Sprite currSprite = spriteMap.get(currID);
         setPen(currID, (boolean) turtle.isPenDown());
@@ -147,7 +164,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         }
         throw new ErrorPrompt(exceptionResources.getString("InvalidColorIndex"));
     }
-    
+
     public double getPenWidth() {
         return penWidth;
     }
@@ -168,7 +185,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 
     public int setBackground(double index) {
         backgroundColorIndex = (int) index;
-        backgroundNode.setFill(colorMap.get(backgroundColorIndex));
+        view.setStyle(String.format("-fx-background: %s; ", colorToHex(colorMap.get((int) index))));
         return (int) index;
     }
 
@@ -253,7 +270,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     public Node getView() {
-        return root;
+        return view;
     }
 
     public double clearScreen() {

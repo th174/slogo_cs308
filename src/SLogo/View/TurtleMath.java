@@ -4,24 +4,26 @@ import java.util.List;
 
 /**
  * This class handles all math associated with the turtle moving in its environment.
- * @author Riley Nisbet
  *
+ * @author Riley Nisbet
  */
 public class TurtleMath {
 
-	/**
-	 * Takes in a location where (0,0) is the middle of the view, and returns a location where (0,0) is the top left
-	 * @param viewWidth
-	 * @param viewHeight
-	 * @param zeroPosition
-	 * @return
-	 */
+    /**
+     * Takes in a location where (0,0) is the middle of the view, and returns a location where (0,0) is the top left
+     *
+     * @param viewWidth
+     * @param viewHeight
+     * @param zeroPosition
+     * @return
+     */
     public double[] zeroToAbsolute(double viewWidth, double viewHeight, double[] zeroPosition) {
         return new double[]{zeroPosition[0] + viewWidth / 2, -1 * (zeroPosition[1] - viewHeight / 2)};
     }
 
     /**
      * Takes in a location where (0,0) is the top left, and returns a location where (0,0) is the middle of the view
+     *
      * @param viewWidth
      * @param viewHeight
      * @param absolutePosition
@@ -33,6 +35,7 @@ public class TurtleMath {
 
     /**
      * Finds the intercepts of a vector in the given view size given it's starting location
+     *
      * @param viewWidth
      * @param viewHeight
      * @param x
@@ -73,6 +76,7 @@ public class TurtleMath {
 
     /**
      * If the vector is Vertical or Horizontal, handle it differently to avoid dividing by zero
+     *
      * @param viewWidth
      * @param viewHeight
      * @param x
@@ -101,6 +105,7 @@ public class TurtleMath {
 
     /**
      * Adds a list of line(s) following the path of the turtle to be drawn by CanvasView
+     *
      * @param viewWidth
      * @param viewHeight
      * @param currentLocation
@@ -112,31 +117,32 @@ public class TurtleMath {
         double[] currLocation = currentLocation;
         double[] nextLocation;
         int count = 0;
-        while (count < 100) {
-            count++;
-            nextLocation = new double[]{currLocation[0] + vector[0], currLocation[1] - vector[1]};
-            if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0) {
-                double[] intercepts = findIntercepts(viewWidth, viewHeight, currLocation[0], currLocation[1], vector[0], vector[1]);
-                double deltaX = intercepts[0] - currLocation[0];
-                double deltaY = intercepts[1] - currLocation[1];
-                linesToMake.add(new double[]{currLocation[0], currLocation[1], intercepts[0], intercepts[1]});
-                currLocation = intercepts;
-                if (currLocation[0] == 0) {
-                    currLocation[0] = viewWidth;
-                } else if (currLocation[0] == viewWidth) {
-                    currLocation[0] = 0;
-                }
-                if (currLocation[1] == 0) {
-                    currLocation[1] = viewHeight;
-                } else if (currLocation[1] == viewHeight) {
-                    currLocation[1] = 0;
-                }
-                vector[0] -= deltaX;
-                vector[1] += deltaY;
-            } else {
-                linesToMake.add(new double[]{currLocation[0], currLocation[1], nextLocation[0], nextLocation[1]});
-                break;
-            }
-        }
+//        while (count < 100) {
+//            count++;
+        nextLocation = new double[]{currLocation[0] + vector[0], currLocation[1] - vector[1]};
+////            if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0) {
+//            if (false) {
+//                double[] intercepts = findIntercepts(viewWidth, viewHeight, currLocation[0], currLocation[1], vector[0], vector[1]);
+//                double deltaX = intercepts[0] - currLocation[0];
+//                double deltaY = intercepts[1] - currLocation[1];
+//                linesToMake.add(new double[]{currLocation[0], currLocation[1], intercepts[0], intercepts[1]});
+//                currLocation = intercepts;
+////                if (currLocation[0] == 0) {
+////                    currLocation[0] = viewWidth;
+////                } else if (currLocation[0] == viewWidth) {
+////                    currLocation[0] = 0;
+////                }
+////                if (currLocation[1] == 0) {
+////                    currLocation[1] = viewHeight;
+////                } else if (currLocation[1] == viewHeight) {
+////                    currLocation[1] = 0;
+////                }
+//                vector[0] -= deltaX;
+//                vector[1] += deltaY;
+//            } else {
+        linesToMake.add(new double[]{currLocation[0], currLocation[1], nextLocation[0], nextLocation[1]});
+//                break;
+//            }
     }
 }
+
