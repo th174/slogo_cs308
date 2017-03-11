@@ -4,15 +4,19 @@ import java.util.Map;
 import java.util.Observable;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.View.CommandLineView;
 
 public class VariableListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
+	private EnvironmentImpl myEnvironment;
 	
-	public VariableListView(CommandLineView commandLineView) {
+	public VariableListView(EnvironmentImpl environment, CommandLineView commandLineView) {
 		initializeResources();
 		myCommandLineView = commandLineView;
+		myEnvironment = environment;
+		update(myEnvironment,null);
 	}
 
 	@Override

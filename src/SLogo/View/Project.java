@@ -51,11 +51,11 @@ public class Project implements SLogoGUIElement {
     	Node commandLineNode = commandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1, HPos.CENTER, VPos.TOP);
     	
-    	SLogoGUIElement menuItemTabPane = new ItemDisplay(commandLine, myEnv, myCanvasView, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
-    	Node menuItemTabPaneNode = menuItemTabPane.getView();
-    	GridPane.setConstraints(menuItemTabPaneNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
+    	SLogoGUIElement itemDisplay = new ItemDisplay(commandLine, myEnv, myCanvasView, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
+    	Node itemDisplayNode = itemDisplay.getView();
+    	GridPane.setConstraints(itemDisplayNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	gridPane.getChildren().addAll(menuItemTabPaneNode,commandLineNode,canvasViewNode);
+    	gridPane.getChildren().addAll(itemDisplayNode,commandLineNode,canvasViewNode);
         myRoot.getChildren().addAll(gridPane);
 	}
 	

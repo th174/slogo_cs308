@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Observable;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.View.CommandLineView;
 
@@ -14,14 +15,18 @@ import SLogo.View.CommandLineView;
  */
 public class FunctionListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
-	public FunctionListView(CommandLineView commandLineView) {
+	private EnvironmentImpl myEnvironment;
+	
+	public FunctionListView(EnvironmentImpl environment, CommandLineView commandLineView) {
 		initializeResources();
+		myEnvironment = environment;
 		myCommandLineView = commandLineView;
+		update(myEnvironment,null);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		Environment environment = (Environment) o;
+		Environment environment = (EnvironmentImpl) o;
 		Map<String, Invokable> currentVariableMap = environment.getAllFunctions();
 		getMyListView().getChildren().clear();
 		for(String string : currentVariableMap.keySet()){
