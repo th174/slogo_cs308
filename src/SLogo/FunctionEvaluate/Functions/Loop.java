@@ -30,12 +30,13 @@ public interface Loop extends Invokable {
         Variable loopStart = (Variable) loopParams[1];
         Variable loopEnd = (Variable) loopParams[2];
         Expression onChange = (Expression) loopParams[3];
-        env.addUserVariable(loopVar,loopStart);
-        return operation(repl, env, Variable.FALSE, loopVar, (var) -> env.getVariableByName(var).greaterThan(loopEnd).equals(Variable.FALSE), onChange, Arrays.copyOfRange(expr, 1, expr.length));
+        env.addUserVariable(loopVar, loopStart);
+        Predicate<Variable> condition = variable -> variable.lessThan(loopStart).and(variable.lessThan(loopEnd)).or(variable.greaterThan(loopStart).and(variable.greaterThan(loopEnd))).not().toBoolean();
+        return operation(repl, env, Variable.FALSE, loopVar, condition, onChange, Arrays.copyOfRange(expr, 1, expr.length));
     }
 
-    default Variable operation(Repl repl, Environment env, Variable last, String loopVar, Predicate<String> condition, Expression onChange, Expression... expr) {
-        if (!condition.test(loopVar)) {
+    default Variable operation(Repl repl, Environment env, Variable last, String loopVar, Predicate<Variable> condition, Expression onChange, Expression... expr) {
+        if (!condition.test(env.getVariableByName(loopVar))) {
             return last;
         } else {
             last = PredefinedCommandList.$DEFAULT_OPERATION$.eval(repl, env, expr);

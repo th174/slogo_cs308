@@ -4,8 +4,6 @@ package SLogo.FunctionEvaluate.Variables;
  * Created by th174 on 2/16/2017.
  */
 public final class NumberVariable extends Variable<Number> {
-    //IMMUTABLE CLASS
-    //ALL VARIABLES MUST BE FINAL
     NumberVariable(Number value) {
         super(value);
     }

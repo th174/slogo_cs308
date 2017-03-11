@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 /**
+ * All implementations must be immutable
  * Created by th174 on 2/16/2017.
  */
 public abstract class Variable<T> implements Comparable<Variable> {
@@ -163,6 +164,8 @@ public abstract class Variable<T> implements Comparable<Variable> {
             return new NumberVariable(s);
         } else if (s.matches(REGEX.getString("StringLiteral"))) {
             return new StringVariable(s.substring(1, s.length() - 1));
+        } else if (s.matches(REGEX.getString("Variable"))) {
+            return FALSE;
         } else {
             throw new UnrecognizedSymbolException(s);
         }

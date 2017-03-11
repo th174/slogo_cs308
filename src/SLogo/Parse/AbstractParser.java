@@ -24,9 +24,7 @@ public abstract class AbstractParser implements Parser {
     }
 
     protected LinkedList<String> tokenSplit(String s) {
-        Matcher m = Pattern.compile(String.format("(%s|%s|%s|%s)", REGEX.getString("GroupStart"), REGEX.getString("GroupEnd"), REGEX.getString("ListStart"), REGEX.getString("ListEnd"))).matcher(s);
-        s = m.replaceAll(" $1 ");
-        m = Pattern.compile(REGEX.getString("Token"), Pattern.DOTALL).matcher(s);
+        Matcher m = Pattern.compile(REGEX.getString("Token"), Pattern.DOTALL).matcher(s);
         LinkedList<String> tokens = new LinkedList<>();
         while (m.find()) {
             tokens.add(m.group(1));

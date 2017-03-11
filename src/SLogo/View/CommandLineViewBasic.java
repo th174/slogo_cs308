@@ -57,7 +57,7 @@ public class CommandLineViewBasic implements CommandLineView {
 	}
 
 	private void initializeRunButton() {
-		myRunButton = new Button();        
+		myRunButton = new Button();
    		myRunButton.setText(myResources.getString("RunButtonText"));
    		myRunButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
         GridPane.setConstraints(myRunButton, 1, 0);
@@ -73,9 +73,6 @@ public class CommandLineViewBasic implements CommandLineView {
         	commandErrorAlert.setTitle(myResources.getString("AlertError"));
         	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
         	commandErrorAlert.setContentText(e.getClass().getSimpleName()+"\n"+e.getMessage());
-            DialogPane stackTraceView = new DialogPane();
-            stackTraceView.setContentText(Arrays.toString(e.getStackTrace()));
-        	commandErrorAlert.setDialogPane(stackTraceView);
             commandErrorAlert.showAndWait();
         }
         myCommandText.clear();
@@ -102,6 +99,6 @@ public class CommandLineViewBasic implements CommandLineView {
 	@Override
 	public void setText(String command) {
 		myCommandText.setText(command);
-		
+
 	}
 }
