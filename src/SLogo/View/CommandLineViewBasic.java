@@ -29,11 +29,11 @@ public class CommandLineViewBasic implements CommandLineView {
 	private TextArea myHistoryText;
 
 
-    public CommandLineViewBasic(Repl repl, CanvasView canvasView, double width, double height) {
-        myRepl = repl;
+    public CommandLineViewBasic(Project project, double width, double height) {
+        myRepl = project.getRepl();
         myWidth = width;
         myHeight = height;
-        myCanvasView = canvasView;
+        myCanvasView = project.getCanvasView();
 		initializeResources();
         initializeGridPane();
         initializeCommandPrompt();

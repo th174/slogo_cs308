@@ -7,15 +7,16 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.View.CommandLineView;
+import SLogo.View.Project;
 
 public class VariableListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
 	private EnvironmentImpl myEnvironment;
 	
-	public VariableListView(EnvironmentImpl environment, CommandLineView commandLineView) {
+	public VariableListView(Project project) {
 		initializeResources();
-		myCommandLineView = commandLineView;
-		myEnvironment = environment;
+		myCommandLineView = project.getCommandLineView();
+		myEnvironment = (EnvironmentImpl) project.getRepl().getEnvironment();
 		update(myEnvironment,null);
 	}
 
