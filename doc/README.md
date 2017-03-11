@@ -28,20 +28,22 @@ SLogo
 *File property files contain information pertinent to file-handling. `turtle.properties` contains the tags needed to save a Turtle's state in an XML file. `writing.properties` contains strings needed to write the XML files.
 
 ####Information to use the program:
-* 
+* Type commands in the command line and press Run to run the commands. The top menu can be used to load configurations, change the language, and get help with commands. On the left the tabs keep running lists of different things in slogo (variables, functions, color, and turtle images). Clicking on turtles and the background allows you to change their properties.
 
 ####Known bugs/problems with functionality:
 * Turtle is no longer wrapping. This was working at one point, but broke following further feature additions. We were unable to identify the cause of this.
 * The USE command (which we added to change languages) is no longer functional. This bleeds over into saving the current library (user functions and variables), which expects USE to work, as this is the first command placed at the top of the document. Without this command working, the file will not be properly read if the project is set to a different language.
 *Command Files are not read in properly if the correct language is not set in the project. (This may not be considered a bug, but simply more dependence being placed on the user than is desired.)
 *There is currently back end framework established to take in configuration data and write it to a file in XML format. However, it has neither been implemented for all possible data (only the ObservableTurtle class has implemented the required `toProperty()` method), nor connected to the front end.
+*GUI formatting is different on different machines.
 
 ####Extra features:
 * CanvasView: When clicking on a turtle, a pop-up display appears for the user to change the turtle’s properties. When clicking on the canvas, a pop-up display appears for the user to change the turtle environment's properties.
-
+* Clicking on items in the right side pane 
 
 ####Impressions of the assignment:
 Having the team design API's at the beginning of the project and making changes to those API's throughout gave us a good understanding of the importance of API's. Especially when working in larger teams, it is vital to establish what methods are available between portions of the project. Any change to the API's may effect how other portions work, thus a change in one area can elicit change throughout the program. 
 This project also revealed the difficulties associated with communication between front end and back end. Resolving the issues that arose required learning how to design and implement Observers and Observables.
 As always, increasing the complexity of the project made it more difficult to stay true to an intended design. For example, certain separations of responsibilities and knowledge between portions of the front end and back end had to be reworked.
+We were made more comfortable with not know eachothers' specific implementations
 
