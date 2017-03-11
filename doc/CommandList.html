@@ -699,14 +699,6 @@ Lists evaluate to their final element in scalar context.<br><br>
             returns the result of <em>expr</em></td>
     </tr>
     <tr>
-        <td><code>OPEN</code> <em>path</em><br>
-            <code>READ</code> <em>path</em><br>
-        </td>
-        <td>executes the contents of SLogo file from <em>path</em> and returns the results<br>
-            uses relative path from working directory
-        </td>
-    </tr>
-    <tr>
         <td><code>EXIT</code> <em>expr</em><br>
         </td>
         <td>exits the application with exit code <em>expr</em><br>
@@ -759,6 +751,22 @@ Lists evaluate to their final element in scalar context.<br><br>
         <td>
             reads a String as a SLogo code, and executes it<br>
             returns the result
+        </td>
+    </tr>
+    <tr>
+        <td><code>WRITE <em>path</em> <em>string</em></code></td>
+        <td>opens the file located at <em>path</em>, and overwrites it with <em>string</em><br>
+            the file is created if it doesn't exist<br>
+            returns the <em>string</em> that was written<br>
+            uses relative path from working directory
+        </td>
+    </tr>
+    <tr>
+        <td><code>OPEN</code> <em>path</em><br>
+            <code>READ</code> <em>path</em><br>
+        </td>
+        <td>returns a string containing the contents of the file located at <em>path</em><br>
+            uses relative path from working directory
         </td>
     </tr>
     </tbody>

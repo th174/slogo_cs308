@@ -37,13 +37,16 @@ SLogo
 ####Extra features:
 * CanvasView: When clicking on a turtle, a pop-up display appears for the user to change the turtle’s properties. When clicking on the canvas, a pop-up display appears for the user to change the turtle environment's properties.
 * Clicking on items in the right side pane 
-* [Additional commands:](CommandList.html)
+* Additional commands (see [CommandList.html](CommandList.html) for more details):
     * `USE` changes language
-    * `READ` reads file
     * `SETBW` changes toroidal vs infinite bounds mode
     * `BW` gets current bounds
     * `EXIT` exits the program with a custom exit code
-    * 
+    * `HISTORY` gets all previous commands as a String 
+    * `!!` gets previous command as a string
+    * `EXECUTE` reads a String as SLogo code and executes it
+    * `WRITE` writes a String to a file
+    * `READ` reads a file and executes the contents
 
 ####Impressions of the assignment:
 Having the team design API's at the beginning of the project and making changes to those API's throughout gave us a good understanding of the importance of API's. Especially when working in larger teams, it is vital to establish what methods are available between portions of the project. Any change to the API's may effect how other portions work, thus a change in one area can elicit change throughout the program. 

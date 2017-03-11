@@ -6,12 +6,14 @@ import SLogo.Parse.Expression;
 import SLogo.Repl;
 import SLogo.View.CanvasView;
 
+import java.io.IOException;
+
 /**
  * Created by th174 on 3/4/2017.
  */
 @FunctionalInterface
 public interface Setting extends IterableInvokable {
-    Object operation(Repl repl, Variable var1);
+    Object operation(Repl repl, Variable var1) throws Exception;
 
     @Override
     default int minimumArity() {
@@ -19,7 +21,7 @@ public interface Setting extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Repl repl, Environment env, Expression... vargs)  {
+    default Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception {
         return Variable.newInstance(operation(repl, vargs[0].eval(repl,env)));
     }
 }

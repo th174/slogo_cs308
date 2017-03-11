@@ -11,7 +11,7 @@ import SLogo.Repl;
 @FunctionalInterface
 public interface BinaryIterable extends IterableInvokable {
 
-    Variable operation(Variable var1, Variable var2);
+    Variable operation(Variable var1, Variable var2) throws Exception;
 
     @Override
     default int minimumArity() {
@@ -19,7 +19,7 @@ public interface BinaryIterable extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Repl repl, Environment env, Expression... vargs) {
+    default Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception {
         return operation(vargs[0].eval(repl,env), vargs[1].eval(repl,env));
     }
 }

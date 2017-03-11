@@ -8,6 +8,7 @@ import SLogo.Repl;
 import SLogo.Turtles.Turtle;
 
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -76,7 +77,11 @@ public final class PredefinedCommandList {
             LESSTHAN = Variable::lessThan,
             GREATERTHAN = Variable::greaterThan,
             EQUAL = Variable::equalTo,
-            NOTEQUAL = Variable::notEqualTo;
+            NOTEQUAL = Variable::notEqualTo,
+            WRITE = (var1, var2) -> {
+                Files.write(Paths.get(var1.toContentString()), Collections.singletonList(var2.toContentString()), Charset.defaultCharset());
+                return Variable.TRUE;
+            };
     public static final TurtleMovement
             FORWARD = Turtle::moveForward,
             BACKWARD = Turtle::moveBackward,
@@ -104,7 +109,8 @@ public final class PredefinedCommandList {
             SETSHAPE = (repl, var1) -> repl.getCanvas().setShape(var1.toNumber()),
             SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.toNumber()),
             SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber()),
-            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getEnvironment(), var1.toContentString());
+            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getEnvironment(), var1.toContentString()),
+            READFILE = (repl,var1) -> new String(Files.readAllBytes(Paths.get(var1.toContentString())));
     public static final Property
             GETBOUNDSWRAP = repl -> repl.getCanvas().getBoundsWrap(),
             TURTLES = repl -> repl.getEnvironment().getAllTurtles().size(),
@@ -166,17 +172,6 @@ public final class PredefinedCommandList {
                 public Variable operation(Repl repl, Environment env, Expression... vargs) {
                     env.addUserVariable(vargs[0].toString(), vargs[1].eval(repl, env));
                     return vargs[0].eval(repl, env);
-                }
-            },
-            READFILE = new IterableInvokable() {
-                @Override
-                public int minimumArity() {
-                    return 1;
-                }
-
-                @Override
-                public Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception {
-                    return Variable.newInstance(repl.getParser().parse(repl, env, new String(Files.readAllBytes(Paths.get(vargs[0].eval(repl, env).toContentString())))));
                 }
             },
             USE = new IterableInvokable() {
