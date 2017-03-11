@@ -1,5 +1,6 @@
 package SLogo.View;
 
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import SLogo.Repl;
@@ -7,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
@@ -66,11 +68,15 @@ public class CommandLineViewBasic implements CommandLineView {
         try {
 			myRepl.read(myCommandText.getText());
         }catch (Exception e) {
+            e.printStackTrace();
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle(myResources.getString("AlertError"));
         	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
-        	commandErrorAlert.setContentText(e.getClass().getName());
-        	commandErrorAlert.showAndWait();
+        	commandErrorAlert.setContentText(e.getClass().getSimpleName()+"\n"+e.getMessage());
+            DialogPane stackTraceView = new DialogPane();
+            stackTraceView.setContentText(Arrays.toString(e.getStackTrace()));
+        	commandErrorAlert.setDialogPane(stackTraceView);
+            commandErrorAlert.showAndWait();
         }
         myCommandText.clear();
     }

@@ -1,9 +1,4 @@
-USE "English"
-to fibonacci n
-    ifelse < n 3
-        1
-        +
-            fibonacci
-                - n 1
-            fibonacci
-                - n 2
+tell (1 2 3 4 5 6 7 8 9)
+
+rt * id 40 
+(repeat (i 10 100 10) rt 50 fd i)

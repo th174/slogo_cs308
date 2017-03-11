@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
+    public static final int DEFAULT_TURTLE_ID = 1;
     private Environment outer;
     private Map<String, Variable> scopeVariables;
     private Map<String, Invokable> scopeFunctions;
@@ -28,6 +29,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         scopeVariables = initVariableDictonary();
         scopeFunctions = initCommandDictionary();
         myTurtles = FXCollections.observableHashMap();
+        myTurtles.put(DEFAULT_TURTLE_ID,new ObservableTurtle(DEFAULT_TURTLE_ID));
         outer = null;
     }
 
@@ -59,7 +61,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Variable> getLocalVars() {
-        return Collections.unmodifiableMap(scopeVariables);
+        return scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches("^\\$.*")).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
@@ -138,6 +140,11 @@ public class EnvironmentImpl extends Observable implements Environment {
             }
             return getAllTurtles().get(id);
         }).collect(Collectors.toList());
+    }
+
+    public double clearTurtles(){
+        getAllTurtles().keySet().retainAll(Collections.singleton(DEFAULT_TURTLE_ID));
+        return getAllTurtles().get(DEFAULT_TURTLE_ID).reset();
     }
 
     @Override

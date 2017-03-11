@@ -7,19 +7,19 @@ import SLogo.Repl;
 import SLogo.View.CanvasView;
 
 /**
- * Created by th174 on 3/2/2017.
+ * Created by th174 on 3/4/2017.
  */
 @FunctionalInterface
-public interface CanvasProperty extends Invokable {
-    Object operation(CanvasView canvas);
+public interface Setting extends IterableInvokable {
+    Object operation(Repl repl, Variable var1);
 
     @Override
     default int minimumArity() {
-        return 0;
+        return 1;
     }
 
     @Override
-    default Variable eval(Repl repl, Environment env, Expression... expr) {
-        return Variable.newInstance(operation(repl.getCanvas()));
+    default Variable operation(Repl repl, Environment env, Expression... vargs)  {
+        return Variable.newInstance(operation(repl, vargs[0].eval(repl,env)));
     }
 }

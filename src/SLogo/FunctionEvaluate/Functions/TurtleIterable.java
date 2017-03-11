@@ -1,11 +1,13 @@
 package SLogo.FunctionEvaluate.Functions;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Repl;
 import SLogo.Turtles.Turtle;
 
+import java.util.Collections;
 import java.util.List;
 
 import static SLogo.FunctionEvaluate.Variables.Variable.FALSE;
@@ -21,9 +23,9 @@ public interface TurtleIterable {
         if (turtleList.isEmpty()) {
             return FALSE;
         } else if (turtleList.size() == 1) {
-            return Variable.newInstance(doTurtle(repl, turtleList.get(0), env, vargs));
+            return Variable.newInstance(doTurtle(repl, turtleList.get(0), new EnvironmentImpl(env, Collections.singletonList(turtleList.get(0).id())), vargs));
         } else {
-            Variable.newInstance(doTurtle(repl, turtleList.get(0), env, vargs));
+            Variable.newInstance(doTurtle(repl, turtleList.get(0), new EnvironmentImpl(env, Collections.singletonList(turtleList.get(0).id())), vargs));
             return forEachTurtle(repl, turtleList.subList(1, turtleList.size()), env, vargs);
         }
     }

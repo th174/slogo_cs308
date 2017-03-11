@@ -97,19 +97,7 @@ public interface CanvasView extends Observer {
      * @return turtle's current shape index
      */
     int getShape();
-    
-    /**
-	 * @return Sprite's absolute location
-	 */
-	double[] getSpritePosition(int currID);
-	
-	/**
-     * Add an object as a listener
-     *
-     * @author Riley Nisbet
-     */
-    void addObserver(Observer o);
-    
+
     /**
      * @return	map of Indices to Colors
      */
