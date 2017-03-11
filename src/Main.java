@@ -11,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        int width = 900;
+        int width = 1300;
         int height = 700;
         SLogoGUIImpl gui = new SLogoGUIImpl(primaryStage,width, height);
         BorderPane GUIPane = new BorderPane();
