@@ -1,6 +1,7 @@
 package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.Repl;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -38,9 +39,13 @@ public abstract class AbstractParser implements Parser {
         return myTranslator;
     }
 
-    public Expression parse(Environment env, String input) {
+    @Override
+    public boolean parse(Repl repl, Environment env, String input) {
         LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
-        return readTokens(env, tokens);
+        while (!tokens.isEmpty()) {
+            readTokens(env, tokens).eval(repl,env);
+        }
+        return true;
     }
 
     @Override

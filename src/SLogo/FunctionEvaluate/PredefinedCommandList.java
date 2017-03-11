@@ -99,11 +99,13 @@ public final class PredefinedCommandList {
             XCOORDINATE = Turtle::getX,
             YCOORDINATE = Turtle::getY;
     public static final Setting
+            SETBOUNDSWRAP = (repl, var1) -> repl.getCanvas().setBoundsWrap(var1.toBoolean()),
             SETBACKGROUND = (repl, var1) -> repl.getCanvas().setBackground(var1.toNumber()),
             SETSHAPE = (repl, var1) -> repl.getCanvas().setShape(var1.toNumber()),
             SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.toNumber()),
             SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber());
     public static final Property
+            GETBOUNDSWRAP = repl -> repl.getCanvas().getBoundsWrap(),
             TURTLES = repl -> repl.getEnvironment().getAllTurtles().size(),
             CLEARSCREEN = repl -> {
                 repl.getCanvas().clearScreen();
@@ -171,7 +173,7 @@ public final class PredefinedCommandList {
 
                 @Override
                 public Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception {
-                    return repl.getParser().parse(env, new String(Files.readAllBytes(Paths.get(vargs[0].eval(repl, env).toContentString())))).eval(repl, env);
+                    return Variable.newInstance(repl.getParser().parse(repl, env, new String(Files.readAllBytes(Paths.get(vargs[0].eval(repl, env).toContentString())))));
                 }
             },
             USE = new IterableInvokable() {

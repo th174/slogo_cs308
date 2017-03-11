@@ -18,11 +18,6 @@ public interface Repl {
     void read(String input) throws Exception;
 
     /**
-     * @return list of all previous commands run
-     */
-    List<String> getHistory();
-
-    /**
      * @return Environment
      */
     Environment getEnvironment();

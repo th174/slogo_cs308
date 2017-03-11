@@ -54,11 +54,6 @@ public class PolishParser extends AbstractParser {
         }
     }
 
-    @Override
-    public Expression parse(Environment env, String input) {
-        return super.parse(env, "[" + input + "]");
-    }
-
     private Expression readUntil(Environment env, String end, SExpression subList, Deque tokens, boolean isGroup) {
         while (Objects.nonNull(tokens.peek()) && !tokens.peek().toString().matches(end)) {
             if (isGroup) {

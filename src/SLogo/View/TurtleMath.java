@@ -112,7 +112,7 @@ public class TurtleMath {
      * @param vector
      * @param linesToMake
      */
-    public void addLinesToMake(int viewWidth, int viewHeight, double[] currentLocation, double[] vector, List<double[]> linesToMake) {
+    public void addLinesToMake(int viewWidth, int viewHeight, double[] currentLocation, double[] vector, List<double[]> linesToMake,boolean wrappedBounds) {
         //yVector is conventionally facing (+ is up), but this class uses unconventional (+ is down)
         double[] currLocation = currentLocation;
         double[] nextLocation;
@@ -120,7 +120,7 @@ public class TurtleMath {
         while (count < 2000) {
             count++;
             nextLocation = new double[]{currLocation[0] + vector[0], currLocation[1] - vector[1]};
-            if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0) {
+            if (nextLocation[0] > viewWidth || nextLocation[0] < 0 || nextLocation[1] > viewHeight || nextLocation[1] < 0 && wrappedBounds) {
                 double[] intercepts = findIntercepts(viewWidth, viewHeight, currLocation[0], currLocation[1], vector[0], vector[1]);
                 double deltaX = intercepts[0] - currLocation[0];
                 double deltaY = intercepts[1] - currLocation[1];

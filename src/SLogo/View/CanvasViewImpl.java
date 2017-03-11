@@ -44,6 +44,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     private double penWidth;
     private int backgroundColorIndex;
     private TurtleMath tMath;
+    private boolean wrappedBounds;
 
     private HashMap<Integer, Sprite> spriteMap;
     private HashMap<Integer, Boolean> turtleHiddenMap;
@@ -200,7 +201,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     public int[] getPalette(double index) {
-        Color color = colorMap.get(index);
+        Color color = colorMap.get((int) index);
         return new int[]{(int) color.getRed(), (int) color.getGreen(), (int) color.getBlue()};
     }
 
@@ -213,7 +214,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     private void move(int currID, double[] vector) {
         Sprite currSprite = spriteMap.get(currID);
         ArrayList<double[]> linesToMake = new ArrayList<double[]>();
-        tMath.addLinesToMake(viewWidth, viewHeight, currSprite.getPosition(), vector, linesToMake);
+        tMath.addLinesToMake(viewWidth, viewHeight, currSprite.getPosition(), vector, linesToMake, wrappedBounds);
         double[] finalPosition = currSprite.getPosition();
         for (double[] coordinates : linesToMake) {
             if (penDownMap.get(currID)) {
@@ -285,5 +286,16 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 
     public Map<Integer, Image> getImageMap() {
         return imageMap;
+    }
+
+    @Override
+    public boolean setBoundsWrap(boolean wrappedBounds) {
+        this.wrappedBounds = wrappedBounds;
+        return wrappedBounds;
+    }
+
+    @Override
+    public boolean getBoundsWrap(){
+        return wrappedBounds;
     }
 }

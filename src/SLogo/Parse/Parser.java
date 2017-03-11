@@ -1,6 +1,7 @@
 package SLogo.Parse;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.Repl;
 
 import java.util.Deque;
 import java.util.ResourceBundle;
@@ -18,7 +19,7 @@ public interface Parser {
      * @param env,    Current runtime environmental variables
      * @return Expression built from command
      */
-    Expression parse(Environment env, String command);
+    boolean parse(Repl repl, Environment env, String command);
 
     Expression readTokens(Environment env, Deque tokens);
 

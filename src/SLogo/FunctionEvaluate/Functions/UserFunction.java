@@ -39,6 +39,6 @@ public final class UserFunction implements Invokable {
 
     @Override
     public String toString() {
-        return params.toString().replace("[", "(").replace("]", ")").replace(",", "") + "\n\t" + Arrays.stream(body).map(Expression::toString).collect(Collectors.joining("\n\t")) + ")\n";
+        return "\u03bb "+params.toString().replace("[", "(").replace("]", ")").replace(",", "") + "\n\t" + Arrays.stream(body).map(Expression::toString).collect(Collectors.joining("\n\t")) + ")\n";
     }
 }

@@ -113,4 +113,8 @@ public interface CanvasView extends Observer {
      * @return	map of Indices to Image
      */
     Map<Integer,Image> getImageMap();
+
+    boolean setBoundsWrap(boolean b);
+
+    boolean getBoundsWrap();
 }
