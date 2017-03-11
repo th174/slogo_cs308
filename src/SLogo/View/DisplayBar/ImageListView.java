@@ -5,20 +5,26 @@ import java.util.Observable;
 
 import SLogo.View.CanvasViewImpl;
 import SLogo.View.CommandLineView;
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class ImageListView extends ItemList<IndexNode> {
 	private CommandLineView myCommandLineView;
-	public ImageListView(CommandLineView commandLineView) {
+	private CanvasViewImpl myCanvasView;
+	
+	public ImageListView(CanvasViewImpl canvasView, CommandLineView commandLineView) {
 		initializeResources();
 		myCommandLineView = commandLineView;
+		myCanvasView = canvasView;
+		update(myCanvasView,null);
+		getMyListView().setSpacing(Integer.parseInt(getMyResources().getString("ItemSpacing")));
+		getMyListView().setPadding(new Insets(Integer.parseInt(getMyResources().getString("ItemSpacing"))));
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		CanvasViewImpl canvasViewImpl = (CanvasViewImpl)o;
-		Map<Integer, Image> imageMap = canvasViewImpl.getImageMap();
+		Map<Integer, Image> imageMap = myCanvasView.getImageMap();
 		getMyListView().getChildren().clear();
 		for(Integer i: imageMap.keySet()){
 			ImageView imageView = new ImageView(imageMap.get(i));

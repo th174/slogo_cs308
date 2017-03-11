@@ -19,7 +19,7 @@ public class ItemDisplay implements SLogoGUIElement{
 	public ItemDisplay(CommandLineView commandLine, EnvironmentImpl environment, CanvasViewImpl canvasView, double width, double height) {
 		initializeResources();
 		
-		ItemList<TextContainer> variableListView = new VariableListView(commandLine);
+		ItemList<TextContainer> variableListView = new VariableListView(environment,commandLine);
 		environment.addObserver(variableListView);
     	Node variableListViewNode = variableListView.getView();
     	Tab variableListTab = new Tab();
@@ -27,7 +27,7 @@ public class ItemDisplay implements SLogoGUIElement{
     	variableListTab.setText(myResources.getString("VariableTab"));
     	variableListTab.setContent(variableListViewNode);
     	
-    	ItemList<TextContainer> functionListView = new FunctionListView(commandLine);
+    	ItemList<TextContainer> functionListView = new FunctionListView(environment,commandLine);
     	environment.addObserver(functionListView);
     	Node functionListViewNode = functionListView.getView();
     	Tab functionListTab = new Tab();
@@ -35,7 +35,7 @@ public class ItemDisplay implements SLogoGUIElement{
     	functionListTab.setText(myResources.getString("FunctionTab"));
     	functionListTab.setContent(functionListViewNode);
     	
-    	ItemList<IndexNode> colorListView = new ColorListView(commandLine);
+    	ItemList<IndexNode> colorListView = new ColorListView(canvasView,commandLine);
     	canvasView.addObserver(colorListView);
     	Node colorListViewNode = colorListView.getView();
     	Tab colorListTab = new Tab();
@@ -43,7 +43,7 @@ public class ItemDisplay implements SLogoGUIElement{
     	colorListTab.setText(myResources.getString("ColorTab"));
     	colorListTab.setContent(colorListViewNode);
 
-    	ItemList<IndexNode> imageListView = new ImageListView(commandLine);
+    	ItemList<IndexNode> imageListView = new ImageListView(canvasView,commandLine);
     	canvasView.addObserver(imageListView);
     	Node imageListViewNode = imageListView.getView();
     	Tab imageListTab = new Tab();
@@ -51,15 +51,15 @@ public class ItemDisplay implements SLogoGUIElement{
     	imageListTab.setText(myResources.getString("ImageTab"));
     	imageListTab.setContent(imageListViewNode);
     	
-    	SettingsView settingsView = new SettingsView(canvasView);
-    	Node settingsViewNode = settingsView.getView();
-    	Tab settingsTab = new Tab();
-    	settingsTab.setClosable(false);
-    	settingsTab.setText(myResources.getString("SettingsTab"));
-    	settingsTab.setContent(settingsViewNode);
+//    	SettingsView settingsView = new SettingsView(canvasView);
+//    	Node settingsViewNode = settingsView.getView();
+//    	Tab settingsTab = new Tab();
+//    	settingsTab.setClosable(false);
+//    	settingsTab.setText(myResources.getString("SettingsTab"));
+//    	settingsTab.setContent(settingsViewNode);
     	
     	myTabPane.setPrefSize(width, height);
-    	myTabPane.getTabs().addAll(variableListTab,functionListTab,colorListTab,imageListTab,settingsTab);
+    	myTabPane.getTabs().addAll(variableListTab,functionListTab,colorListTab,imageListTab);
 	}
 	
 	private void initializeResources() {
