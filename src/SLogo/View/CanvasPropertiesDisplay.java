@@ -1,6 +1,7 @@
 package SLogo.View;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,6 +20,9 @@ import javafx.stage.Stage;
  */
 
 public class CanvasPropertiesDisplay {
+	private static final String RESOURCE_FILEPATH = "resources/View/";
+	private ResourceBundle viewResources;
+	private static final int MAX_PEN_WIDTH = 7;
 	Stage myStage;
 	Popup myPopup;
 	private Integer penColor;
@@ -28,6 +32,7 @@ public class CanvasPropertiesDisplay {
     private Map<Integer, Color> myColorMap;
 	
 	public CanvasPropertiesDisplay(CanvasView cv, Map<Integer, Color> colorMap){
+		viewResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "View");
 		myCV = cv;
 		myColorMap = colorMap;
 		
@@ -59,29 +64,29 @@ public class CanvasPropertiesDisplay {
 		VBox displayBox = new VBox();
 		
 		HBox penColorBox = new HBox();
-	    Label penColorLabel = new Label(String.format("Pen Color Index: %s", penColor));
+	    Label penColorLabel = new Label(String.format(viewResources.getString("penLabel"), penColor));
 	    Slider penColorSlider = new Slider(0, myColorMap.size()-1, penColor);
 	    penColorSlider.setOnMouseClicked(e -> {
 	    	penColor = (int) penColorSlider.getValue();
-	    	penColorLabel.setText(String.format("Pen Color Index: %s", penColor));
+	    	penColorLabel.setText(String.format(viewResources.getString("penLabel"), penColor));
 	    });
 	    setSliderProperties(penColorBox, penColorLabel, penColorSlider, 0);
 	    
 	    HBox penWidthBox = new HBox();
-	    Label penWidthLabel = new Label(String.format("Pen Width: %1$,.1f", penWidth));
-	    Slider penWidthSlider = new Slider(0, 5, penWidth);//magic number 5
+	    Label penWidthLabel = new Label(String.format(viewResources.getString("widthLabel"), penWidth));
+	    Slider penWidthSlider = new Slider(0, MAX_PEN_WIDTH, penWidth);
 	    penWidthSlider.setOnMouseClicked(e -> {
 	    	penWidth = penWidthSlider.getValue();
-	    	penWidthLabel.setText(String.format("Pen Width: %1$,.1f", penWidth));
+	    	penWidthLabel.setText(String.format(viewResources.getString("widthLabel"), penWidth));
 	    });
 	    setSliderProperties(penWidthBox, penWidthLabel, penWidthSlider, 10);
 	    
 	    HBox bgColorBox = new HBox();
-	    Label bgColorLabel = new Label(String.format("Background Color Index: %s", backgroundColorIndex));
+	    Label bgColorLabel = new Label(String.format(viewResources.getString("backgroundLabel"), backgroundColorIndex));
 	    Slider bgColorSlider = new Slider(0, myColorMap.size()-1, backgroundColorIndex);//magic number 5
 	    bgColorSlider.setOnMouseClicked(e -> {
 	    	backgroundColorIndex = (int) bgColorSlider.getValue();
-	    	bgColorLabel.setText(String.format("Background Color Index: %s", backgroundColorIndex));
+	    	bgColorLabel.setText(String.format(viewResources.getString("backgroundLabel"), backgroundColorIndex));
 	    });
 	    setSliderProperties(bgColorBox, bgColorLabel, bgColorSlider, 0);
 	    
@@ -98,7 +103,8 @@ public class CanvasPropertiesDisplay {
 	    displayBox.getChildren().add(bgColorBox);
 	    displayBox.getChildren().add(buttonsBox);
 	    root.getChildren().add(displayBox);
-	    Scene myPopup= new Scene(root, 300, 200);
+	    Scene myPopup= new Scene(root, Integer.parseInt(viewResources.getString("popupWidth")), 
+	    		Integer.parseInt(viewResources.getString("popupHeight")));
 	    return myPopup;
 	}
 
@@ -114,7 +120,7 @@ public class CanvasPropertiesDisplay {
 
 	private void createStage() {
 		myStage = new Stage();
-		myStage.setTitle("Environment Properties");
+		myStage.setTitle(viewResources.getString("envPropTitle"));
 	}
 
 	

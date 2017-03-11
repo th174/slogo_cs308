@@ -1,5 +1,7 @@
 package SLogo.View.Sprite;
 
+import java.util.ResourceBundle;
+
 import SLogo.Turtles.Turtle;
 import SLogo.View.ErrorPrompt;
 import javafx.scene.Scene;
@@ -18,6 +20,9 @@ import javafx.stage.Stage;
  */
 
 public class TurtlePropertiesDisplay {
+	private static final String RESOURCE_FILEPATH = "resources/View/";
+	private ResourceBundle viewResources;
+	private ResourceBundle exceptionResources;
 	Stage myStage;
 	Popup myPopup;
 	private Integer myID;
@@ -32,6 +37,8 @@ public class TurtlePropertiesDisplay {
 	private TextField newHeadingField;
 	
 	public TurtlePropertiesDisplay(int ID, double[] pos, double heading, boolean hidden, boolean penDown, Turtle turtRef){
+		viewResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "View");
+		exceptionResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "Exceptions");
 		myID = ID;
 		myPos = pos;
 		myHeading = heading;
@@ -54,13 +61,13 @@ public class TurtlePropertiesDisplay {
 			myTurtRef.setXY(Double.parseDouble(newXField.getText()), Double.parseDouble(newYField.getText()));
 		}
 		else{
-			throw new ErrorPrompt("Position Values not Valid");
+			throw new ErrorPrompt(exceptionResources.getString("positionException"));
 		}
 		if (matchesDecimalFormat(newHeadingField.getText())){
 			myTurtRef.setHeading(Double.parseDouble(newHeadingField.getText()));
 		}
 		else{
-			throw new ErrorPrompt("Heading Value not Valid");
+			throw new ErrorPrompt(exceptionResources.getString("headingException"));
 		}
 		myTurtRef.setTurtleShow(!myHidden);
 		myTurtRef.setPenDown(myPenDown);
@@ -77,11 +84,11 @@ public class TurtlePropertiesDisplay {
 		VBox displayBox = new VBox();
 		
 		HBox IDBox = new HBox();
-	    Label idLabel = new Label(String.format("ID: %s", myID));
+	    Label idLabel = new Label(String.format(viewResources.getString("idLabel"), myID));
 	    IDBox.getChildren().add(idLabel);
 	    
 	    HBox posBox = new HBox();
-	    Label posLabel = new Label("Position: ");
+	    Label posLabel = new Label(viewResources.getString("positionLabel_Turtle"));
 	    newXField = new TextField(String.valueOf(myPos[0]));
 	    newXField.setPrefWidth(100);
 	    newYField = new TextField(String.valueOf(myPos[1]));
@@ -91,22 +98,22 @@ public class TurtlePropertiesDisplay {
 	    posBox.getChildren().add(newYField);
 	    
 	    HBox headingBox = new HBox();
-	    Label headingLabel = new Label("Heading: ");
+	    Label headingLabel = new Label(viewResources.getString("headingLabel_Turtle"));
 	    newHeadingField = new TextField(String.valueOf(myHeading));
 	    newHeadingField.setPrefWidth(100);
 	    headingBox.getChildren().add(headingLabel);
 	    headingBox.getChildren().add(newHeadingField);
 	    
 	    HBox hiddenBox = new HBox();
-	    Label hiddenLabel = new Label(String.format("Hidden: %B", myHidden));
-	    Button hiddenButton = new Button("Toggle Hidden");
+	    Label hiddenLabel = new Label(String.format(viewResources.getString("hiddenLabel"), myHidden));
+	    Button hiddenButton = new Button(viewResources.getString("hiddenButton"));
 	    hiddenButton.setOnAction(e -> toggleHidden(hiddenLabel));
 	    hiddenBox.getChildren().add(hiddenLabel);
 	    hiddenBox.getChildren().add(hiddenButton);
 	    
 	    HBox penDownBox = new HBox();
-	    Label penDownLabel = new Label(String.format("Pen Down: %B", myHidden));
-	    Button penDownButton = new Button("Toggle Pen Down");
+	    Label penDownLabel = new Label(String.format(viewResources.getString("penDownLabel"), myHidden));
+	    Button penDownButton = new Button(viewResources.getString("penDownButton"));
 	    penDownButton.setOnAction(e -> togglePenDown(penDownLabel));
 	    penDownBox.getChildren().add(penDownLabel);
 	    penDownBox.getChildren().add(penDownButton);
@@ -132,17 +139,17 @@ public class TurtlePropertiesDisplay {
 
 	private void togglePenDown(Label penDownLabel) {
 		myPenDown = !myPenDown;
-		penDownLabel.setText(String.format("Pen Down: %B", myPenDown));
+		penDownLabel.setText(String.format(viewResources.getString("penDownLabel"), myPenDown));
 	}
 
 	private void toggleHidden(Label hiddenLabel) {
 		myHidden = !myHidden;
-		hiddenLabel.setText(String.format("Hidden: %B", myHidden));
+		hiddenLabel.setText(String.format(viewResources.getString("hiddenLabel"), myHidden));
 	}
 
 	private void createStage() {
 		myStage = new Stage();
-		myStage.setTitle(String.format("Turtle %d Properties", myID));
+		myStage.setTitle(String.format(viewResources.getString("turtPropTitle"), myID));
 	}
 
 	
