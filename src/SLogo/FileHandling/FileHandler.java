@@ -58,6 +58,22 @@ public class FileHandler {
 		}
 	}
 	
+	/**
+	 * Prompts user to select a file and returns whichever file is chosen.
+	 * 
+	 * @return User-selected File
+	 */
+	public File saveNewFile(String title) throws FileNotFoundException{
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle(title);
+		File chosen = chooser.showSaveDialog(myWindow);
+		if(chosen != null){
+			return chosen;
+		}else{
+			throw new FileNotFoundException();
+		}
+	}
+	
 	private void initializeResources(){
 		myResources = ResourceBundle.getBundle(ERROR_BUNDLE);
 	}
