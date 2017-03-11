@@ -55,12 +55,24 @@ public interface CanvasView extends Observer {
      * @return given index
      */
     int setPenColor(double index);
-
+    
+    /**
+     * @return turtle's current color index
+     * @throws ErrorPrompt 
+     */
+    int getPenColor();
+    
     /**
      * @param index sets size of the pen to be pixels thickness
      * @return given pixels
      */
     int setPenSize(double index);
+    
+    /**
+     * @return turtle's current width
+     * @throws ErrorPrompt 
+     */
+    double getPenWidth();
 
     /**
      * @param index sets shape of turtle to that represented by index
@@ -86,18 +98,6 @@ public interface CanvasView extends Observer {
      * @return int array of the three RGB values
      */
     int[] getPalette(double index);
-
-    /**
-     * @return turtle's current color index
-     * @throws ErrorPrompt 
-     */
-    int getPenColor();
-    
-    /**
-     * @return turtle's current width
-     * @throws ErrorPrompt 
-     */
-    double getPenWidth();
 
     /**
      * @return turtle's current shape index

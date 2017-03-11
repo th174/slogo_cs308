@@ -10,7 +10,7 @@ import SLogo.View.CommandLineView;
 import SLogo.View.Project;
 
 /**
- * 
+ * Keeps track of functions
  * @author Alex
  *
  */
@@ -18,6 +18,10 @@ public class FunctionListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
 	private EnvironmentImpl myEnvironment;
 	
+	/**
+	 * Create function list
+	 * @param project
+	 */
 	public FunctionListView(Project project) {
 		initializeResources();
 		myCommandLineView = project.getCommandLineView();
@@ -25,6 +29,9 @@ public class FunctionListView extends ItemList<TextContainer> {
 		update(myEnvironment,null);
 	}
 
+	/**
+	 * Updates contents
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		Environment environment = (EnvironmentImpl) o;
@@ -35,11 +42,17 @@ public class FunctionListView extends ItemList<TextContainer> {
 		}
 	}
 
+	/**
+	 * Says what to do on click
+	 */
 	@Override
 	protected void onClick(TextContainer item) {
 		myCommandLineView.setText(item.getCommand());
 	}
 
+	/**
+	 * Add item
+	 */
 	@Override
 	protected void addItem(TextContainer toAddItem) {
 		getMyListView().getChildren().add(toAddItem.getView());
