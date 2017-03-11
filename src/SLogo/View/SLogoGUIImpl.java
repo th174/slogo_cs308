@@ -63,7 +63,7 @@ public class SLogoGUIImpl implements SLogoGUI {
 		try {
 			FileHandler fh = new FileHandler(myStage);
 			LibraryWriter lw = new LibraryWriter(getCurrentEnvironment());
-			lw.write(fh.getFile(myResources.getString("SaveFile")));
+			lw.write(fh.saveNewFile(myResources.getString("SaveFile")));
 		}catch(FileNotFoundException ex) {
         	showErrorAlert(ex, myResources.getString("FileNotFoundError"));
 		}catch(Exception ex){
