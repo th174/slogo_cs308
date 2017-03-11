@@ -113,7 +113,7 @@ public class ObservableTurtle extends Observable implements Turtle {
 		attributes.put(myResources.getString("xPos"), new PropertyString("" + xPos));
 		attributes.put(myResources.getString("yPos"), new PropertyString("" + yPos));
 		attributes.put(myResources.getString("Heading"), new PropertyString("" + headingAngle));
-		attributes.put(myResources.getString("PenDown"), new PropertyString(new Boolean(isPenDown).toString()));
+		attributes.put(myResources.getString("PenDown"), new PropertyString(Boolean.toString(isPenDown)));
 		
 		returnData.put(myResources.getString("Turtle"), new PropertyMap(attributes));
 		
