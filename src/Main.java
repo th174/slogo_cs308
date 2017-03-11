@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         int width = 1300;
         int height = 900;
-        SLogoGUIImpl gui = new SLogoGUIImpl(width, height);
+        SLogoGUIImpl gui = new SLogoGUIImpl(primaryStage,width, height);
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(gui.getView());
         Scene scene = new Scene(GUIPane, width, height);
