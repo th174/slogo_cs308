@@ -33,6 +33,7 @@ SLogo
 ####Known bugs/problems with functionality:
 * There is currently back end framework established to take in configuration data and write it to a file in XML format. However, it has neither been implemented for all possible data (only the ObservableTurtle class has implemented the required `toProperty()` method), nor connected to the front end.
 * GUI formatting is different on different machines.
+* If you run `exec !!` twice in a row, it results in a StackOverflow error. Running the previous command runs the previous command, which is itself, so it runs itself.
 
 ####Extra features:
 * CanvasView: When clicking on a turtle, a pop-up display appears for the user to change the turtle’s properties. When clicking on the canvas, a pop-up display appears for the user to change the turtle environment's properties.
