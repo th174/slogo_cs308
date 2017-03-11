@@ -92,6 +92,12 @@ public interface CanvasView extends Observer {
      * @throws ErrorPrompt 
      */
     int getPenColor();
+    
+    /**
+     * @return turtle's current width
+     * @throws ErrorPrompt 
+     */
+    double getPenWidth();
 
     /**
      * @return turtle's current shape index

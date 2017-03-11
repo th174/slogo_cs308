@@ -3,6 +3,7 @@ package SLogo.View;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.View.Sprite.Sprite;
+import SLogo.View.Sprite.TurtlePropertiesDisplay;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
@@ -28,13 +29,10 @@ import java.util.*;
  */
 
 public class CanvasViewImpl extends Observable implements CanvasView {
-    private static final boolean SCROLL_PANE_TEST = true;
-
     private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
     private ResourceBundle exceptionResources;
     private static final String RESOURCE_FILEPATH = "resources/View/";
     private Pane root;
-    private ScrollPane view;
     private int viewWidth;
     private int viewHeight;
     private int[] spriteDimensions;
@@ -42,9 +40,10 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     private Map<Integer, Color> colorMap;
     private Map<Integer, Image> imageMap;
     private Rectangle backgroundNode;
-    private double penColor;
+    private CanvasPropertiesDisplay propDisp;
+    private int penColor;
     private double penWidth;
-    private double backgroundColorIndex;
+    private int backgroundColorIndex;
     private TurtleMath tMath;
 
     private HashMap<Integer, Sprite> spriteMap;
@@ -71,12 +70,10 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         penColor = 1;
         penWidth = 1;
         root = new Pane();
-        view = new ScrollPane();
-        view.setBackground(new Background(new BackgroundFill(colorMap.get(0), null, null)));
-        view.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        view.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        view.setPrefSize(viewWidth, viewHeight);
-        view.setContent(root);
+        backgroundNode = new Rectangle(viewWidth, viewHeight, colorMap.get(0));
+        propDisp = new CanvasPropertiesDisplay(this, colorMap);
+        backgroundNode.setOnMouseClicked(e -> propDisp.toggleDisplay());
+        root.getChildren().add(backgroundNode);
     }
 
     public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
@@ -139,7 +136,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     public int setPenColor(double index) {
-        penColor = index;
+        penColor = (int) index;
         return (int) index;
     }
 
@@ -152,6 +149,10 @@ public class CanvasViewImpl extends Observable implements CanvasView {
             }
         }
         throw new ErrorPrompt(exceptionResources.getString("InvalidColorIndex"));
+    }
+    
+    public double getPenWidth() {
+        return penWidth;
     }
 
     public int setPenSize(double index) {
@@ -169,8 +170,8 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     public int setBackground(double index) {
-        backgroundColorIndex = index;
-        backgroundNode.setFill(colorMap.get(index));
+        backgroundColorIndex = (int) index;
+        backgroundNode.setFill(colorMap.get(backgroundColorIndex));
         return (int) index;
     }
 
@@ -207,7 +208,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
                 line.setStartY(coordinates[1]);
                 line.setEndX(coordinates[2]);
                 line.setEndY(coordinates[3]);
-                line.setFill(colorMap.get(penColor));
+                line.setStroke(colorMap.get(penColor));
                 line.setStrokeWidth(penWidth);
                 root.getChildren().add(line);
             }
@@ -246,7 +247,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
      */
     private void instantializeSprite(int ID, Turtle t) {
         currentImageIndexMap.put(ID, (double) currentTurtleIMGIndex);
-        Sprite newSprite = new Sprite(ID, imageMap.get(currentTurtleIMGIndex), spriteDimensions[0], spriteDimensions[1], viewWidth, viewHeight);
+        Sprite newSprite = new Sprite(ID, imageMap.get(currentTurtleIMGIndex), spriteDimensions[0], spriteDimensions[1], viewWidth, viewHeight, t);
         spriteMap.put(ID, newSprite);
         root.getChildren().add(spriteMap.get(ID).getImageView());
         setPen(ID, (boolean) t.isPenDown());
@@ -255,15 +256,11 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     public Node getView() {
-        return view;
+        return root;
     }
 
     public double clearScreen() {
-        for (Node n : root.getChildren()) {
-            if (n instanceof Line) {
-                root.getChildren().remove(n);
-            }
-        }
+        root.getChildren().removeIf(n -> n instanceof Line);
         return 0;
     }
 

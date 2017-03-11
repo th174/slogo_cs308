@@ -1,5 +1,6 @@
 package SLogo.View.Sprite;
 
+import SLogo.Turtles.Turtle;
 import SLogo.View.TurtleMath;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,19 +19,21 @@ public class Sprite {
 	private int spriteHeight;
 	private int viewWidth;
 	private int viewHeight;
+	private Turtle myTurtRef;
 	private int direction;
 	private double[] position;
 	private boolean hidden;
 	private boolean penDown;
-	private PropertiesDisplay propDisp;
+	private TurtlePropertiesDisplay propDisp;
 	private TurtleMath tMath;
 
-	public Sprite(int ID, Image adefaultSpriteIMG, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight){
+	public Sprite(int ID, Image adefaultSpriteIMG, int aspriteWidth, int aspriteHeight, int aviewWidth, int aviewHeight, Turtle turtRef){
 		myID = ID;
 		spriteWidth = aspriteWidth;
 		spriteHeight = aspriteHeight;
 		viewWidth = aviewWidth;
 		viewHeight = aviewHeight;
+		myTurtRef = turtRef;
 		defaultSpriteIMG = adefaultSpriteIMG;
 		spriteIV = new ImageView();
 		setImage(defaultSpriteIMG);
@@ -39,9 +42,9 @@ public class Sprite {
 		setDirection(90);
 		setHidden(false);
 		tMath = new TurtleMath();
-		propDisp = new PropertiesDisplay(myID, tMath.absoluteToZero(viewWidth, viewHeight, getPosition()),
-				getDirection(), getHidden(), penDown);
-		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay(e));
+		propDisp = new TurtlePropertiesDisplay(myID, tMath.absoluteToZero(viewWidth, viewHeight, getPosition()),
+				getDirection(), getHidden(), penDown, myTurtRef);
+		spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay());
 	}
 
 	/**
@@ -81,7 +84,7 @@ public class Sprite {
 	}
 
 	public double getDirection(){
-		return direction - 90;
+		return direction + 90;
 	}
 
 	public void setDirection(int degrees){
