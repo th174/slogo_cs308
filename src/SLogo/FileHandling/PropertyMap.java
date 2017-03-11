@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
+ * PropertyMap is a wrapper class for any Map of data that needs to be written into XML format.
+ * The Map that it wraps maps String keys to Property values. In XML format, the key is the tag
+ * surrounding the Property that it corresponds to.
+ * 
  * @author Stone Mathers
  * Created 3/10/2017
  */
@@ -13,6 +17,9 @@ public class PropertyMap implements Property {
 	public ResourceBundle myCommands = ResourceBundle.getBundle(COMMAND_BUNDLE);
 	Map<String, Property> myMap;
 	
+	/**
+	 * @param valueMap - Map with the tag String as the key and the corresponding Property as the value.
+	 */
 	public PropertyMap(Map<String, Property> valueMap) {
 		myMap = valueMap;
 	}
