@@ -41,7 +41,7 @@ public class LibraryWriter implements FileWriter{
 	 */
 	public LibraryWriter(Environment env) {
 		myEnvironment = env;
-		varMap = myEnvironment.getAllVars();
+		varMap = myEnvironment.getLocalVars();
 		funcMap = myEnvironment.getLocalFunctions();
 		initializeResources();
 	}

@@ -1,6 +1,7 @@
 package SLogo.FileHandling;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,10 +34,28 @@ public class FileHandler {
 	 * 
 	 * @return String of data contained within the file.
 	 */
-	public String getFileData(){
+	public String getFileData(String title){
+		try{
+			return readFile(getFile(title));
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Prompts user to select a file and returns whichever file is chosen.
+	 * 
+	 * @return User-selected File
+	 */
+	public File getFile(String title) throws FileNotFoundException{
 		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Select SLogo File");
-		return readFile(chooser.showOpenDialog(myWindow));
+		chooser.setTitle(title);
+		File chosen = chooser.showOpenDialog(myWindow);
+		if(chosen != null){
+			return chosen;
+		}else{
+			throw new FileNotFoundException();
+		}
 	}
 	
 	private void initializeResources(){
