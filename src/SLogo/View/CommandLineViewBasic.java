@@ -72,13 +72,11 @@ public class CommandLineViewBasic implements CommandLineView {
 			myRepl.read(myCommandText.getText());
 			historyText = myCommandText.getText().trim() + "\n";
         }catch (Exception e) {
+            e.printStackTrace();
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle(myResources.getString("AlertError"));
         	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
         	commandErrorAlert.setContentText(e.getClass().getSimpleName()+"\n"+e.getMessage());
-            DialogPane stackTraceView = new DialogPane();
-            stackTraceView.setContentText(Arrays.toString(e.getStackTrace()));
-        	commandErrorAlert.setDialogPane(stackTraceView);
             commandErrorAlert.showAndWait();
         }
         myHistoryText.setText(myHistoryText.getText() + myResources.getString("CommandBreak") + historyText);

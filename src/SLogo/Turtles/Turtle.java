@@ -159,10 +159,12 @@ public interface Turtle {
      * @return distance moved
      */
     default double reset() {
-        setPenDown(DEFAULT_IS_PEN_DOWN);
+        setPenDown(false);
         setTurtleShow(DEFAULT_IS_SHOWING);
         setHeading(DEFAULT_HEADING);
-        return setXY(DEFAULT_X_POS, DEFAULT_Y_POS);
+        double ret = setXY(DEFAULT_X_POS, DEFAULT_Y_POS);
+        setPenDown(DEFAULT_IS_PEN_DOWN);
+        return ret;
     }
 
     /**

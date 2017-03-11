@@ -44,11 +44,11 @@ public class Project implements SLogoGUIElement {
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio),myRepl.getEnvironment().getAllTurtles());
     	Node canvasViewNode = myCanvasView.getView();
     	GridPane.setConstraints(canvasViewNode, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
-    	
+    	myRepl.setCanvas(myCanvasView);
     	myCommandLine = new CommandLineViewBasic(this, myWidth,myHeight*commandLineHeightRatio);
     	Node commandLineNode = myCommandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1, HPos.CENTER, VPos.TOP);
-    	
+
     	SLogoGUIElement itemDisplay = new ItemDisplay(this, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
     	Node itemDisplayNode = itemDisplay.getView();
     	GridPane.setConstraints(itemDisplayNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);

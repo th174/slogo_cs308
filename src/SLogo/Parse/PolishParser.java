@@ -15,6 +15,10 @@ public class PolishParser extends AbstractParser {
         super();
     }
 
+    public PolishParser(String s) {
+        super(s);
+    }
+
     public Expression readTokens(Environment env, Deque tokens) {
         String token = tokens.removeFirst().toString();
         SExpression subList = new SExpression();
