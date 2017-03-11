@@ -23,7 +23,7 @@ public class PolishParser extends AbstractParser {
         return readTokens(env, tokens, true);
     }
 
-    public Expression readTokens(Environment env, Deque<String> tokens, boolean autoGroup) {
+    private Expression readTokens(Environment env, Deque<String> tokens, boolean autoGroup) {
         String token = tokens.removeFirst();
         if (token.matches(REGEX.getString("GroupEnd")) | token.matches(REGEX.getString("ListEnd"))) {
             throw new SyntaxException(token);

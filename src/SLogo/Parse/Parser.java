@@ -4,6 +4,7 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.Repl;
 
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 /**
@@ -20,6 +21,8 @@ public interface Parser {
      * @return Expression built from command
      */
     boolean parse(Repl repl, Environment env, String command);
+
+    LinkedList<String> tokenize(String s);
 
     Expression readTokens(Environment env, Deque<String> tokens);
 

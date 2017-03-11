@@ -112,7 +112,8 @@ public final class PredefinedCommandList {
                 return repl.getEnvironment().clearTurtles();
             },
             GETPENCOLOR = repl -> repl.getCanvas().getPenColor(),
-            GETSHAPE = repl -> repl.getCanvas().getShape();
+            GETSHAPE = repl -> repl.getCanvas().getShape(),
+            GETUSERHISTORY = repl -> "\n" + repl.getHistory().stream().map(Object::toString).collect(Collectors.joining("\n")) + "\n";
     public static final IterableInvokable
             IFELSE = new IterableInvokable() {
         @Override

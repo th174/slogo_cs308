@@ -24,7 +24,8 @@ public abstract class AbstractParser implements Parser {
         setLocale(locale);
     }
 
-    protected LinkedList<String> tokenSplit(String s) {
+    public LinkedList<String> tokenize(String s) {
+        s = s.replaceAll(REGEX.getString("Comment"), "");
         Matcher m = Pattern.compile(REGEX.getString("Token"), Pattern.DOTALL).matcher(s);
         LinkedList<String> tokens = new LinkedList<>();
         while (m.find()) {
@@ -41,9 +42,9 @@ public abstract class AbstractParser implements Parser {
 
     @Override
     public boolean parse(Repl repl, Environment env, String input) {
-        LinkedList<String> tokens = tokenSplit(input.replaceAll(REGEX.getString("Comment"), ""));
+        Deque<String> tokens = tokenize(input);
         while (!tokens.isEmpty()) {
-            readTokens(env, tokens).eval(repl,env);
+            readTokens(env, tokens).eval(repl, env);
         }
         return true;
     }

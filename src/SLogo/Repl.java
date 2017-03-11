@@ -1,6 +1,7 @@
 package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
+import SLogo.Parse.Expression;
 import SLogo.Parse.Parser;
 import SLogo.View.CanvasView;
 
@@ -21,6 +22,8 @@ public interface Repl {
      * @return Environment
      */
     Environment getEnvironment();
+
+    List<Expression> getHistory();
 
     void setCanvas(CanvasView canvas);
 
