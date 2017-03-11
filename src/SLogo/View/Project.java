@@ -36,7 +36,7 @@ public class Project implements SLogoGUIElement {
     	double canvasHeightWeight = Integer.parseInt(myResources.getString("CanvasHeightWeight"));
     	double commandLineHeightWeight = Integer.parseInt(myResources.getString("CommandLineHeightWeight"));
     	double canvasHeightRatio = canvasHeightWeight / (canvasHeightWeight + commandLineHeightWeight);
-    	//double commandLineHeightRatio = commandLineHeightWeight / (canvasHeightWeight + commandLineHeightWeight);
+    	double commandLineHeightRatio = commandLineHeightWeight / (canvasHeightWeight + commandLineHeightWeight);
     	// Widths | Columns
     	double canvasWidthWeight = Integer.parseInt(myResources.getString("CanvasWidthWeight"));
     	double displayWidthWeight = Integer.parseInt(myResources.getString("DisplayWidthWeight"));
@@ -44,11 +44,10 @@ public class Project implements SLogoGUIElement {
     	double displayWidthRatio = displayWidthWeight/(canvasWidthWeight + displayWidthWeight);
     	
     	myCanvasView = new CanvasViewImpl((int)(myWidth * canvasWidthRatio),(int)(myHeight * canvasHeightRatio),myRepl.getEnvironment().getAllTurtles());
-		myRepl.setCanvas(myCanvasView);
-		Node canvasViewNode = myCanvasView.getView();
+    	Node canvasViewNode = myCanvasView.getView();
     	GridPane.setConstraints(canvasViewNode, 0, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	
-    	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myCanvasView, myWidth,myHeight*.2);
+    	CommandLineView commandLine = new CommandLineViewBasic(myRepl,myCanvasView, myWidth,myHeight*commandLineHeightRatio);
     	Node commandLineNode = commandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1, HPos.CENTER, VPos.TOP);
     	
