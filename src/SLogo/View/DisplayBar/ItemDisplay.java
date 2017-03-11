@@ -9,12 +9,23 @@ import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+/**
+ * Creates right side display with variables, functions, colors, and images
+ * @author Alex
+ *
+ */
 public class ItemDisplay implements SLogoGUIElement{
 	TabPane myTabPane = new TabPane();
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "ItemList";
 	private ResourceBundle myResources;
 	
+	/**
+	 * Creates Item display with specified height
+	 * @param project
+	 * @param width
+	 * @param height
+	 */
 	public ItemDisplay(Project project, double width, double height) {
 		initializeResources();
 		ItemList<TextContainer> variableListView = new VariableListView(project);
@@ -53,10 +64,16 @@ public class ItemDisplay implements SLogoGUIElement{
     	myTabPane.getTabs().addAll(variableListTab,functionListTab,colorListTab,imageListTab);
 	}
 	
+	/**
+	 * Creates new resources
+	 */
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
 	}
 	
+	/**
+	 * Gets node
+	 */
 	@Override
 	public Node getView() {
 		return myTabPane;

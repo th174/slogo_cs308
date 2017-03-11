@@ -10,10 +10,19 @@ import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Extends ItemList for use with colors
+ * @author Alex
+ *
+ */
 public class ColorListView extends ItemList<IndexNode> {
 	private CommandLineView myCommandLineView;
 	private CanvasViewImpl myCanvasView;
 	
+	/**
+	 * Creates new ColorListView
+	 * @param project
+	 */
 	public ColorListView(Project project) {
 		initializeResources();
 		myCommandLineView = project.getCommandLineView();
@@ -23,6 +32,9 @@ public class ColorListView extends ItemList<IndexNode> {
 		getMyListView().setPadding(new Insets(Integer.parseInt(getMyResources().getString("ItemSpacing"))));
 	}
 
+	/**
+	 * Used to update contents
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		Map<Integer, Color> colorMap = myCanvasView.getColorMap();
@@ -33,12 +45,18 @@ public class ColorListView extends ItemList<IndexNode> {
 			addItem(new IndexNode(i, rectangle));
 		}
 	}
-
+	
+	/**
+	 * Say what to do on click for items
+	 */
 	@Override
 	protected void onClick(IndexNode item) {
 		myCommandLineView.setText("SETPENCOLOR " + item.getCommand());
 	}
 
+	/**
+	 * Add items to group
+	 */
 	@Override
 	protected void addItem(IndexNode toAddItem) {
 		getMyListView().getChildren().add(toAddItem.getView());
