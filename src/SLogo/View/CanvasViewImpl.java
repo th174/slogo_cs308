@@ -3,14 +3,10 @@ package SLogo.View;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.View.Sprite.Sprite;
-import SLogo.View.Sprite.TurtlePropertiesDisplay;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -87,7 +83,8 @@ public class CanvasViewImpl extends Observable implements CanvasView {
 
     public void update(Observable o, Object n) {
         ObservableTurtle turtle = (ObservableTurtle) o;
-        Pair<Double, Double> changeLoc = (Pair<Double, Double>) n;
+        @SuppressWarnings("unchecked")
+		Pair<Double, Double> changeLoc = (Pair<Double, Double>) n;
         int currID = (int) turtle.id();
         Sprite currSprite = spriteMap.get(currID);
         setPen(currID, (boolean) turtle.isPenDown());
