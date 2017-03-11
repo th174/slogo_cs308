@@ -26,6 +26,7 @@ public class CommandLineViewBasic implements CommandLineView {
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "CommandLine";
 	private ResourceBundle myResources;
+	private TextArea myHistoryText;
 
 
     public CommandLineViewBasic(Repl repl, CanvasView canvasView, double width, double height) {
@@ -36,9 +37,10 @@ public class CommandLineViewBasic implements CommandLineView {
 		initializeResources();
         initializeGridPane();
         initializeCommandPrompt();
+        initializeHistory();
         initializeRunButton();
         initializeClearButton();
-        myCommandLine.getChildren().addAll(myCommandText, myRunButton, myClearButton);
+        myCommandLine.getChildren().addAll(myCommandText,myHistoryText,myRunButton, myClearButton);
     }
 
     private void initializeResources() {
@@ -47,7 +49,7 @@ public class CommandLineViewBasic implements CommandLineView {
 
 	private void initializeClearButton() {
         myClearButton = new Button(myResources.getString("ClearButton"));
-        myClearButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * (1 - .8));
+        myClearButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * 1);
         GridPane.setConstraints(myClearButton, 1, 1);
         myClearButton.setOnAction(e -> clearScreen());
     }
@@ -59,16 +61,17 @@ public class CommandLineViewBasic implements CommandLineView {
 	private void initializeRunButton() {
 		myRunButton = new Button();        
    		myRunButton.setText(myResources.getString("RunButtonText"));
-   		myRunButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * .8);
+   		myRunButton.setPrefSize(((87 * myWidth / 1000) - myCommandText.getPrefColumnCount()) * TEXT_WIDTH, myCommandText.getPrefRowCount() * TEXT_HEIGHT * 1);
         GridPane.setConstraints(myRunButton, 1, 0);
         myRunButton.setOnAction(e -> sendCommand());
     }
 
     private void sendCommand() {
+    	String historyText = "Failed Command... \n";
         try {
 			myRepl.read(myCommandText.getText());
+			historyText = myCommandText.getText().trim() + "\n";
         }catch (Exception e) {
-            e.printStackTrace();
         	Alert commandErrorAlert = new Alert(AlertType.ERROR);
         	commandErrorAlert.setTitle(myResources.getString("AlertError"));
         	commandErrorAlert.setHeaderText(myResources.getString("CommandNotRecognized"));
@@ -78,17 +81,28 @@ public class CommandLineViewBasic implements CommandLineView {
         	commandErrorAlert.setDialogPane(stackTraceView);
             commandErrorAlert.showAndWait();
         }
+        myHistoryText.setText(myHistoryText.getText() + myResources.getString("CommandBreak") + historyText);
+        myHistoryText.setScrollTop(myHistoryText.getScrollTop()+Integer.MAX_VALUE);
         myCommandText.clear();
     }
 
     private void initializeCommandPrompt() {
         myCommandText = new TextArea();
-        myCommandText.setPrefColumnCount((int) (myCommandText.getPrefColumnCount() * (1.72 * myWidth / 1000)));
-        myCommandText.setPrefRowCount((int) (myCommandText.getPrefRowCount() * (myHeight / 200)));
+        myCommandText.setPrefColumnCount((int) (myCommandText.getPrefColumnCount() * (1.74 * myWidth / 1000)));
+        myCommandText.setPrefRowCount((int) (myCommandText.getPrefRowCount() * (myHeight / 400)));
         myCommandText.setPromptText("Enter a command...");
-        GridPane.setConstraints(myCommandText, 0, 0, 1, 2);
+        GridPane.setConstraints(myCommandText, 0, 0, 1, 1);
     }
 
+
+    private void initializeHistory() {
+        myHistoryText = new TextArea();
+        myHistoryText.setPrefColumnCount((int) (myHistoryText.getPrefColumnCount() * (1.74 * myWidth / 1000)));
+        myHistoryText.setPrefRowCount((int) (myHistoryText.getPrefRowCount() * (myHeight / 400)));
+        myHistoryText.setEditable(false);
+        GridPane.setConstraints(myCommandText, 0, 1, 1, 1);
+    }
+    
     private void initializeGridPane() {
         myCommandLine = new GridPane();
     }

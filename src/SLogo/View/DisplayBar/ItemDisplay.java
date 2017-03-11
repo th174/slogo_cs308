@@ -1,9 +1,9 @@
 package SLogo.View.DisplayBar;
 
-
 import java.util.ResourceBundle;
 
 import SLogo.FunctionEvaluate.EnvironmentImpl;
+import SLogo.View.CanvasViewImpl;
 import SLogo.View.CommandLineView;
 import SLogo.View.SLogoGUIElement;
 import javafx.scene.Node;
@@ -16,7 +16,7 @@ public class ItemDisplay implements SLogoGUIElement{
 	private final static String PROPERTIES_FILENAME = "ItemList";
 	private ResourceBundle myResources;
 	
-	public ItemDisplay(CommandLineView commandLine, EnvironmentImpl environment, double width, double height) {
+	public ItemDisplay(CommandLineView commandLine, EnvironmentImpl environment, CanvasViewImpl canvasView, double width, double height) {
 		initializeResources();
 		
 		ItemList<TextContainer> variableListView = new VariableListView(commandLine);
@@ -35,26 +35,31 @@ public class ItemDisplay implements SLogoGUIElement{
     	functionListTab.setText(myResources.getString("FunctionTab"));
     	functionListTab.setContent(functionListViewNode);
     	
-    	Node colorListViewNode = new ColorListView(commandLine).getView();
+    	ItemList<IndexNode> colorListView = new ColorListView(commandLine);
+    	canvasView.addObserver(colorListView);
+    	Node colorListViewNode = colorListView.getView();
     	Tab colorListTab = new Tab();
     	colorListTab.setClosable(false);
     	colorListTab.setText(myResources.getString("ColorTab"));
     	colorListTab.setContent(colorListViewNode);
-    	
-    	Node imageListViewNode = new ImageListView(commandLine).getView();
+
+    	ItemList<IndexNode> imageListView = new ImageListView(commandLine);
+    	canvasView.addObserver(imageListView);
+    	Node imageListViewNode = imageListView.getView();
     	Tab imageListTab = new Tab();
     	imageListTab.setClosable(false);
     	imageListTab.setText(myResources.getString("ImageTab"));
     	imageListTab.setContent(imageListViewNode);
     	
-//    	Node settingsViewNode = new SettingsView().getView();
-//    	Tab settingsTab = new Tab();
-//    	settingsTab.setClosable(false);
-//    	colorListTab.setText(myResources.getString("SettingsTab"));
-//    	settingsTab.setContent(settingsViewNode);
+    	SettingsView settingsView = new SettingsView(canvasView);
+    	Node settingsViewNode = settingsView.getView();
+    	Tab settingsTab = new Tab();
+    	settingsTab.setClosable(false);
+    	settingsTab.setText(myResources.getString("SettingsTab"));
+    	settingsTab.setContent(settingsViewNode);
     	
     	myTabPane.setPrefSize(width, height);
-    	myTabPane.getTabs().addAll(variableListTab,functionListTab,colorListTab,imageListTab);
+    	myTabPane.getTabs().addAll(variableListTab,functionListTab,colorListTab,imageListTab,settingsTab);
 	}
 	
 	private void initializeResources() {
