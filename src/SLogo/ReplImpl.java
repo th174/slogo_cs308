@@ -20,7 +20,7 @@ public class ReplImpl implements Repl {
     private int currentIndex;
     private Environment userEnv;
 
-    public ReplImpl() throws IOException {
+    public ReplImpl() {
         history = new ArrayList<>();
         currentIndex = 0;
         userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(1));

@@ -11,14 +11,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
-        ReplImpl repl = new ReplImpl();
-        int SIZE = 800;
-        SLogoGUIImpl gui = new SLogoGUIImpl(repl, SIZE, SIZE);
+        int width = 1300;
+        int height = 900;
+        SLogoGUIImpl gui = new SLogoGUIImpl(width, height);
         BorderPane GUIPane = new BorderPane();
         GUIPane.setCenter(gui.getView());
-        Scene scene = new Scene(GUIPane, SIZE, SIZE);
+        Scene scene = new Scene(GUIPane, width, height);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

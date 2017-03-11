@@ -4,35 +4,32 @@ import java.util.Map;
 import java.util.Observable;
 
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.Functions.Invokable;
+import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.View.CommandLineView;
 
-/**
- * 
- * @author Alex
- *
- */
-public class FunctionListViewBasic extends ItemList<TextContainer> {
+public class VariableListView extends ItemList<TextContainer> {
 	private CommandLineView myCommandLineView;
-	public FunctionListViewBasic(CommandLineView commandLineView) {
+	
+	public VariableListView(CommandLineView commandLineView) {
 		initializeResources();
 		myCommandLineView = commandLineView;
-		addItem(new TextContainer(getMyResources().getString("FunctionTab")));
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		Environment environment = (Environment) o;
-		Map<String, Invokable> currentVariableMap = environment.getAllFunctions();
+		@SuppressWarnings("rawtypes")
+		Map<String, Variable> currentVariableMap = environment.getAllVars();
 		getMyListView().getChildren().clear();
 		for(String string : currentVariableMap.keySet()){
-			getMyListView().getChildren().add(new TextContainer(string + " = " + currentVariableMap.get(string)).getView());
+			addItem(new TextContainer(string + " = " + currentVariableMap.get(string)));
 		}
 	}
 
 	@Override
 	protected void onClick(TextContainer item) {
-		myCommandLineView.setText(item.getCommand());
+		String [] commandInfo = item.getCommand().split(" = ");
+		myCommandLineView.setText("MAKEVARIABLE " + commandInfo[0] + " " + commandInfo[1]);
 	}
 
 	@Override
