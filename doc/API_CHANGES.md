@@ -1,5 +1,7 @@
 ###Environment
-* Added methods to accommodate multiple turtles
+* Added methods to accommodate multiple turtles. These methods were `getActiveTurtleList()`, `getAllTurtles()`, `filterTurtles(Predicate<Turtle> filter)`, `selectTurtles(List<Integer> turtleIDs)`, and `clearTurtles()`.
+*Changed `getUserVars()` and `getUserFunctions()` to `getLocalVars()` and `getLocalFunctions()`, respectively. These still return only the user-created variables and functions, however, the method name change reflects the effects of scope. Thus, only functions and variables within a particular Environment's scope can be accessed. This accounts for the creation of variable or functions within a TO method or a recursive method, to prevent reading or writing of variables that should not be accessible beyond the appropriate scope.
+* Added methods `addUserVariable(String name, Variable var)` and `addUserFunction(String name, Invokable function)` to create new variables and functions. This alteration does not reflect a major design change, but merely an oversight in the initial design process.
 ###Parser
 * Changed parser to algorithm to simultaneous parsing and executing, instead of parsing the entire thing and executing later. 
 ###CanvasView started with only one command `getView()` to return the canvas' view to the GUI. Since then, there have been added features that continued to grow as the program grew
