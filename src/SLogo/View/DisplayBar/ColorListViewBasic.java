@@ -1,8 +1,12 @@
 package SLogo.View.DisplayBar;
 
+import java.util.Map;
 import java.util.Observable;
 
+import SLogo.View.CanvasViewImpl;
 import SLogo.View.CommandLineView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class ColorListViewBasic extends ItemList<IndexNode> {
 	private CommandLineView myCommandLineView;
@@ -14,13 +18,13 @@ public class ColorListViewBasic extends ItemList<IndexNode> {
 
 	@Override
 	public void update(Observable o, Object arg) {
-//		Environment environment = (Environment) o;
-//		@SuppressWarnings("rawtypes")
-//		Map<String, Variable> currentVariableMap = environment.getAllVars();
-//		getMyListView().getChildren().clear();
-//		for(String string : currentVariableMap.keySet()){
-//			getMyListView().getChildren().add(new TextContainer(string + " = " + currentVariableMap.get(string)).getView());
-//		}
+		CanvasViewImpl canvasViewImpl = (CanvasViewImpl)o;
+		Map<Integer, Color> colorMap = canvasViewImpl.getColorMap();
+		getMyListView().getChildren().clear();
+		for(Integer i: colorMap.keySet()){
+			Rectangle rectangle = new Rectangle(20,20);
+			addItem(new IndexNode(i, rectangle));
+		}
 	}
 
 	@Override

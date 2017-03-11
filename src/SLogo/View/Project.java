@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 public class Project implements SLogoGUIElement {
 	
 	private Repl myRepl;
-	private CanvasView myCanvasView;
+	private CanvasViewImpl myCanvasView;
 	private EnvironmentImpl myEnv;
 	private Group myRoot;
 	private double myWidth;
@@ -51,7 +51,7 @@ public class Project implements SLogoGUIElement {
     	Node commandLineNode = commandLine.getView();
     	GridPane.setConstraints(commandLineNode, 0, 2, 2, 1, HPos.CENTER, VPos.TOP);
     	
-    	SLogoGUIElement menuItemTabPane = new ItemDisplay(commandLine, myEnv, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
+    	SLogoGUIElement menuItemTabPane = new ItemDisplay(commandLine, myEnv, myCanvasView, myWidth * displayWidthRatio,myHeight * canvasHeightRatio);
     	Node menuItemTabPaneNode = menuItemTabPane.getView();
     	GridPane.setConstraints(menuItemTabPaneNode, 1, 1, 1, 1, HPos.CENTER, VPos.TOP);
     	

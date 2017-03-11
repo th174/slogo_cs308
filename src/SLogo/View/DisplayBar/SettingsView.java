@@ -2,6 +2,7 @@ package SLogo.View.DisplayBar;
 
 import java.util.ResourceBundle;
 
+import SLogo.View.CanvasViewImpl;
 import SLogo.View.SLogoGUIElement;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -12,13 +13,12 @@ public class SettingsView implements SLogoGUIElement{
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "SettingsView";
 	private ResourceBundle myResources;
+	private CanvasViewImpl myCanvasView;
 	
-	public SettingsView() {
+	public SettingsView(CanvasViewImpl canvasView) {
 		initializeResources();
-		mySettings.getChildren().add(new Label(myResources.getString("Title")));
-
+		myCanvasView = canvasView;
 		mySettings.getChildren().add(new Label(myResources.getString("BackgroundColor")));
-		mySettings.getChildren().add(new Label(myResources.getString("Title")));
 		
 		
 //		set a background color for the turtle's display area
