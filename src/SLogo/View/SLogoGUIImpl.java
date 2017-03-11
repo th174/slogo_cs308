@@ -1,6 +1,5 @@
 package SLogo.View;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,6 @@ import SLogo.Repl;
 import SLogo.FileHandling.FileHandler;
 import SLogo.FileHandling.LibraryWriter;
 import SLogo.FunctionEvaluate.Environment;
-import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.View.Menu.MenuBarItems;
 import SLogo.View.Menu.MenuBarItemsBasic;
 import javafx.event.ActionEvent;
@@ -23,7 +21,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class SLogoGUIImpl implements SLogoGUI {
