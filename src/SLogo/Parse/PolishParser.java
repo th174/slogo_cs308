@@ -23,14 +23,14 @@ public class PolishParser extends AbstractParser {
         return readTokens(env, tokens, true);
     }
 
-    private Expression readTokens(Environment env, Deque<String> tokens, boolean autoGroup) {
+    public Expression readTokens(Environment env, Deque<String> tokens, boolean autoGroup) {
         String token = tokens.removeFirst();
         if (token.matches(REGEX.getString("GroupEnd")) | token.matches(REGEX.getString("ListEnd"))) {
             throw new SyntaxException(token);
         } else if (token.matches(REGEX.getString("GroupStart"))) {
-            return readUntil(env, REGEX.getString("GroupEnd"), tokens, true);
+            return readUntil(env, REGEX.getString("GroupEnd"), tokens, false);
         } else if (token.matches(REGEX.getString("ListStart"))) {
-            return readUntil(env, REGEX.getString("ListEnd"), tokens, false);
+            return readUntil(env, REGEX.getString("ListEnd"), tokens, true);
         } else {
             return group(env, tokens, token, autoGroup);
         }
@@ -48,13 +48,14 @@ public class PolishParser extends AbstractParser {
         }
     }
 
-    private Expression readUntil(Environment env, String end, Deque<String> tokens, boolean isGroup) {
+    private Expression readUntil(Environment env, String end, Deque<String> tokens, boolean autoGroup) {
         SExpression subList = new SExpression();
         while (Objects.nonNull(tokens.peek()) && !tokens.peek().matches(end)) {
-            subList.add(readTokens(env, tokens, isGroup));
-            isGroup = false;
+            subList.add(readTokens(env, tokens, autoGroup));
+            autoGroup = true;
         }
         tokens.pollFirst();
         return subList;
     }
+
 }
