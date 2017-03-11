@@ -1,10 +1,16 @@
 package SLogo.View;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import SLogo.Repl;
+import SLogo.FileHandling.FileHandler;
+import SLogo.FileHandling.LibraryWriter;
+import SLogo.FunctionEvaluate.Environment;
+import SLogo.FunctionEvaluate.EnvironmentImpl;
 import SLogo.View.Menu.MenuBarItems;
 import SLogo.View.Menu.MenuBarItemsBasic;
 import javafx.event.ActionEvent;
@@ -17,31 +23,33 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class SLogoGUIImpl implements SLogoGUI {
 	
 	TabPane myTabPane = new TabPane();
 	private Group myRoot;
+	private Stage myStage;
 	private double myWidth;
 	private double myHeight;
 	private final static String RESOURCES_PATH = "resources/View/";
 	private final static String PROPERTIES_FILENAME = "SLogoGUI";
 	private ResourceBundle myResources;
-	private ReaderWriter<Node> myProjectReaderWriter;
 	private Map<Node,Project> myProjectMap = new HashMap<Node,Project>();
 	
 	
-	public SLogoGUIImpl(double width,double height){
+	public SLogoGUIImpl(Stage stage,double width,double height){
 		myRoot = new Group();
+		myStage = stage;
 		myWidth = width;
 		myHeight = height;
-		myProjectReaderWriter = new ReaderWriter<Node>();
 		initializeResources();
 		GridPane gridPane = new GridPane();
 		double menuBarHeight = Integer.parseInt(myResources.getString("MenuBarHeight"));
     	// Heights | Rows
     	MenuBarItems menuBarItems = new MenuBarItemsBasic(myTabPane, myProjectMap, e->addNewProjectTab(createNewProjectTab(menuBarHeight,myResources.getString("Project"))),
-    													  this::saveFile,this::loadFile);
+    													  this::saveLibrary,this::loadLibrary);
     	Node menuBarItemsNode = menuBarItems.getView();
     	GridPane.setConstraints(menuBarItemsNode, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
     	
@@ -51,46 +59,35 @@ public class SLogoGUIImpl implements SLogoGUI {
         myRoot.getChildren().addAll(gridPane);
 	}
 
-	private void saveFile(ActionEvent e) {
-		Node saveProject = myTabPane.getSelectionModel().getSelectedItem().getContent();
+	private void saveLibrary(ActionEvent e) {
 		try {
-			myProjectReaderWriter.writeObject(saveProject);
+			FileHandler fh = new FileHandler(myStage);
+			LibraryWriter lw = new LibraryWriter(getCurrentEnvironment());
+			lw.write(fh.getFile(myResources.getString("SaveFile")));
 		}catch(FileNotFoundException ex) {
-        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
-        	commandErrorAlert.setTitle("Error");
-        	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
-        	commandErrorAlert.setContentText(e.getClass().getName());
-        	commandErrorAlert.showAndWait();
+        	showErrorAlert(ex, myResources.getString("FileNotFoundError"));
 		}catch(Exception ex){
-        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
-        	commandErrorAlert.setTitle("Error");
-        	commandErrorAlert.setHeaderText(myResources.getString("SaveError"));
-        	commandErrorAlert.setContentText(e.getClass().getName());
-        	commandErrorAlert.showAndWait();
+			showErrorAlert(ex, myResources.getString("SaveError"));
 		}
 	}
 
-	private void loadFile(ActionEvent e) {
-		Node loadedProject;
+	private void loadLibrary(ActionEvent e) {
 		try {
-			loadedProject = myProjectReaderWriter.readObject();
-			Tab loadedTab = new Tab(myResources.getString("LoadedTab"), loadedProject);
-			myTabPane.getTabs().add(loadedTab);
+			FileHandler fh = new FileHandler(myStage);
+			getCurrentRepl().read(fh.getFileData(myResources.getString("LoadFile")));
 		}catch(FileNotFoundException ex) {
-			loadedProject = null;
-        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
-        	commandErrorAlert.setTitle("Error");
-        	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
-        	commandErrorAlert.setContentText(e.getClass().getName());
-        	commandErrorAlert.showAndWait();
+			showErrorAlert(ex, myResources.getString("FileNotFoundError"));
 		}catch(Exception ex){
-			loadedProject = null;
-        	Alert commandErrorAlert = new Alert(AlertType.ERROR);
-        	commandErrorAlert.setTitle("Error");
-        	commandErrorAlert.setHeaderText(myResources.getString("LoadError"));
-        	commandErrorAlert.setContentText(e.getClass().getName());
-        	commandErrorAlert.showAndWait();
+			showErrorAlert(ex, myResources.getString("LoadError"));
 		}
+	}
+	
+	private Environment getCurrentEnvironment(){
+		return myProjectMap.get(myTabPane.getSelectionModel().getSelectedItem().getContent()).getRepl().getEnvironment();
+	}
+	
+	private Repl getCurrentRepl(){
+		return myProjectMap.get(myTabPane.getSelectionModel().getSelectedItem().getContent()).getRepl();
 	}
 
 	private void addNewProjectTab(Tab tab) {
@@ -113,5 +110,13 @@ public class SLogoGUIImpl implements SLogoGUI {
 
 	private void initializeResources() {
 		myResources = ResourceBundle.getBundle(RESOURCES_PATH + PROPERTIES_FILENAME);
+	}
+	
+	private void showErrorAlert(Exception e, String errorType){
+		Alert commandErrorAlert = new Alert(AlertType.ERROR);
+    	commandErrorAlert.setTitle("Error");
+    	commandErrorAlert.setHeaderText(myResources.getString("FileNotFoundError"));
+    	commandErrorAlert.setContentText(e.getClass().getName());
+    	commandErrorAlert.showAndWait();
 	}
 }

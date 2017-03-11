@@ -38,13 +38,13 @@ public class FileMenu implements SLogoMenu{
 	}
 
 	private void initializeSaveChoice(EventHandler<ActionEvent> saveProject) {
-		MenuItem saveChoice = new MenuItem(myResources.getString("SaveProject"));
+		MenuItem saveChoice = new MenuItem(myResources.getString("SaveLibrary"));
 		saveChoice.setOnAction(saveProject);
 		myFileMenu.getItems().add(saveChoice);
 	}
 
 	private void initializeLoadChoice(EventHandler<ActionEvent> loadProject) {
-		MenuItem loadChoice = new MenuItem(myResources.getString("LoadProject"));
+		MenuItem loadChoice = new MenuItem(myResources.getString("LoadLibrary"));
 		loadChoice.setOnAction(loadProject);
 		myFileMenu.getItems().add(loadChoice);
 	}
