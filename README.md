@@ -134,13 +134,13 @@ Boolean TRUE evaluates to 1 in numerical context, and "true" in string context. 
 <tr>
 <td><code>(+ TRUE 3)</code></td>
 <td>
-<div align="right"><code>=> 4</code></div>
+<code>=> 4</code>
 </td>
 </tr>
 <tr>
 <td><code>(+ TRUE "FALSE")</code></td>
 <td>
-<div align="right"><code>=> "trueFalse" </code></div>
+<code>=> "trueFalse" </code>
 </td>
 <tr>
 </tbody>
@@ -156,13 +156,13 @@ Numbers evaluate to their string representation in string context. 0 evaluates t
 <tr>
 <td><code>(+ 1 2 '3' 4 5)</code></td>
 <td>
-<div align="right"><code> => "3345" </code></div>
+<code> => "3345" </code>
 </td>
 </tr>
 <tr>
 <td><code>(AND .5 2 3 0 4)</code></td>
 <td>
-<div align="right"><code> => 0 </code></div>
+<code> => 0 </code>
 </td>
 <tr>
 </tbody>
@@ -178,13 +178,13 @@ Strings evaluate to their numerical value if possible in numerical context, else
 <tr>
 <td><code>(sin "30")</code></td>
 <td>
-<div align="right"><code> => 0.5 </code></div>
+<code> => 0.5 </code>
 </td>
 </tr>
 <tr>
 <td><code>(AND "hello" "false" "" "world")</code></td>
 <td>
-<div align="right"><code> => "" </code></div>
+<code> => "" </code>
 </td>
 </tr>
 </tbody>
@@ -200,7 +200,7 @@ Lists evaluate to their final element in scalar context.
 <tr>
 <td><code>(+ 1 2 3 (4 5 6))</code></td>
 <td>
-<div align="right"><code>=> (+ 1 2 3 6)<br> => 9</code></div>
+<code>=> (+ 1 2 3 6)<br> => 9</code>
 </td>
 <tr>
 </tbody>
