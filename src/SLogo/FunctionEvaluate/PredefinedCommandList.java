@@ -103,7 +103,8 @@ public final class PredefinedCommandList {
             SETBACKGROUND = (repl, var1) -> repl.getCanvas().setBackground(var1.toNumber()),
             SETSHAPE = (repl, var1) -> repl.getCanvas().setShape(var1.toNumber()),
             SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.toNumber()),
-            SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber());
+            SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber()),
+            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getEnvironment(), var1.toContentString());
     public static final Property
             GETBOUNDSWRAP = repl -> repl.getCanvas().getBoundsWrap(),
             TURTLES = repl -> repl.getEnvironment().getAllTurtles().size(),

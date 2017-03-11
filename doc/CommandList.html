@@ -128,6 +128,7 @@
 <p>All variables are weakly typed, and use Javascript-style runtime dynamic typing. <br><br>
     Boolean TRUE evaluates to 1 in numerical context, and "true" in string context. Boolean FALSE evaluates to 0 in
     numerical context, and "false" in string context. Booleans evaluate to singleton lists in list context.<br><br>
+</p>
 <table border="1">
     <tbody>
     <tr>
@@ -157,15 +158,15 @@ other numbers evaluate to true. Numbers evaluate to singleton lists in list cont
         <th>Evaluation Result</th>
     <tr>
         <td><code>(+ 1 2 '3' 4 5)</code></td>
-        <td><code>
-            <div align="right">=> "3345"
-        </code></div></td>
+        <td>
+            <div align="right"><code> => "3345" </code></div>
+        </td>
     </tr>
     <tr>
         <td><code>(AND .5 2 3 0 4)</code></td>
-        <td><code>
-            <div align="right">=> 0</div>
-        </code></td>
+        <td>
+            <div align="right"><code> => 0 </code></div>
+        </td>
     <tr>
     </tbody>
 </table>
@@ -180,15 +181,15 @@ singleton lists in list context<br><br>
         <th>Evaluation Result</th>
     <tr>
         <td><code>(sin "30")</code></td>
-        <td><code>
-            <div align="right">=> 0.5</div>
-        </code></td>
+        <td>
+            <div align="right"><code> => 0.5 </code></div>
+        </td>
     </tr>
     <tr>
         <td><code>(AND "hello" "false" "true" "FALSE" "" "world")</code></td>
-        <td><code>
-            <div align="right">=> ""</div>
-        </code></td>
+        <td>
+            <div align="right"><code> => "" </code></div>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -207,7 +208,7 @@ Lists evaluate to their final element in scalar context.<br><br>
     <tr>
     </tbody>
 </table>
-<br></p>
+<br>
 
 
 <h4>Turtle Commands</h4>
@@ -657,6 +658,30 @@ Lists evaluate to their final element in scalar context.<br><br>
     </tbody>
 </table>
 
+<h4>Predefined Variables</h4>
+<table border="1">
+    <tbody>
+    <tr>
+    </tr>
+    <tr>
+        <td>PI</td>
+        <td>Reports the number Pi</td>
+    </tr>
+    <tr>
+        <td>E</td>
+        <td>Reports the number E</td>
+    </tr>
+    <tr>
+        <td>TRUE</td>
+        <td>Returns TRUE</td>
+    </tr>
+    <tr>
+        <td>FALSE</td>
+        <td>Returns FALSE</td>
+    </tr>
+    </tbody>
+</table>
+
 <h4>Additional Implemented Commands</h4>
 <table border="1">
     <tbody>
@@ -712,33 +737,24 @@ Lists evaluate to their final element in scalar context.<br><br>
             returns TRUE if bounds behavior is current set to toroidal, otherwise FALSE
         </td>
     </tr>
-    </tbody>
-</table>
-
-<h4>Predefined Variables</h4>
-<table border="1">
-    <tbody>
     <tr>
+        <td><code>HISTORY</code>
+        </td>
+        <td>
+            returns all previously executed commands as a string, one per line
+        </td>
     </tr>
     <tr>
-        <td>PI</td>
-        <td>Reports the number Pi</td>
-    </tr>
-    <tr>
-        <td>E</td>
-        <td>Reports the number E</td>
-    </tr>
-    <tr>
-        <td>TRUE</td>
-        <td>Returns TRUE</td>
-    </tr>
-    <tr>
-        <td>FALSE</td>
-        <td>Returns FALSE</td>
+        <td><code>EXECUTE <em>string</em></code><br>
+            <code>EXEC <em>string</em></code>
+        </td>
+        <td>
+            reads a String as a SLogo code, and executes it<br>
+            returns the result
+        </td>
     </tr>
     </tbody>
 </table>
-
 
 </body>
 </html>
