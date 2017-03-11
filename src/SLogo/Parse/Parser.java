@@ -21,7 +21,7 @@ public interface Parser {
      */
     boolean parse(Repl repl, Environment env, String command);
 
-    Expression readTokens(Environment env, Deque tokens);
+    Expression readTokens(Environment env, Deque<String> tokens);
 
     /**
      * @param locale Desired Locale of commands

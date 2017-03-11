@@ -33,7 +33,7 @@ public abstract class AbstractParser implements Parser {
         return tokens;
     }
 
-    public abstract Expression readTokens(Environment env, Deque tokens);
+    public abstract Expression readTokens(Environment env, Deque<String> tokens);
 
     protected Translator getTranslator() {
         return myTranslator;

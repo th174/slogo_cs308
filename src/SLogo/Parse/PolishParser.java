@@ -19,52 +19,42 @@ public class PolishParser extends AbstractParser {
         super(s);
     }
 
-    public Expression readTokens(Environment env, Deque tokens) {
-        String token = tokens.removeFirst().toString();
-        SExpression subList = new SExpression();
+    public Expression readTokens(Environment env, Deque<String> tokens) {
+        return readTokens(env, tokens, true);
+    }
+
+    private Expression readTokens(Environment env, Deque<String> tokens, boolean autoGroup) {
+        String token = tokens.removeFirst();
         if (token.matches(REGEX.getString("GroupEnd")) | token.matches(REGEX.getString("ListEnd"))) {
             throw new SyntaxException(token);
         } else if (token.matches(REGEX.getString("GroupStart"))) {
-            return readUntil(env, REGEX.getString("GroupEnd"), subList, tokens, true);
+            return readUntil(env, REGEX.getString("GroupEnd"), tokens, true);
         } else if (token.matches(REGEX.getString("ListStart"))) {
-            return readUntil(env, REGEX.getString("ListEnd"), subList, tokens, false);
+            return readUntil(env, REGEX.getString("ListEnd"), tokens, false);
         } else {
-            Invokable fn = env.getFunctionByName(getTranslator().get(token));
-            if (Objects.nonNull(fn)) {
-                subList.add(new AtomicList(getTranslator().get(token)));
-                subList.addAll(fn.readArgs(fn.minimumArity(), env, tokens, this));
-                return subList;
-            } else {
-                return new AtomicList(getTranslator().get(token));
-            }
+            return group(env, tokens, token, autoGroup);
         }
     }
 
-    private Expression readFirstToken(Environment env, Deque tokens) {
-        String token = tokens.removeFirst().toString();
+    private Expression group(Environment env, Deque<String> tokens, String token, boolean autoGroup) {
         SExpression subList = new SExpression();
-        if (token.matches(REGEX.getString("GroupEnd")) | token.matches(REGEX.getString("ListEnd"))) {
-            throw new SyntaxException(token);
-        } else if (token.matches(REGEX.getString("GroupStart"))) {
-            return readUntil(env, REGEX.getString("GroupEnd"), subList, tokens, true);
-        } else if (token.matches(REGEX.getString("ListStart"))) {
-            return readUntil(env, REGEX.getString("ListEnd"), subList, tokens, false);
+        Invokable fn = env.getFunctionByName(getTranslator().get(token));
+        if (Objects.nonNull(fn) && autoGroup) {
+            subList.add(new AtomicList(getTranslator().get(token)));
+            subList.addAll(fn.readArgs(fn.minimumArity(), env, tokens, this));
+            return subList;
         } else {
             return new AtomicList(getTranslator().get(token));
         }
     }
 
-    private Expression readUntil(Environment env, String end, SExpression subList, Deque tokens, boolean isGroup) {
-        while (Objects.nonNull(tokens.peek()) && !tokens.peek().toString().matches(end)) {
-            if (isGroup) {
-                subList.add(readFirstToken(env, tokens));
-                isGroup = false;
-            } else {
-                subList.add(readTokens(env, tokens));
-            }
+    private Expression readUntil(Environment env, String end, Deque<String> tokens, boolean isGroup) {
+        SExpression subList = new SExpression();
+        while (Objects.nonNull(tokens.peek()) && !tokens.peek().matches(end)) {
+            subList.add(readTokens(env, tokens, isGroup));
+            isGroup = false;
         }
         tokens.pollFirst();
         return subList;
     }
-
 }
