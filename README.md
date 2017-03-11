@@ -182,7 +182,7 @@ Strings evaluate to their numerical value if possible in numerical context, else
 </td>
 </tr>
 <tr>
-<td><code>(AND "hello" "false" "true" "FALSE" "" "world")</code></td>
+<td><code>(AND "hello" "false" "" "world")</code></td>
 <td>
 <div align="right"><code> => "" </code></div>
 </td>
