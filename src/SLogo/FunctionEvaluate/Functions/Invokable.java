@@ -14,39 +14,43 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Created by th174 on 2/16/2017.
+ * @author Created by th174 on 2/16/2017.
  */
 public interface Invokable {
 
     /**
-     * @param env Current runtime environment
-     * @return Result of the command as a variable
+     * @param repl  Current REPL session
+     * @param env   Current dynamic runtime environment
+     * @param exprs Array of arguments to this command
+     * @return Result of evaluating this command
      */
-    Variable eval(Repl repl, Environment env, Expression... expr);
+    Variable eval(Repl repl, Environment env, Expression... exprs);
 
     /**
      * Invokes the method on its arguments in dynamic scope
      *
-     * @param env  Current runtime environment
-     * @param expr Array of arguments
+     * @param repl  Current REPL session
+     * @param env   Current runtime environment
+     * @param exprs Array of arguments
      * @return Result of the command as a variable
      */
-    default Variable invoke(Repl repl, Environment env, Expression... expr) {
-        if (expr.length < minimumArity()) {
-            throw new UnexpectedArgumentException(minimumArity(), expr.length);
+    default Variable invoke(Repl repl, Environment env, Expression... exprs) {
+        if (exprs.length < minimumArity()) {
+            throw new UnexpectedArgumentException(minimumArity(), exprs.length);
         }
-        return eval(repl, env, expr);
+        return eval(repl, env, exprs);
     }
 
     /**
-     * Parses arguments for this Invokable
+     * Parses arguments for this Invokable by converting a Deque of tokens into a List of Expressions
      *
      * @param numArgs Number of arguments to parse
      * @param env     Current environment
      * @param tokens  Deque of tokenized inputs to parse
+     * @param parser  Parser to use when reading arguments
      * @return List of arguments for this invokable
      */
-    default List<Expression> readArgs(int numArgs, Environment env, Deque tokens, Parser parser) {
+    default List<Expression> readArgs(int numArgs, Environment env, Deque<String> tokens, Parser parser) {
         if (numArgs == 0) {
             return new ArrayList<>(0);
         } else if (numArgs == 1) {
@@ -62,7 +66,7 @@ public interface Invokable {
 
 
     /**
-     * @return Minimum number of arguments for this
+     * @return Minimum number of arguments in this Invokable
      */
     int minimumArity();
 

@@ -20,18 +20,18 @@ public interface CanvasView extends Observer {
     /**
      * Adds image to saved image files
      *
-     * @param filename 	filename of image to set
-     * @return ID	ID of the turtle trying to change
+     * @param imgFile filename of image to set
      */
     void addImage(File imgFile);
 
     /**
      * Sets the image of the turtle with the given ID to the given Image File (and adds the image to the saved image files)
+     *
      * @param currID
      * @param imgFile
      */
     void setImage(int currID, Image imgFile);
-    
+
     /**
      * Clears all lines from screen and instantiates a new Turtle.
      *
@@ -44,7 +44,7 @@ public interface CanvasView extends Observer {
      * @return given index
      */
     int setBackground(double index);
-    
+
     /**
      * @return current index representing the background color
      */
@@ -55,22 +55,22 @@ public interface CanvasView extends Observer {
      * @return given index
      */
     int setPenColor(double index);
-    
+
     /**
      * @return turtle's current color index
-     * @throws ErrorPrompt 
+     * @throws ErrorPrompt
      */
     int getPenColor();
-    
+
     /**
      * @param index sets size of the pen to be pixels thickness
      * @return given pixels
      */
     int setPenSize(double index);
-    
+
     /**
      * @return turtle's current width
-     * @throws ErrorPrompt 
+     * @throws ErrorPrompt
      */
     double getPenWidth();
 
@@ -91,9 +91,10 @@ public interface CanvasView extends Observer {
      * @return given index
      */
     int setPalette(double index, double r, double g, double b);
-    
+
     /**
      * Returns the RGB values associated with that index
+     *
      * @param index
      * @return int array of the three RGB values
      */
@@ -105,14 +106,14 @@ public interface CanvasView extends Observer {
     int getShape();
 
     /**
-     * @return	map of Indices to Colors
+     * @return map of Indices to Colors
      */
-    Map<Integer,Color> getColorMap();
-    
+    Map<Integer, Color> getColorMap();
+
     /**
-     * @return	map of Indices to Image
+     * @return map of Indices to Image
      */
-    Map<Integer,Image> getImageMap();
+    Map<Integer, Image> getImageMap();
 
     boolean setBoundsWrap(boolean b);
 

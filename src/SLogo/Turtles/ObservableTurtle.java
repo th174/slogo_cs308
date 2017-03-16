@@ -1,23 +1,24 @@
 package SLogo.Turtles;
 
 
+import SLogo.FileHandling.Property;
+import SLogo.FileHandling.PropertyMap;
+import SLogo.FileHandling.PropertyString;
 import javafx.util.Pair;
 
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
-import SLogo.FileHandling.Property;
-import SLogo.FileHandling.PropertyMap;
-import SLogo.FileHandling.PropertyString;
-
 /**
- * Created by th174 on 3/2/2017.
+ * An simple observable implementation of a SLogo turtle
+ *
+ * @author Created by th174 on 3/2/2017.
  */
 public class ObservableTurtle extends Observable implements Turtle {
     private static final Pair<Double, Double> NO_POS_CHANGE = new Pair<>(0.0, 0.0);
     private static final String TURTLE_BUNDLE = "resources/files/turtle";
-	public ResourceBundle myResources = ResourceBundle.getBundle(TURTLE_BUNDLE);
+    public ResourceBundle myResources = ResourceBundle.getBundle(TURTLE_BUNDLE);
     private int id;
     private double xPos;
     private double yPos;
@@ -25,6 +26,10 @@ public class ObservableTurtle extends Observable implements Turtle {
     private boolean isTurtleShowing;
     private boolean isPenDown;
 
+    /**
+     * Creates a new turtle with default properties
+     * @param i ID of turtle
+     */
     public ObservableTurtle(int i) {
         this.id = i;
         this.xPos = DEFAULT_X_POS;
@@ -104,19 +109,19 @@ public class ObservableTurtle extends Observable implements Turtle {
         super.notifyObservers(coordinates);
     }
 
-	@Override
-	public Property toProperty() {
-		HashMap<String, Property> attributes = new HashMap<String, Property>();	
-		HashMap<String, Property> returnData = new HashMap<String, Property>();
-		
-		attributes.put(myResources.getString("ID"), new PropertyString("" + id));
-		attributes.put(myResources.getString("xPos"), new PropertyString("" + xPos));
-		attributes.put(myResources.getString("yPos"), new PropertyString("" + yPos));
-		attributes.put(myResources.getString("Heading"), new PropertyString("" + headingAngle));
-		attributes.put(myResources.getString("PenDown"), new PropertyString(Boolean.toString(isPenDown)));
-		
-		returnData.put(myResources.getString("Turtle"), new PropertyMap(attributes));
-		
-		return new PropertyMap(returnData);
-	}
+    @Override
+    public Property toProperty() {
+        HashMap<String, Property> attributes = new HashMap<String, Property>();
+        HashMap<String, Property> returnData = new HashMap<String, Property>();
+
+        attributes.put(myResources.getString("ID"), new PropertyString("" + id));
+        attributes.put(myResources.getString("xPos"), new PropertyString("" + xPos));
+        attributes.put(myResources.getString("yPos"), new PropertyString("" + yPos));
+        attributes.put(myResources.getString("Heading"), new PropertyString("" + headingAngle));
+        attributes.put(myResources.getString("PenDown"), new PropertyString(Boolean.toString(isPenDown)));
+
+        returnData.put(myResources.getString("Turtle"), new PropertyMap(attributes));
+
+        return new PropertyMap(returnData);
+    }
 }

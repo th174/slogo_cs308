@@ -28,8 +28,8 @@ import java.util.*;
 
 public class CanvasViewImpl extends Observable implements CanvasView {
     private static final String defaultMapPropertiesFilename = "data/defaultViewMapProperties.xml";
-    private ResourceBundle exceptionResources;
     private static final String RESOURCE_FILEPATH = "resources/View/";
+    private ResourceBundle exceptionResources;
     private ScrollPane view;
     private Group root;
     private int viewWidth;
@@ -83,13 +83,6 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         view.setStyle(String.format("-fx-background: %s; ", colorToHex(colorMap.get(0))));
     }
 
-    private String colorToHex(Color color) {
-        return String.format("#%02X%02X%02X",
-                (int) (color.getRed() * 255),
-                (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255));
-    }
-
     public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
         this(aviewWidth, aviewHeight);
         turtles.addListener(this::onTurtleMapChange);
@@ -99,13 +92,20 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         }
     }
 
+    private String colorToHex(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+
     public void update(Observable o, Object n) {
         ObservableTurtle turtle = (ObservableTurtle) o;
         @SuppressWarnings("unchecked")
         Pair<Double, Double> changeLoc = (Pair<Double, Double>) n;
-        int currID = (int) turtle.id();
+        int currID = turtle.id();
         Sprite currSprite = spriteMap.get(currID);
-        setPen(currID, (boolean) turtle.isPenDown());
+        setPen(currID, turtle.isPenDown());
         currSprite.setDirection((int) turtle.getHeading());
         move(currID, new double[]{changeLoc.getKey(), changeLoc.getValue()});
         setHidden(currID, !turtle.isTurtleShow());
@@ -157,7 +157,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     public int getPenColor() {
         for (HashMap.Entry<Integer, Color> e : colorMap.entrySet()) {
             Integer indexEntry = e.getKey();
-            Color colorEntry = (Color) e.getValue();
+            Color colorEntry = e.getValue();
             if (colorEntry.equals(colorMap.get(penColor))) {
                 return indexEntry;
             }
@@ -190,7 +190,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     public int getBackground() {
-        return (int) backgroundColorIndex;
+        return backgroundColorIndex;
     }
 
     public int setPalette(double index, double r, double g, double b) {
@@ -266,7 +266,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         Sprite newSprite = new Sprite(ID, imageMap.get(currentTurtleIMGIndex), spriteDimensions[0], spriteDimensions[1], viewWidth, viewHeight, t);
         spriteMap.put(ID, newSprite);
         root.getChildren().add(spriteMap.get(ID).getImageView());
-        setPen(ID, (boolean) t.isPenDown());
+        setPen(ID, t.isPenDown());
         newSprite.setDirection((int) t.getHeading());
         setHidden(ID, !t.isTurtleShow());
     }
@@ -295,7 +295,7 @@ public class CanvasViewImpl extends Observable implements CanvasView {
     }
 
     @Override
-    public boolean getBoundsWrap(){
+    public boolean getBoundsWrap() {
         return wrappedBounds;
     }
 }

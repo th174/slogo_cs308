@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by th174 on 2/23/2017.
+ * This class models a list in SLogo's dynamic type system
+ *
+ * @author Created by th174 on 2/23/2017.
  */
 public final class ListVariable extends Variable<List<Variable>> {
 
@@ -17,30 +19,11 @@ public final class ListVariable extends Variable<List<Variable>> {
         super(list);
     }
 
-    @Override
-    public Variable sum(Variable other) {
-        return last().sum(other);
-    }
-
-    @Override
-    public Variable random() {
-        return last().random();
-    }
-
-    @Override
-    public boolean equals(Variable o) {
-        return last().equals(o);
-    }
-
-    @Override
-    public int compareTo(Variable o) {
-        return last().compareTo(o);
-    }
-
-    public Variable contains(Variable other) {
-        return value().stream().anyMatch(other::equals) ? TRUE : FALSE;
-    }
-
+    /**
+     * @param other Variable to be combined with
+     * @return A new list consisting of this variable with other appended to the end
+     * @see Variable#list(Variable)
+     */
     @Override
     public ListVariable list(Variable other) {
         List<Variable> temp = new LinkedList<>(value());
@@ -48,16 +31,18 @@ public final class ListVariable extends Variable<List<Variable>> {
         return new ListVariable(temp);
     }
 
-    @Override
-    public int size() {
-        return value().size();
-    }
-
+    /**
+     * @return The last element of this ListVariable in boolean context
+     */
     @Override
     public boolean toBoolean() {
         return last().toBoolean();
     }
 
+    /**
+     * @return The last element of this ListVariable in numerical context
+     * @throws NotANumberException Thrown if the last element cannot be represented in numerical context
+     */
     @Override
     public double toNumber() throws NotANumberException {
         try {
@@ -70,11 +55,6 @@ public final class ListVariable extends Variable<List<Variable>> {
     @Override
     public String toContentString() {
         return last().toContentString();
-    }
-
-    @Override
-    public List<Variable> toList() {
-        return value();
     }
 
     @Override

@@ -4,11 +4,11 @@ import javafx.scene.Node;
 
 /**
  * For ause with objects that contain nodes
- * @author Alex
  *
+ * @author Alex
  */
 public interface SLogoGUIElement {
-	/**
+    /**
      * @return View of GUI
      */
     Node getView();

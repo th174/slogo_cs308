@@ -15,24 +15,37 @@ public interface Repl {
      * Take in user input
      *
      * @param input User input string
+     * @throws Exception if error in parsing or evaluating input
      */
     void read(String input) throws Exception;
 
     /**
-     * @return Environment
+     * @return User environment associated with current REPL session
      */
-    Environment getEnvironment();
+    Environment getUserEnvironment();
 
+    /**
+     * @return List of all previous commands in Expression representation, from least to most recent
+     */
     List<Expression> getHistory();
 
+    /**
+     * @return Last run command in Expression representation
+     */
     Expression lastCommand();
 
-    void setCanvas(CanvasView canvas);
-
+    /**
+     * @return Canvas associated with current REPL session
+     */
     CanvasView getCanvas();
 
     /**
-     * @return Parser
+     * @param canvas Sets the canvas associated with the current REPL session
+     */
+    void setCanvas(CanvasView canvas);
+
+    /**
+     * @return Parser associated with the current REPL session
      */
     Parser getParser();
 }

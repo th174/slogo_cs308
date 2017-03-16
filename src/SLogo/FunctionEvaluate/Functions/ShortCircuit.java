@@ -8,27 +8,46 @@ import SLogo.Repl;
 import java.util.Arrays;
 
 /**
- * Created by th174 on 3/1/2017.
+ * This interface allows for short circuiting boolean logical operators
+ *
+ * @author Created by th174 on 3/1/2017.
  */
 @FunctionalInterface
 public interface ShortCircuit extends Invokable {
+
+    /**
+     * A boolean test such as AND or OR
+     *
+     * @param var1 The first argument
+     * @param var2 The second argument
+     * @return Either var1 or var2, depending on the test and their values
+     */
     Variable test(Variable var1, Variable var2);
 
+    /**
+     * Applies the boolean operation recursively to each expression until it short circuits and terminates
+     *
+     * @param repl  Current REPL session
+     * @param env   Current dynamic runtime environment
+     * @param exprs Array of arguments to this command
+     * @return The first result of the first expression that causes the test to terminate
+     */
     @Override
-    default Variable eval(Repl repl, Environment env, Expression... expr) {
-        if (expr.length == 0) {
+    default Variable eval(Repl repl, Environment env, Expression... exprs) {
+        if (exprs.length == 0) {
             return Variable.FALSE;
         }
-        Expression total = expr[expr.length - 1];
-        if (expr.length == 1) {
-            return total.eval(repl,env);
+        Expression total = exprs[exprs.length - 1];
+        if (exprs.length == 1) {
+            return total.eval(repl, env);
         } else {
-            Variable eval = eval(repl, env, Arrays.copyOfRange(expr, 0, expr.length - 1));
+            Variable eval = eval(repl, env, Arrays.copyOfRange(exprs, 0, exprs.length - 1));
             return (eval.toBoolean() == test(Variable.TRUE, Variable.FALSE).toBoolean()) ? eval :
-                    test(eval, total.eval(repl,env));
+                    test(eval, total.eval(repl, env));
         }
     }
 
+    @Override
     default int minimumArity() {
         return 2;
     }

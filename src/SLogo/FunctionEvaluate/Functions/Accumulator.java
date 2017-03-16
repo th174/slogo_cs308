@@ -10,11 +10,17 @@ import java.util.Arrays;
 /**
  * This interface wraps operations that work by accumulating value over a number of arguments.
  * This recursively applies Accumulator::accumulate over each of its arguments.
- *
- * @Author Created by th174 on 2/16/2017.
+ * @see Invokable
+ * @author Created by th174 on 2/16/2017.
  */
 @FunctionalInterface
 public interface Accumulator extends Invokable {
+    /**
+     * The accumulator operation to be applied successively to each argument of this command
+     * @param var1 First parameter
+     * @param var2 Second parameter
+     * @return Result
+     */
     Variable accumulate(Variable var1, Variable var2);
 
     @Override
@@ -22,17 +28,25 @@ public interface Accumulator extends Invokable {
         return 2;
     }
 
-    default Variable eval(Repl repl, Environment env, Expression... expr) {
-        if (expr.length == 0) {
+    /**
+     * Applies the accumulator recursively to each expression in expr.
+     * @param repl Current REPL session
+     * @param env Current dynamic runtime environment
+     * @param exprs Array of arguments to this command
+     * @return The result of the accumulation, or FALSE if no arguments
+     */
+    @Override
+    default Variable eval(Repl repl, Environment env, Expression... exprs) {
+        if (exprs.length == 0) {
             return Variable.FALSE;
         }
-        Expression total = expr[expr.length - 1];
-        if (expr.length == 1) {
-            return total.eval(repl,env);
+        Expression total = exprs[exprs.length - 1];
+        if (exprs.length == 1) {
+            return total.eval(repl, env);
         } else {
             try {
-                return accumulate(eval(repl, env, Arrays.copyOfRange(expr, 0, expr.length - 1)), total.eval(repl, env));
-            } catch (Expression.EvaluationTargetException e){
+                return accumulate(eval(repl, env, Arrays.copyOfRange(exprs, 0, exprs.length - 1)), total.eval(repl, env));
+            } catch (Expression.EvaluationTargetException e) {
                 throw e;
             } catch (Exception e) {
                 throw new Expression.EvaluationTargetException(e);
@@ -41,10 +55,10 @@ public interface Accumulator extends Invokable {
     }
 
     @Override
-    default Variable invoke(Repl repl, Environment env, Expression... expr) {
-        if (expr.length < 1) {
-            throw new UnexpectedArgumentException(minimumArity(), expr.length);
+    default Variable invoke(Repl repl, Environment env, Expression... exprs) {
+        if (exprs.length < 1) {
+            throw new UnexpectedArgumentException(minimumArity(), exprs.length);
         }
-        return eval(repl, env, expr);
+        return eval(repl, env, exprs);
     }
 }
