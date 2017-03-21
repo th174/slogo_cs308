@@ -1,7 +1,9 @@
 package SLogo.FunctionEvaluate.Variables;
 
 /**
- * Created by th174 on 2/16/2017.
+ * This class models boolean values in SLogo's dynamic type system
+ *
+ * @author Created by th174 on 2/16/2017.
  */
 public final class BoolVariable extends Variable<Boolean> {
 
@@ -9,16 +11,21 @@ public final class BoolVariable extends Variable<Boolean> {
         super(value);
     }
 
+    /**
+     * Negates this variable.
+     *
+     * @see Variable#not()
+     */
     @Override
     public Variable negate() {
-        return this.equals(TRUE) ? FALSE : TRUE;
+        return this.not();
     }
 
-    @Override
-    public boolean toBoolean() {
-        return value();
-    }
-
+    /**
+     * {@inheritDoc}
+     *
+     * @return 1 if TRUE, or 0 if FALSE
+     */
     @Override
     public double toNumber() {
         return value() ? 1 : 0;

@@ -7,18 +7,36 @@ import java.util.Deque;
 import java.util.Objects;
 
 /**
- * Created by th174 on 3/7/2017.
+ * An implementation of AbstractParser designed to parse Polish notation
+ *
+ * @author Created by th174 on 3/7/2017.
  */
 public class PolishParser extends AbstractParser {
 
+    /**
+     * Creates an instance of a PolishParser with the default locale
+     */
     public PolishParser() {
         super();
     }
 
+    /**
+     * Creates instance of PolishParser with the desired locale
+     *
+     * @param s locale
+     */
     public PolishParser(String s) {
         super(s);
     }
 
+    /**
+     * Reads tokens in Polish notation
+     *
+     * @param env    Current local environment
+     * @param tokens Deque of Token Strings
+     * @return Expression built from token strings
+     */
+    @Override
     public Expression readTokens(Environment env, Deque<String> tokens) {
         return readTokens(env, tokens, true);
     }

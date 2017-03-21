@@ -8,7 +8,8 @@ import SLogo.Repl;
 import java.util.*;
 
 /**
- * Created by th174 on 2/21/2017.
+ * An implementation of Expression modeling a single atom.
+ * @author Created by th174 on 2/21/2017.
  */
 public final class AtomicList extends LinkedList<String> implements Expression {
 
@@ -18,7 +19,7 @@ public final class AtomicList extends LinkedList<String> implements Expression {
     }
 
     @Override
-    public Variable eval(Repl repl, Environment env) throws EvaluationTargetException, Environment.VariableNotFoundException {
+    public Variable eval(Repl repl, Environment env) {
         Variable ret = env.getVariableByName(get());
         return Objects.nonNull(ret) ? ret : Variable.fromString(get());
     }
@@ -33,34 +34,8 @@ public final class AtomicList extends LinkedList<String> implements Expression {
         return new LinkedList<>(Collections.singleton(this));
     }
 
-    public boolean add(String o) {
-        if (super.size() > 0) {
-            throw new AtomicException();
-        } else {
-            return super.add(o);
-        }
-    }
-
     private String get() {
         return get(0);
-    }
-
-    @Override
-    public boolean addAll(Collection c) {
-        if (c.size() + this.size() > 1) {
-            throw new AtomicException();
-        } else {
-            return super.addAll(c);
-        }
-    }
-
-    @Override
-    public int size() {
-        if (super.size() > 1) {
-            throw new RuntimeException("How did you end up with more than 1 wtf are you doing");
-        } else {
-            return super.size();
-        }
     }
 
     @Override
@@ -68,9 +43,4 @@ public final class AtomicList extends LinkedList<String> implements Expression {
         return get(0);
     }
 
-    private static class AtomicException extends RuntimeException {
-        private AtomicException() {
-            super("Size of AtomicList cannot go above 1! That's why it's atomic.");
-        }
-    }
 }

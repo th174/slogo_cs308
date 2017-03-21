@@ -12,15 +12,14 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Created by th174 on 2/17/2017.
+ * This class models an Expression as a Lisp-style linked list, where the first element is a function, and all further arguments are function arguments
+ *
+ * @author Created by th174 on 2/17/2017.
  */
 public class SExpression extends LinkedList<Expression> implements Expression {
     private int isOp = 0;
 
-    public SExpression() {
-        super();
-    }
-
+    @Override
     public Variable eval(Repl repl, Environment env) throws EvaluationTargetException {
         try {
             if (size() == 0) {
@@ -50,6 +49,12 @@ public class SExpression extends LinkedList<Expression> implements Expression {
         return args;
     }
 
+    /**
+     * Returns null because SExpressions are lists, and cannot be parsed to a single Function
+     *
+     * @param env Current local environment
+     * @return null
+     */
     @Override
     public Invokable getCommand(Environment env) {
         return null;

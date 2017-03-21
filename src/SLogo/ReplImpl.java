@@ -1,4 +1,3 @@
-
 package SLogo;
 
 import SLogo.FunctionEvaluate.Environment;
@@ -23,6 +22,9 @@ public class ReplImpl implements Repl {
     private Environment userEnv;
     private CanvasView myCanvas;
 
+    /**
+     * Creates a new ReplImpl
+     */
     public ReplImpl() {
         myHistory = new ArrayList<>();
         userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(1));
@@ -41,6 +43,7 @@ public class ReplImpl implements Repl {
         }
     }
 
+
     public List<Expression> getHistory() {
         return myHistory;
     }
@@ -50,18 +53,18 @@ public class ReplImpl implements Repl {
     }
 
     @Override
-    public Environment getEnvironment() {
+    public Environment getUserEnvironment() {
         return userEnv;
-    }
-
-    @Override
-    public void setCanvas(CanvasView canvas) {
-        this.myCanvas = canvas;
     }
 
     @Override
     public CanvasView getCanvas() {
         return myCanvas;
+    }
+
+    @Override
+    public void setCanvas(CanvasView canvas) {
+        this.myCanvas = canvas;
     }
 
     @Override

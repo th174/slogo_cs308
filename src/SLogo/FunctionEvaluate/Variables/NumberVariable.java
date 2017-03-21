@@ -1,9 +1,12 @@
 package SLogo.FunctionEvaluate.Variables;
 
 /**
- * Created by th174 on 2/16/2017.
+ * This class models a numerical value in SLogo's dynamic type system
+ *
+ * @author Created by th174 on 2/16/2017.
  */
 public final class NumberVariable extends Variable<Number> {
+
     NumberVariable(Number value) {
         super(value);
     }
@@ -12,25 +15,24 @@ public final class NumberVariable extends Variable<Number> {
         super(Double.parseDouble(value));
     }
 
+    /**
+     * {@inheritDoc}
+     * If other is a string, concatenates the two variables in string context
+     */
     @Override
     public Variable sum(Variable other) {
         if (other instanceof StringVariable) {
-            return new StringVariable(this.toContentString() +  other.toContentString());
+            return new StringVariable(this.toContentString() + other.toContentString());
         } else {
             return super.sum(other);
         }
     }
 
-    @Override
-    public NumberVariable negate() {
-        return new NumberVariable(-toNumber());
-    }
-
-    @Override
-    public NumberVariable random() {
-            return (NumberVariable) super.random();
-    }
-
+    /**
+     * {@inheritDoc}
+     *
+     * @return false if this variable is 0, else true
+     */
     @Override
     public boolean toBoolean() {
         return value().intValue() != 0;

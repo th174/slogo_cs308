@@ -4,15 +4,20 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Repl;
-import SLogo.View.CanvasView;
-
-import java.io.IOException;
 
 /**
- * Created by th174 on 3/4/2017.
+ * This interface allows for commands that change current session settings
+ *
+ * @author Created by th174 on 3/4/2017.
  */
 @FunctionalInterface
 public interface Setting extends IterableInvokable {
+    /**
+     * @param repl Current REPL session
+     * @param var1 New value of setting
+     * @return New value of setting
+     * @throws Exception Thrown when operation throws Exception
+     */
     Object operation(Repl repl, Variable var1) throws Exception;
 
     @Override
@@ -21,7 +26,7 @@ public interface Setting extends IterableInvokable {
     }
 
     @Override
-    default Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception {
-        return Variable.newInstance(operation(repl, vargs[0].eval(repl,env)));
+    default Variable operation(Repl repl, Environment env, Expression... exprs) throws Exception {
+        return Variable.newInstance(operation(repl, exprs[0].eval(repl, env)));
     }
 }

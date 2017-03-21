@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html class="" lang="en"><head prefix="og: http://ogp.me/ns#"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html class="" lang="en">
+<head prefix="og: http://ogp.me/ns#">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" media="all" href="./CommandList-stylesheet.css">
 </head>
 <body class="ui_charcoal" data-group="" data-page="projects:show" data-project="slogo_team14">
 <div class="page-with-sidebar">
     <div class="content-wrapper page-with-layout-nav">
-        <div class="alert-wrapper">
-            <div class="flash-container flash-container-page">
-            </div>
-        </div>
         <div class=" ">
             <div class="content" id="content-body">
                 <div class="container-fluid container-limited">
@@ -16,9 +14,13 @@
                         <article class="readme-holder">
                             <div class="file-content wiki">
                                 <h1 dir="auto">
-                                    <a id="user-content-slogo-help" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#slogo-help" aria-hidden="true"></a>SLogo Help</h1>
+                                    <a id="user-content-slogo-help" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#slogo-help"
+                                       aria-hidden="true"></a>SLogo Help</h1>
                                 <h4 dir="auto">
-                                    <a id="user-content-basic-syntax" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#basic-syntax" aria-hidden="true"></a>Basic Syntax</h4>
+                                    <a id="user-content-basic-syntax" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#basic-syntax"
+                                       aria-hidden="true"></a>Basic Syntax</h4>
                                 <p dir="auto">NOTE: All predefined variables and commands are case-insensitive, except
                                     for USE. All user-defined variables and commands are case-sensitive.</p>
                                 <table border="1" dir="auto">
@@ -112,8 +114,7 @@
                                     <tr>
                                         <td><strong>List</strong></td>
                                         <td>
-                                            <div align="center"><code>[ <br>
-                                                ]</code></div>
+                                            <div align="center"><code>[ .* ]</code></div>
                                         </td>
                                         <td>these brackets enclose a list of zero or more commands or variables<br>
                                         </td>
@@ -124,8 +125,7 @@
                                     <tr>
                                         <td><strong>Group</strong></td>
                                         <td>
-                                            <div align="center"><code>( <br>
-                                                )</code></div>
+                                            <div align="center"><code>( .* )</code></div>
                                         </td>
                                         <td>these parentheses enclose allow commands to take variable additional
                                             arguments<br>
@@ -149,13 +149,19 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-variable-dynamic-typing" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#variable-dynamic-typing" aria-hidden="true"></a>Variable dynamic typing</h4>
+                                    <a id="user-content-variable-dynamic-typing" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#variable-dynamic-typing"
+                                       aria-hidden="true"></a>Variable dynamic typing</h4>
                                 <p dir="auto">All variables are weakly typed, and use Javascript-style runtime dynamic
                                     typing. </p>
                                 <p dir="auto">Boolean TRUE evaluates to 1 in numerical context, and "true" in string
                                     context. Boolean FALSE evaluates to 0 in numerical context, and "false" in string
                                     context. Booleans evaluate to singleton lists in list context. </p>
                                 <table border="1" dir="auto">
+                                    <colgroup>
+                                        <col width="50%">
+                                        <col width="50%">
+                                    </colgroup>
                                     <tbody>
                                     <tr>
                                         <th>SLogo Expression</th>
@@ -164,13 +170,13 @@
                                     <tr>
                                         <td><code>(+ TRUE 3)</code></td>
                                         <td>
-                                            <div align="right"><code>=&gt; 4</code></div>
+                                            <code>=&gt; 4</code>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><code>(+ TRUE "FALSE")</code></td>
                                         <td>
-                                            <div align="right"><code>=&gt; "trueFalse" </code></div>
+                                            <code>=&gt; "trueFalse" </code>
                                         </td>
                                     </tr>
                                     <tr>
@@ -181,6 +187,10 @@
                                     evaluates to FALSE in boolean context, while all other numbers evaluate to true.
                                     Numbers evaluate to singleton lists in list context </p>
                                 <table border="1" dir="auto">
+                                    <colgroup>
+                                        <col width="50%">
+                                        <col width="50%">
+                                    </colgroup>
                                     <tbody>
                                     <tr>
                                         <th>SLogo Expression</th>
@@ -189,13 +199,13 @@
                                     <tr>
                                         <td><code>(+ 1 2 '3' 4 5)</code></td>
                                         <td>
-                                            <div align="right"><code> =&gt; "3345" </code></div>
+                                            <code> =&gt; "3345" </code>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><code>(AND .5 2 3 0 4)</code></td>
                                         <td>
-                                            <div align="right"><code> =&gt; 0 </code></div>
+                                            <code> =&gt; 0 </code>
                                         </td>
                                     </tr>
                                     <tr>
@@ -207,6 +217,10 @@
                                     boolean context, while all other strings evaluate to TRUE. Strings evaluate to
                                     singleton lists in list context </p>
                                 <table border="1" dir="auto">
+                                    <colgroup>
+                                        <col width="50%">
+                                        <col width="50%">
+                                    </colgroup>
                                     <tbody>
                                     <tr>
                                         <th>SLogo Expression</th>
@@ -215,19 +229,23 @@
                                     <tr>
                                         <td><code>(sin "30")</code></td>
                                         <td>
-                                            <div align="right"><code> =&gt; 0.5 </code></div>
+                                            <code> =&gt; 0.5 </code>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><code>(AND "hello" "false" "" "world")</code></td>
                                         <td>
-                                            <div align="right"><code> =&gt; "" </code></div>
+                                            <code> =&gt; "" </code>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <p dir="auto">Lists evaluate to their final element in scalar context.</p>
                                 <table border="1" dir="auto">
+                                    <colgroup>
+                                        <col width="50%">
+                                        <col width="50%">
+                                    </colgroup>
                                     <tbody>
                                     <tr>
                                         <th>SLogo Expression</th>
@@ -236,7 +254,7 @@
                                     <tr>
                                         <td><code>(+ 1 2 3 (4 5 6))</code></td>
                                         <td>
-                                            <div align="right"><code>=&gt; (+ 1 2 3 6)<br> =&gt; 9</code></div>
+                                            <code>=&gt; (+ 1 2 3 6)<br> =&gt; 9</code>
                                         </td>
                                     </tr>
                                     <tr>
@@ -244,7 +262,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-turtle-commands" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#turtle-commands" aria-hidden="true"></a>Turtle Commands</h4>
+                                    <a id="user-content-turtle-commands" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#turtle-commands"
+                                       aria-hidden="true"></a>Turtle Commands</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -263,7 +283,7 @@
                                     <tr>
                                         <td>
                                             <code>BACK <em>pixels</em></code><br>
-                                            BK <em>pixels</em>
+                                            <code>BK <em>pixels</em></code>
                                         </td>
                                         <td>moves turtle backward in its current heading by <em>pixels</em> distance<br>
                                             returns the value of <em>pixels</em>
@@ -371,8 +391,7 @@
                                             created<br>
                                             note, there is technically only one "active turtle" at any given time since
                                             each command is run once for
-                                            each active turtle, i.e., this value can always be used to identify the
-                                            current turtle running the command
+                                            each active turtle.
                                         </td>
                                     </tr>
                                     <tr>
@@ -394,8 +413,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <code>ASK [ <em>turtle(s)</em> ]</code> <br>
-                                            <code>[<em> command(s)</em> ]</code>
+                                            <code>ASK [ <em>turtle(s)</em> ] [<em> command(s)</em> ]</code>
                                         </td>
                                         <td>only the <i>turtles</i> given in first list all run <em>commands</em> given
                                             in the second list<em><br>
@@ -409,8 +427,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <code>ASKWITH[ <em>condition</em> </code>]<br>
-                                            <code>[ <em>command(s)</em> ]</code>
+                                            <code>ASKWITH [ <em>condition</em> ] [ <em>command(s)</em> ]</code>
                                         </td>
                                         <td>tell <i>turtles</i> matching given <em>condition</em> to run
                                             <em>commands</em> given in the second
@@ -426,7 +443,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-turtle-queries" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#turtle-queries" aria-hidden="true"></a>Turtle Queries</h4>
+                                    <a id="user-content-turtle-queries" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#turtle-queries"
+                                       aria-hidden="true"></a>Turtle Queries</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -462,7 +481,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-math-operations" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#math-operations" aria-hidden="true"></a>Math Operations</h4>
+                                    <a id="user-content-math-operations" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#math-operations"
+                                       aria-hidden="true"></a>Math Operations</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -577,7 +598,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-boolean-operations" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#boolean-operations" aria-hidden="true"></a>Boolean Operations</h4>
+                                    <a id="user-content-boolean-operations" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#boolean-operations"
+                                       aria-hidden="true"></a>Boolean Operations</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -647,7 +670,10 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-variables-control-structures-and-user-defined-commands" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#variables-control-structures-and-user-defined-commands" aria-hidden="true"></a>Variables, Control Structures, and User-Defined Commands
+                                    <a id="user-content-variables-control-structures-and-user-defined-commands"
+                                       class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#variables-control-structures-and-user-defined-commands"
+                                       aria-hidden="true"></a>Variables, Control Structures, and User-Defined Commands
                                 </h4>
                                 <table border="1" dir="auto">
                                     <tbody>
@@ -675,7 +701,6 @@
                                             note, the final value of the current iteration, starting at 1, is
                                             automatically assigned to the variable
                                             <em>:repcount</em>
-                                            so that it can be accessed by the <em>command(s)</em>
                                         </td>
                                     </tr>
                                     <tr>
@@ -743,7 +768,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-display-commands" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#display-commands" aria-hidden="true"></a>Display Commands</h4>
+                                    <a id="user-content-display-commands" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#display-commands"
+                                       aria-hidden="true"></a>Display Commands</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -797,8 +824,8 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <code>PENCOLOR<br>
-                                            </code><code>PC</code>
+                                            <code>PENCOLOR</code><br>
+                                            <code>PC</code>
                                         </td>
                                         <td>returns turtle's current color index</td>
                                     </tr>
@@ -812,7 +839,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-predefined-variables" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#predefined-variables" aria-hidden="true"></a>Predefined Variables</h4>
+                                    <a id="user-content-predefined-variables" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#predefined-variables"
+                                       aria-hidden="true"></a>Predefined Variables</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -836,7 +865,9 @@
                                     </tbody>
                                 </table>
                                 <h4 dir="auto">
-                                    <a id="user-content-additional-implemented-commands" class="anchor" href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#additional-implemented-commands" aria-hidden="true"></a>Additional Implemented Commands</h4>
+                                    <a id="user-content-additional-implemented-commands" class="anchor"
+                                       href="https://coursework.cs.duke.edu/CompSci308_2017Spring/slogo_team14#additional-implemented-commands"
+                                       aria-hidden="true"></a>Additional Implemented Commands</h4>
                                 <table border="1" dir="auto">
                                     <tbody>
                                     <tr>
@@ -938,9 +969,9 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><code>CD&lt; <em>path</em>/code&gt;</code></td>
+                                        <td><code>CD <em>path</em></code></td>
                                         <td>changes current working directory to <em>path</em><br>
-                                            uses relative path from working directory
+                                            uses relative or absolute path from working directory
                                         </td>
                                     </tr>
                                     <tr>
@@ -968,4 +999,5 @@
         </div>
     </div>
 </div>
-</body></html>
+</body>
+</html>

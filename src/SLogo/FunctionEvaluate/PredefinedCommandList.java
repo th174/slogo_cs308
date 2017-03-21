@@ -15,7 +15,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This probably isn't the right way to hold a ton of functions, but I don't know how else you would do it.
+ * Container class that holds all the pre-defined function implementations.
+ * <p>
+ * <p>
+ * Java doesn't let me have top level functions, so I'm stuck with this.
+ * <p>
+ * I could make each and every one of these into separate classes, and instantiate each one with reflection, but that leads to way too much repeated code.
+ * <p>
+ * Not the kind that I can refactor out, but the kind that's just boring Java syntax like imports, class headers, and method headers.
+ * <p>
+ * I recognize that this is technically a singleton, but there's neither state nor behavior associated with this class. It's more of a library that anything else.
  *
  * @author Created by th174 on 2/16/2017.
  */
@@ -82,16 +91,16 @@ public final class PredefinedCommandList {
                 Files.write(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()), Collections.singletonList(var2.toContentString()), Charset.defaultCharset());
                 return var2;
             };
-    public static final TurtleMovement
+    public static final TurtleUnary
             FORWARD = Turtle::moveForward,
             BACKWARD = Turtle::moveBackward,
             LEFT = Turtle::rotateCCW,
             RIGHT = Turtle::rotateCW,
             SETHEADING = Turtle::setHeading;
-    public static final TurtlePosition
+    public static final TurtleBinary
             SETPOSITION = Turtle::setXY,
             SETTOWARDS = Turtle::setHeadingTowards;
-    public static final TurtleProperties
+    public static final TurtleProperty
             ID = Turtle::id,
             HOME = Turtle::reset,
             HEADING = Turtle::getHeading,
@@ -109,16 +118,21 @@ public final class PredefinedCommandList {
             SETSHAPE = (repl, var1) -> repl.getCanvas().setShape(var1.toNumber()),
             SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.toNumber()),
             SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber()),
-            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getEnvironment(), var1.toContentString()),
-            CD = (repl, var1) -> System.setProperty("user.dir", Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()).normalize().toAbsolutePath().toString()),
-            READFILE = (repl, var1) -> new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString())));
-
+            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getUserEnvironment(), var1.toContentString()),
+            CD = (repl, var1) -> {
+                String path = var1.toContentString().startsWith(System.getProperty("file.separator")) || var1.toContentString().startsWith("/") ?
+                        var1.toContentString() :
+                        System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString();
+                return System.setProperty("user.dir", Paths.get(path).normalize().toAbsolutePath().toString());
+            },
+            READFILE = (repl, var1) -> new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()))),
+            USE = (repl, var1) -> repl.getParser().setLocale(var1.toContentString());
     public static final Property
             GETBOUNDSWRAP = repl -> repl.getCanvas().getBoundsWrap(),
-            TURTLES = repl -> repl.getEnvironment().getAllTurtles().size(),
+            TURTLES = repl -> repl.getUserEnvironment().getAllTurtles().size(),
             CLEARSCREEN = repl -> {
                 repl.getCanvas().clearScreen();
-                return repl.getEnvironment().clearTurtles();
+                return repl.getUserEnvironment().clearTurtles();
             },
             GETPENCOLOR = repl -> repl.getCanvas().getPenColor(),
             GETSHAPE = repl -> repl.getCanvas().getShape(),
@@ -134,11 +148,11 @@ public final class PredefinedCommandList {
         }
 
         @Override
-        public Variable operation(Repl repl, Environment env, Expression... vargs) {
-            if (vargs[0].eval(repl, env).toBoolean()) {
-                return vargs[1].eval(repl, env);
+        public Variable operation(Repl repl, Environment env, Expression... exprs) {
+            if (exprs[0].eval(repl, env).toBoolean()) {
+                return exprs[1].eval(repl, env);
             } else {
-                return vargs[2].eval(repl, env);
+                return exprs[2].eval(repl, env);
             }
         }
     },
@@ -149,8 +163,8 @@ public final class PredefinedCommandList {
                 }
 
                 @Override
-                public Variable operation(Repl repl, Environment env, Expression... vargs) {
-                    return Variable.newInstance(repl.getCanvas().setPalette(vargs[0].eval(repl, env).toNumber(), vargs[1].eval(repl, env).toNumber(), vargs[2].eval(repl, env).toNumber(), vargs[3].eval(repl, env).toNumber()));
+                public Variable operation(Repl repl, Environment env, Expression... exprs) {
+                    return Variable.newInstance(repl.getCanvas().setPalette(exprs[0].eval(repl, env).toNumber(), exprs[1].eval(repl, env).toNumber(), exprs[2].eval(repl, env).toNumber(), exprs[3].eval(repl, env).toNumber()));
                 }
             },
             TELL = new IterableInvokable() {
@@ -160,8 +174,8 @@ public final class PredefinedCommandList {
                 }
 
                 @Override
-                public Variable operation(Repl repl, Environment env, Expression... vargs) {
-                    List<Integer> turtleIDs = vargs[0].getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList());
+                public Variable operation(Repl repl, Environment env, Expression... exprs) {
+                    List<Integer> turtleIDs = exprs[0].getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList());
                     env.selectTurtles(turtleIDs);
                     return Variable.newInstance(turtleIDs.get(turtleIDs.size() - 1));
                 }
@@ -173,22 +187,9 @@ public final class PredefinedCommandList {
                 }
 
                 @Override
-                public Variable operation(Repl repl, Environment env, Expression... vargs) {
-                    env.addUserVariable(vargs[0].toString(), vargs[1].eval(repl, env));
-                    return vargs[0].eval(repl, env);
-                }
-            },
-            USE = new IterableInvokable() {
-                @Override
-                public int minimumArity() {
-                    return 1;
-                }
-
-                @Override
-                public Variable operation(Repl repl, Environment env, Expression... vargs) throws Exception {
-                    Variable v = vargs[0].eval(repl, env);
-                    repl.getParser().setLocale(v.toContentString());
-                    return v;
+                public Variable operation(Repl repl, Environment env, Expression... exprs) {
+                    env.addUserVariable(exprs[0].toString(), exprs[1].eval(repl, env));
+                    return exprs[0].eval(repl, env);
                 }
             };
 
@@ -198,11 +199,7 @@ public final class PredefinedCommandList {
     private PredefinedCommandList() {
     }
 
-    /**
-     * @return A map of all defined commands, with their instance name as a key
-     * @throws IllegalAccessException
-     */
-    public static Map<String, Invokable> getAllCommands() throws IllegalAccessException {
+    static Map<String, Invokable> getAllCommands() {
         return Arrays.stream(PredefinedCommandList.class.getDeclaredFields()).collect(Collectors.toMap(Field::getName, e -> {
             try {
                 return (Invokable) e.get(null);

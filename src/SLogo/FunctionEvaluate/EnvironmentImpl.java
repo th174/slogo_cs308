@@ -2,9 +2,7 @@ package SLogo.FunctionEvaluate;
 
 import SLogo.FunctionEvaluate.Functions.Invokable;
 import SLogo.FunctionEvaluate.Variables.Variable;
-import SLogo.Parse.Expression;
 import SLogo.Parse.Parser;
-import SLogo.Repl;
 import SLogo.Turtles.ObservableTurtle;
 import SLogo.Turtles.Turtle;
 import javafx.collections.FXCollections;
@@ -15,59 +13,71 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Created by th174 on 2/16/2017.
+ * {@inheritDoc}
+ * An implementation of an Environment
+ *
+ * @author Created by th174 on 2/16/2017.
  */
 public class EnvironmentImpl extends Observable implements Environment {
     public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
-    public static final int DEFAULT_TURTLE_ID = 1;
-    private Environment outer;
-    private Map<String, Variable> scopeVariables;
-    private Map<String, Invokable> scopeFunctions;
-    private ObservableMap<Integer, Turtle> myTurtles;
+    private static final int DEFAULT_TURTLE_ID = 1;
+    private final Environment outer;
+    private final Map<String, Variable> inScopeVariables;
+    private final Map<String, Invokable> inScopeFunctions;
+    private final ObservableMap<Integer, Turtle> myTurtles;
     private List<Turtle> myActiveTurtles;
 
     private EnvironmentImpl() {
-        scopeVariables = initVariableDictonary();
-        scopeFunctions = initCommandDictionary();
-        myTurtles = FXCollections.observableHashMap();
-        myTurtles.put(DEFAULT_TURTLE_ID, new ObservableTurtle(DEFAULT_TURTLE_ID));
-        outer = null;
+        this(initCommandDictionary(), initVariableDictonary());
+        selectTurtles(Collections.singletonList(DEFAULT_TURTLE_ID));
     }
 
-    private EnvironmentImpl(Environment outer) {
+    /**
+     * A constructor for a top level environment
+     *
+     * @param functions Initial pre-defined commands
+     * @param variables Initial pre-defined variables
+     */
+    public EnvironmentImpl(Map<String, Invokable> functions, Map<String, Variable> variables) {
+        inScopeFunctions = functions;
+        inScopeVariables = variables;
+        this.outer = null;
+        myTurtles = FXCollections.observableHashMap();
+    }
+
+    /**
+     * Constructor for a sub-environment that inherits its parent's turtles
+     *
+     * @param outer Parent environment
+     */
+    public EnvironmentImpl(Environment outer) {
         this.outer = outer;
-        scopeFunctions = new HashMap<>();
-        scopeVariables = new HashMap<>();
+        inScopeFunctions = new HashMap<>();
+        inScopeVariables = new HashMap<>();
         myTurtles = null;
         notifyObservers();
-        this.myActiveTurtles = new ArrayList<>(outer.getAllTurtles().values());
+        this.myActiveTurtles = new ArrayList<>(outer.getActiveTurtleList());
     }
 
-    public EnvironmentImpl(Environment outer, Predicate<Turtle> turtleFilter) {
-        this(outer);
-        filterTurtles(turtleFilter);
-    }
-
+    /**
+     * A constructor for a sub-environment that allows selecting turtles by ID
+     *
+     * @param outer     Parent Environment
+     * @param turtleIDs Active turtle IDs
+     */
     public EnvironmentImpl(Environment outer, List<Integer> turtleIDs) {
         this(outer);
         selectTurtles(turtleIDs);
     }
 
-    public EnvironmentImpl(Environment outer, List<String> params, Repl repl, Expression... expr) {
-        this(outer);
-        for (int i = 0; i < expr.length; i++) {
-            scopeVariables.put(params.get(i), expr[i].eval(repl, outer));
-        }
-    }
-
     @Override
     public Map<String, Variable> getLocalVars() {
-        return Collections.unmodifiableMap(scopeVariables.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        return Collections.unmodifiableMap(inScopeVariables.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override
     public Map<String, Invokable> getLocalFunctions() {
-        return Collections.unmodifiableMap(scopeFunctions.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        return Collections.unmodifiableMap(inScopeFunctions.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override
@@ -94,10 +104,10 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Variable getVariableByName(String name) {
-        if (scopeVariables.containsKey(name)) {
-            return scopeVariables.get(name);
-        } else if (scopeVariables.containsKey(name)) {
-            return scopeVariables.get(name);
+        if (inScopeVariables.containsKey(name)) {
+            return inScopeVariables.get(name);
+        } else if (inScopeVariables.containsKey(name)) {
+            return inScopeVariables.get(name);
         } else if (Objects.isNull(outer)) {
             return null;
         } else {
@@ -107,10 +117,10 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Invokable getFunctionByName(String name) {
-        if (scopeFunctions.containsKey(name)) {
-            return scopeFunctions.get(name);
-        } else if (scopeFunctions.containsKey(name)) {
-            return scopeFunctions.get(name);
+        if (inScopeFunctions.containsKey(name)) {
+            return inScopeFunctions.get(name);
+        } else if (inScopeFunctions.containsKey(name)) {
+            return inScopeFunctions.get(name);
         } else if (Objects.isNull(outer)) {
             return null;
         } else {
@@ -143,6 +153,7 @@ public class EnvironmentImpl extends Observable implements Environment {
         }).collect(Collectors.toList());
     }
 
+    @Override
     public double clearTurtles() {
         getAllTurtles().keySet().retainAll(Collections.singleton(DEFAULT_TURTLE_ID));
         return getAllTurtles().get(DEFAULT_TURTLE_ID).reset();
@@ -150,26 +161,22 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public void addUserVariable(String name, Variable var) {
-        scopeVariables.put(name, var);
+        inScopeVariables.put(name, var);
         notifyObservers();
     }
 
     @Override
     public void addUserFunction(String name, Invokable function) {
-        scopeFunctions.put(name, function);
-        scopeFunctions.put(name, function);
+        inScopeFunctions.put(name, function);
+        inScopeFunctions.put(name, function);
         notifyObservers();
     }
 
-    private Map<String, Invokable> initCommandDictionary() {
-        try {
-            return PredefinedCommandList.getAllCommands();
-        } catch (IllegalAccessException i) {
-            throw new NullPointerException();
-        }
+    private static Map<String, Invokable> initCommandDictionary() {
+        return PredefinedCommandList.getAllCommands();
     }
 
-    private Map<String, Variable> initVariableDictonary() {
+    private static Map<String, Variable> initVariableDictonary() {
         return Variable.getPredefinedVariables();
     }
 

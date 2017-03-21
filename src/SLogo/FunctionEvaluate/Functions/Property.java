@@ -4,13 +4,19 @@ import SLogo.FunctionEvaluate.Environment;
 import SLogo.FunctionEvaluate.Variables.Variable;
 import SLogo.Parse.Expression;
 import SLogo.Repl;
-import SLogo.View.CanvasView;
 
 /**
- * Created by th174 on 3/2/2017.
+ * This interface allows for commands that query information on current session settings
+ *
+ * @author Created by th174 on 3/2/2017.
  */
 @FunctionalInterface
 public interface Property extends Invokable {
+
+    /**
+     * @param repl Current REPL session
+     * @return Current setting value
+     */
     Object operation(Repl repl);
 
     @Override
@@ -19,7 +25,7 @@ public interface Property extends Invokable {
     }
 
     @Override
-    default Variable eval(Repl repl, Environment env, Expression... expr) {
+    default Variable eval(Repl repl, Environment env, Expression... exprs) {
         return Variable.newInstance(operation(repl));
     }
 }

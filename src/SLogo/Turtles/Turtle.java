@@ -5,7 +5,9 @@ import SLogo.FileHandling.Property;
 import java.util.Observer;
 
 /**
- * Created by th174 on 3/2/2017.
+ * This interface provides an API for a model of a SLogo turtle
+ *
+ * @author Created by th174 on 3/2/2017.
  */
 public interface Turtle {
     double DEFAULT_X_POS = 0;
@@ -169,8 +171,7 @@ public interface Turtle {
 
     /**
      * Add an object as a listener
-     *
-     * @author Riley Nisbet
+     * @param o Observer to be notified when changed
      */
     void addObserver(Observer o);
 
