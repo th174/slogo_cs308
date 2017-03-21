@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-/**
- * Created by th174 on 2/19/2017.
- */
 
 /**
  * @author th174

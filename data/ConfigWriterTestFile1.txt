@@ -1,0 +1,46 @@
+<Config>
+	<turt2>
+		<turtle>
+			<heading>
+				100.0
+			</heading>
+			<x>
+				-20.0
+			</x>
+			<y>
+				1.0
+			</y>
+			<penDown>
+				true
+			</penDown>
+			<id>
+				3
+			</id>
+
+		</turtle>
+
+	</turt2>
+	<turt1>
+		<turtle>
+			<heading>
+				50.0
+			</heading>
+			<x>
+				15.0
+			</x>
+			<y>
+				10.0
+			</y>
+			<penDown>
+				false
+			</penDown>
+			<id>
+				3
+			</id>
+
+		</turtle>
+
+	</turt1>
+
+</Config>
+
