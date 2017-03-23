@@ -755,7 +755,7 @@ uses relative path from working directory
 </td>
 </tr>
 <tr>
-<td><code>CD< <em>path</em></code></td>
+<td><code>CD <em>path</em></code></td>
 <td>changes current working directory to <em>path</em><br>
 uses relative path from working directory
 </td>
