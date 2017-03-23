@@ -222,7 +222,7 @@ returns the value of <em>pixels</em></td>
 </tr>
 <tr>
 <td><code>BACK <em>pixels</em></code><br>
-BK <em>pixels</em></td>
+<code>BK <em>pixels</em></code></td>
 <td>moves turtle backward in its current heading by <em>pixels</em> distance<br>
 returns the value of <em>pixels</em></td>
 </tr>
