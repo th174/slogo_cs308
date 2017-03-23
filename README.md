@@ -313,7 +313,7 @@ each active turtle, i.e., this value can always be used to identify the current 
 <td>returns number of turtles created so far</td>
 </tr>
 <tr>
-<td><code>TELL[ <em>turtle(s)</em> ]</code></td>
+<td><code>TELL [ <em>turtle(s)</em> ]</code></td>
 <td>sets <em>turtles</em> that will follow commands hereafter<br>
 returns last value in <em>turtles</em> list<em><br>
 </em>note, if turtle has not previously existed, it is created and placed at the home location<br>
@@ -321,8 +321,7 @@ note, if more than one turtle is active, commands run return value associated wi
 </td>
 </tr>
 <tr>
-<td><code>ASK [ <em>turtle(s)</em> ]</code> <br>
-<code>[<em> command(s)</em> ]</code></td>
+<td><code>ASK [ <em>turtle(s)</em> ] [<em> command(s)</em> ]</code></td>
 <td>only the <i>turtles</i> given in first list all run <em>commands</em> given in the second list<em><br>
 </em>returns result of last command run by the last turtle<br>
 note, after commands are run, currently active list of turtles returns to that set by the last TELL command
@@ -331,8 +330,7 @@ note, if more than one turtle is active, commands run return value associated wi
 </td>
 </tr>
 <tr>
-<td><code>ASKWITH[ <em>condition</em> </code>]<br>
-<code>[ <em>command(s)</em> ]</code></td>
+<td><code>ASKWITH [ <em>condition</em> ] [ <em>command(s)</em> ]</code></td>
 <td>tell <i>turtles</i> matching given <em>condition</em> to run <em>commands</em> given in the second
 list<em><br>
 </em>returns result of last command run<br>
@@ -757,7 +755,7 @@ uses relative path from working directory
 </td>
 </tr>
 <tr>
-<td><code>CD< <em>path</em>/code></td>
+<td><code>CD< <em>path</em></code></td>
 <td>changes current working directory to <em>path</em><br>
 uses relative path from working directory
 </td>
