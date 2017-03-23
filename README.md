@@ -149,6 +149,10 @@ Boolean TRUE evaluates to 1 in numerical context, and "true" in string context. 
 Numbers evaluate to their string representation in string context. 0 evaluates to FALSE in boolean context, while all other numbers evaluate to true. Numbers evaluate to singleton lists in list context  
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -171,6 +175,10 @@ Numbers evaluate to their string representation in string context. 0 evaluates t
 Strings evaluate to their numerical value if possible in numerical context, else throwing a NaN exception. The empty string ("") evaluates to FALSE in boolean context, while all other strings evaluate to TRUE. Strings evaluate to singleton lists in list context  
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -193,6 +201,10 @@ Strings evaluate to their numerical value if possible in numerical context, else
 Lists evaluate to their final element in scalar context.
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
