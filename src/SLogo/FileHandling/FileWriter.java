@@ -1,3 +1,6 @@
+//This entire file is part of my masterpiece.
+//Stone Mathers
+
 package SLogo.FileHandling;
 
 import java.io.File;
