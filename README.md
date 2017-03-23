@@ -127,6 +127,10 @@ All variables are weakly typed, and use Javascript-style runtime dynamic typing.
 Boolean TRUE evaluates to 1 in numerical context, and "true" in string context. Boolean FALSE evaluates to 0 in numerical context, and "false" in string context. Booleans evaluate to singleton lists in list context.  
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -580,8 +584,7 @@ returns the value of each of the commands executed as a list (or FALSE if no com
 </td>
 </tr>
 <tr>
-<td><code>IFELSE <em>expr</em> [ <em>trueCommand(s)</em> ] [ <em>falseCommand(s)</em> ]</code>
-</td>
+<td><code>IFELSE <em>expr</em> [ <em>trueCommand(s)</em> ] [ <em>falseCommand(s)</em> ]</code></td>
 <td>if <i> expr</i> is TRUE, runs the <em>trueCommands</em> given in the first list, otherwise runs the <em>falseCommands</em>
 given in the second list<br>
 returns the value of each of the commands executed as a list (or FALSE if no commands are executed)
