@@ -55,7 +55,27 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         exceptionResources = ResourceBundle.getBundle(RESOURCE_FILEPATH + "Exceptions");
         viewWidth = aviewWidth;
         viewHeight = aviewHeight;
-        colorMap = new HashMap<>();
+        initializeTurtleStructures();
+        XMLParser parser = new XMLParser();
+        parser.populateMaps(spriteDimensions, colorMap, imageMap, defaultMapPropertiesFilename);
+        setDefaultIndeces();
+        root = new Group();
+        propDisp = new CanvasPropertiesDisplay(this, colorMap);
+        Pane test = new Pane();
+        test.setPrefSize(viewWidth, viewHeight);
+        root.getChildren().add(test);
+        initializeScrollPane();
+    }
+
+	private void setDefaultIndeces() {
+		currentTurtleIMGIndex = 0;
+        backgroundColorIndex = 0;
+        penColor = 1;
+        penWidth = 1;
+	}
+
+	private void initializeTurtleStructures() {
+		colorMap = new HashMap<>();
         imageMap = new HashMap<>();
         spriteMap = new HashMap<>();
         turtleHiddenMap = new HashMap<>();
@@ -63,25 +83,17 @@ public class CanvasViewImpl extends Observable implements CanvasView {
         currentImageIndexMap = new HashMap<>();
         spriteDimensions = new int[2];
         tMath = new TurtleMath();
-        XMLParser parser = new XMLParser();
-        parser.populateMaps(spriteDimensions, colorMap, imageMap, defaultMapPropertiesFilename);
-        currentTurtleIMGIndex = 0;
-        backgroundColorIndex = 0;
-        penColor = 1;
-        penWidth = 1;
-        root = new Group();
-        propDisp = new CanvasPropertiesDisplay(this, colorMap);
-        Pane test = new Pane();
-        test.setPrefSize(viewWidth, viewHeight);
-        root.getChildren().add(test);
-        view = new ScrollPane();
+	}
+
+	private void initializeScrollPane() {
+		view = new ScrollPane();
         view.setOnMouseClicked(e -> propDisp.toggleDisplay());
         view.setPrefSize(viewWidth, viewHeight);
         view.setFitToHeight(true);
         view.setFitToWidth(true);
         view.setContent(root);
         view.setStyle(String.format("-fx-background: %s; ", colorToHex(colorMap.get(0))));
-    }
+	}
 
     public CanvasViewImpl(int aviewWidth, int aviewHeight, ObservableMap<Integer, Turtle> turtles) {
         this(aviewWidth, aviewHeight);

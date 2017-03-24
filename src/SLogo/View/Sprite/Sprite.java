@@ -107,5 +107,4 @@ public class Sprite {
     public int[] getViewSize() {
         return new int[]{viewWidth, viewHeight};
     }
-
 }
