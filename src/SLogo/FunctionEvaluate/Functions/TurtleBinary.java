@@ -34,6 +34,6 @@ public interface TurtleBinary extends IterableInvokable, TurtleIterable {
 
     @Override
     default Object doTurtle(Repl repl, Environment env, Turtle turtle, Expression... exprs) {
-        return operation(turtle, exprs[0].eval(repl, env).toNumber(), exprs[1].eval(repl, env).toNumber());
+        return operation(turtle, exprs[0].eval(repl, env).numericalContext(), exprs[1].eval(repl, env).numericalContext());
     }
 }

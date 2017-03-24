@@ -42,7 +42,7 @@ public interface ShortCircuit extends Invokable {
             return total.eval(repl, env);
         } else {
             Variable eval = eval(repl, env, Arrays.copyOfRange(exprs, 0, exprs.length - 1));
-            return (eval.toBoolean() == test(Variable.TRUE, Variable.FALSE).toBoolean()) ? eval :
+            return (eval.booleanContext() == test(Variable.TRUE, Variable.FALSE).booleanContext()) ? eval :
                     test(eval, total.eval(repl, env));
         }
     }

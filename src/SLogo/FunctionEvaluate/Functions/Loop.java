@@ -46,7 +46,7 @@ public interface Loop extends Invokable {
         Variable loopEnd = (Variable) loopParams[2];
         Expression onChange = (Expression) loopParams[3];
         env.addUserVariable(loopVar, loopStart);
-        Predicate<Variable> condition = variable -> variable.lessThan(loopStart).not().and(variable.lessThan(loopEnd)).or(variable.greaterThan(loopStart).not().and(variable.greaterThan(loopEnd))).toBoolean();
+        Predicate<Variable> condition = variable -> variable.lessThan(loopStart).not().and(variable.lessThan(loopEnd)).or(variable.greaterThan(loopStart).not().and(variable.greaterThan(loopEnd))).booleanContext();
         return operation(repl, env, Variable.FALSE, loopVar, condition, onChange, Arrays.copyOfRange(exprs, 1, exprs.length));
     }
 

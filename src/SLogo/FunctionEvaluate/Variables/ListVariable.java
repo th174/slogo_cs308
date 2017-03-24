@@ -35,8 +35,8 @@ public final class ListVariable extends Variable<List<Variable>> {
      * @return The last element of this ListVariable in boolean context
      */
     @Override
-    public boolean toBoolean() {
-        return last().toBoolean();
+    public boolean booleanContext() {
+        return last().booleanContext();
     }
 
     /**
@@ -44,22 +44,22 @@ public final class ListVariable extends Variable<List<Variable>> {
      * @throws NotANumberException Thrown if the last element cannot be represented in numerical context
      */
     @Override
-    public double toNumber() throws NotANumberException {
+    public double numericalContext() throws NotANumberException {
         try {
-            return last().toNumber();
+            return last().numericalContext();
         } catch (NumberFormatException e) {
             throw new NotANumberException(value().toString());
         }
     }
 
     @Override
-    public String toContentString() {
-        return last().toContentString();
+    public String stringContext() {
+        return last().stringContext();
     }
 
     @Override
     public String toString() {
-        return super.toContentString().replace("[", "(").replace("]", ")");
+        return super.stringContext().replace("[", "(").replace("]", ")");
     }
 
     private Variable last() {

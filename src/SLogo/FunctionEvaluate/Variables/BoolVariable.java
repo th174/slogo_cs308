@@ -27,7 +27,7 @@ public final class BoolVariable extends Variable<Boolean> {
      * @return 1 if TRUE, or 0 if FALSE
      */
     @Override
-    public double toNumber() {
+    public double numericalContext() {
         return value() ? 1 : 0;
     }
 }

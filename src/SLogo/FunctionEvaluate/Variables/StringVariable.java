@@ -20,7 +20,7 @@ public final class StringVariable extends Variable<String> {
      */
     @Override
     public StringVariable sum(Variable other) {
-        return new StringVariable(value() + other.toContentString());
+        return new StringVariable(value() + other.stringContext());
     }
 
     /**
@@ -43,7 +43,7 @@ public final class StringVariable extends Variable<String> {
      */
     @Override
     public boolean equals(Variable o) {
-        return o instanceof StringVariable ? this.toContentString().equals(o.toContentString()) : super.equals(o);
+        return o instanceof StringVariable ? this.stringContext().equals(o.stringContext()) : super.equals(o);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class StringVariable extends Variable<String> {
      * @return false if this variable is the empty string, else true.
      */
     @Override
-    public boolean toBoolean() {
+    public boolean booleanContext() {
         return value().length() > 0;
     }
 
@@ -63,7 +63,7 @@ public final class StringVariable extends Variable<String> {
      * @throws NotANumberException Thrown when this variable cannot be represented in numerical context
      */
     @Override
-    public double toNumber() throws NotANumberException {
+    public double numericalContext() throws NotANumberException {
         if (value().length() == 0) {
             return 0;
         }

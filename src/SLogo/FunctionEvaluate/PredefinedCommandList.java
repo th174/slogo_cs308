@@ -42,8 +42,8 @@ public final class PredefinedCommandList {
             AND = Variable::and,
             OR = Variable::or;
     public static final MultiTurtleSet
-            ASKWITH = (repl, env, turtle, expr) -> expr.eval(repl, new EnvironmentImpl(env, Collections.singletonList(turtle.id()))).toBoolean(),
-            ASK = (repl, env, turtle, expr) -> expr.getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList()).contains(turtle.id());
+            ASKWITH = (repl, env, turtle, expr) -> expr.eval(repl, new EnvironmentImpl(env, Collections.singletonList(turtle.id()))).booleanContext(),
+            ASK = (repl, env, turtle, expr) -> expr.getBody().stream().map(e -> Math.round((float) e.eval(repl, env).numericalContext())).collect(Collectors.toList()).contains(turtle.id());
     public static final Loop
             FOR = (repl, env, expr) -> {
         List<Expression> loopParams = expr.getBody();
@@ -79,7 +79,7 @@ public final class PredefinedCommandList {
                 return var;
             },
             EXIT = var -> {
-                System.exit((int) var.toNumber());
+                System.exit((int) var.numericalContext());
                 return var;
             };
     public static final BinaryIterable
@@ -88,7 +88,7 @@ public final class PredefinedCommandList {
             EQUAL = Variable::equalTo,
             NOTEQUAL = Variable::notEqualTo,
             WRITE = (var1, var2) -> {
-                Files.write(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()), Collections.singletonList(var2.toContentString()), Charset.defaultCharset());
+                Files.write(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.stringContext()), Collections.singletonList(var2.stringContext()), Charset.defaultCharset());
                 return var2;
             };
     public static final TurtleUnary
@@ -113,20 +113,20 @@ public final class PredefinedCommandList {
             XCOORDINATE = Turtle::getX,
             YCOORDINATE = Turtle::getY;
     public static final Setting
-            SETBOUNDSWRAP = (repl, var1) -> repl.getCanvas().setBoundsWrap(var1.toBoolean()),
-            SETBACKGROUND = (repl, var1) -> repl.getCanvas().setBackground(var1.toNumber()),
-            SETSHAPE = (repl, var1) -> repl.getCanvas().setShape(var1.toNumber()),
-            SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.toNumber()),
-            SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.toNumber()),
-            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getUserEnvironment(), var1.toContentString()),
+            SETBOUNDSWRAP = (repl, var1) -> repl.getCanvas().setBoundsWrap(var1.booleanContext()),
+            SETBACKGROUND = (repl, var1) -> repl.getCanvas().setBackground(var1.numericalContext()),
+            SETSHAPE = (repl, var1) -> repl.getCanvas().setShape(var1.numericalContext()),
+            SETPENCOLOR = (repl, var1) -> repl.getCanvas().setPenColor(var1.numericalContext()),
+            SETPENSIZE = (repl, var1) -> repl.getCanvas().setPenSize(var1.numericalContext()),
+            EXECUTE = (repl, var1) -> repl.getParser().parse(repl, repl.getUserEnvironment(), var1.stringContext()),
             CD = (repl, var1) -> {
-                String path = var1.toContentString().startsWith(System.getProperty("file.separator")) || var1.toContentString().startsWith("/") ?
-                        var1.toContentString() :
-                        System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString();
+                String path = var1.stringContext().startsWith(System.getProperty("file.separator")) || var1.stringContext().startsWith("/") ?
+                        var1.stringContext() :
+                        System.getProperty("user.dir") + System.getProperty("file.separator") + var1.stringContext();
                 return System.setProperty("user.dir", Paths.get(path).normalize().toAbsolutePath().toString());
             },
-            READFILE = (repl, var1) -> new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.toContentString()))),
-            USE = (repl, var1) -> repl.getParser().setLocale(var1.toContentString());
+            READFILE = (repl, var1) -> new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir") + System.getProperty("file.separator") + var1.stringContext()))),
+            USE = (repl, var1) -> repl.getParser().setLocale(var1.stringContext());
     public static final Property
             GETBOUNDSWRAP = repl -> repl.getCanvas().getBoundsWrap(),
             TURTLES = repl -> repl.getUserEnvironment().getAllTurtles().size(),
@@ -149,7 +149,7 @@ public final class PredefinedCommandList {
 
         @Override
         public Variable operation(Repl repl, Environment env, Expression... exprs) {
-            if (exprs[0].eval(repl, env).toBoolean()) {
+            if (exprs[0].eval(repl, env).booleanContext()) {
                 return exprs[1].eval(repl, env);
             } else {
                 return exprs[2].eval(repl, env);
@@ -164,7 +164,7 @@ public final class PredefinedCommandList {
 
                 @Override
                 public Variable operation(Repl repl, Environment env, Expression... exprs) {
-                    return Variable.newInstance(repl.getCanvas().setPalette(exprs[0].eval(repl, env).toNumber(), exprs[1].eval(repl, env).toNumber(), exprs[2].eval(repl, env).toNumber(), exprs[3].eval(repl, env).toNumber()));
+                    return Variable.newInstance(repl.getCanvas().setPalette(exprs[0].eval(repl, env).numericalContext(), exprs[1].eval(repl, env).numericalContext(), exprs[2].eval(repl, env).numericalContext(), exprs[3].eval(repl, env).numericalContext()));
                 }
             },
             TELL = new IterableInvokable() {
@@ -175,7 +175,7 @@ public final class PredefinedCommandList {
 
                 @Override
                 public Variable operation(Repl repl, Environment env, Expression... exprs) {
-                    List<Integer> turtleIDs = exprs[0].getBody().stream().map(e -> Math.round((float) e.eval(repl, env).toNumber())).collect(Collectors.toList());
+                    List<Integer> turtleIDs = exprs[0].getBody().stream().map(e -> Math.round((float) e.eval(repl, env).numericalContext())).collect(Collectors.toList());
                     env.selectTurtles(turtleIDs);
                     return Variable.newInstance(turtleIDs.get(turtleIDs.size() - 1));
                 }

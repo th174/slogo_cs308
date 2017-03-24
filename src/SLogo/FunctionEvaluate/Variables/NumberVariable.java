@@ -11,10 +11,6 @@ public final class NumberVariable extends Variable<Number> {
         super(value);
     }
 
-    NumberVariable(String value) throws NotANumberException {
-        super(Double.parseDouble(value));
-    }
-
     /**
      * {@inheritDoc}
      * If other is a string, concatenates the two variables in string context
@@ -22,7 +18,7 @@ public final class NumberVariable extends Variable<Number> {
     @Override
     public Variable sum(Variable other) {
         if (other instanceof StringVariable) {
-            return new StringVariable(this.toContentString() + other.toContentString());
+            return new StringVariable(this.stringContext() + other.stringContext());
         } else {
             return super.sum(other);
         }
@@ -34,17 +30,17 @@ public final class NumberVariable extends Variable<Number> {
      * @return false if this variable is 0, else true
      */
     @Override
-    public boolean toBoolean() {
+    public boolean booleanContext() {
         return value().intValue() != 0;
     }
 
     @Override
-    public double toNumber() {
+    public double numericalContext() {
         return value().doubleValue();
     }
 
     @Override
-    public String toContentString() {
-        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.toContentString();
+    public String stringContext() {
+        return value().doubleValue() % 1 == 0 ? value().intValue() + "" : super.stringContext();
     }
 }
