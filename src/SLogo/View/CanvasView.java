@@ -115,7 +115,15 @@ public interface CanvasView extends Observer {
      */
     Map<Integer, Image> getImageMap();
 
+    /**
+     * Toggle whether the turtle wraps around the screen (true) or whether the screen extends (false)
+     * @param b boolean 
+     * @return
+     */
     boolean setBoundsWrap(boolean b);
 
+    /**
+     * @return	whether the turtle wraps around the screen (true) or whether the screen extends (false)
+     */
     boolean getBoundsWrap();
 }

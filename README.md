@@ -127,6 +127,10 @@ All variables are weakly typed, and use Javascript-style runtime dynamic typing.
 Boolean TRUE evaluates to 1 in numerical context, and "true" in string context. Boolean FALSE evaluates to 0 in numerical context, and "false" in string context. Booleans evaluate to singleton lists in list context.  
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -149,6 +153,10 @@ Boolean TRUE evaluates to 1 in numerical context, and "true" in string context. 
 Numbers evaluate to their string representation in string context. 0 evaluates to FALSE in boolean context, while all other numbers evaluate to true. Numbers evaluate to singleton lists in list context  
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -171,6 +179,10 @@ Numbers evaluate to their string representation in string context. 0 evaluates t
 Strings evaluate to their numerical value if possible in numerical context, else throwing a NaN exception. The empty string ("") evaluates to FALSE in boolean context, while all other strings evaluate to TRUE. Strings evaluate to singleton lists in list context  
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -193,6 +205,10 @@ Strings evaluate to their numerical value if possible in numerical context, else
 Lists evaluate to their final element in scalar context.
 
 <table border="1">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <tbody>
 <tr>
 <th>SLogo Expression</th>
@@ -222,7 +238,7 @@ returns the value of <em>pixels</em></td>
 </tr>
 <tr>
 <td><code>BACK <em>pixels</em></code><br>
-BK <em>pixels</em></td>
+<code>BK <em>pixels</em></code></td>
 <td>moves turtle backward in its current heading by <em>pixels</em> distance<br>
 returns the value of <em>pixels</em></td>
 </tr>
@@ -313,7 +329,7 @@ each active turtle, i.e., this value can always be used to identify the current 
 <td>returns number of turtles created so far</td>
 </tr>
 <tr>
-<td><code>TELL[ <em>turtle(s)</em> ]</code></td>
+<td><code>TELL [ <em>turtle(s)</em> ]</code></td>
 <td>sets <em>turtles</em> that will follow commands hereafter<br>
 returns last value in <em>turtles</em> list<em><br>
 </em>note, if turtle has not previously existed, it is created and placed at the home location<br>
@@ -321,8 +337,7 @@ note, if more than one turtle is active, commands run return value associated wi
 </td>
 </tr>
 <tr>
-<td><code>ASK [ <em>turtle(s)</em> ]</code> <br>
-<code>[<em> command(s)</em> ]</code></td>
+<td><code>ASK [ <em>turtle(s)</em> ] [<em> command(s)</em> ]</code></td>
 <td>only the <i>turtles</i> given in first list all run <em>commands</em> given in the second list<em><br>
 </em>returns result of last command run by the last turtle<br>
 note, after commands are run, currently active list of turtles returns to that set by the last TELL command
@@ -331,8 +346,7 @@ note, if more than one turtle is active, commands run return value associated wi
 </td>
 </tr>
 <tr>
-<td><code>ASKWITH[ <em>condition</em> </code>]<br>
-<code>[ <em>command(s)</em> ]</code></td>
+<td><code>ASKWITH [ <em>condition</em> ] [ <em>command(s)</em> ]</code></td>
 <td>tell <i>turtles</i> matching given <em>condition</em> to run <em>commands</em> given in the second
 list<em><br>
 </em>returns result of last command run<br>
@@ -570,8 +584,7 @@ returns the value of each of the commands executed as a list (or FALSE if no com
 </td>
 </tr>
 <tr>
-<td><code>IFELSE <em>expr</em> [ <em>trueCommand(s)</em> ] [ <em>falseCommand(s)</em> ]</code>
-</td>
+<td><code>IFELSE <em>expr</em> [ <em>trueCommand(s)</em> ] [ <em>falseCommand(s)</em> ]</code></td>
 <td>if <i> expr</i> is TRUE, runs the <em>trueCommands</em> given in the first list, otherwise runs the <em>falseCommands</em>
 given in the second list<br>
 returns the value of each of the commands executed as a list (or FALSE if no commands are executed)
@@ -757,7 +770,7 @@ uses relative path from working directory
 </td>
 </tr>
 <tr>
-<td><code>CD< <em>path</em>/code></td>
+<td><code>CD <em>path</em></code></td>
 <td>changes current working directory to <em>path</em><br>
 uses relative path from working directory
 </td>

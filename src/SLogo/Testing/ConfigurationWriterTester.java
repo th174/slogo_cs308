@@ -5,6 +5,11 @@ import SLogo.Turtles.ObservableTurtle;
 
 import java.io.File;
 
+/**
+ * Tester class used to ensure that Configuration Files are being correctly written in XML format.
+ * 
+ * @author Stone Mathers
+ */
 public class ConfigurationWriterTester {
 
     public static void main(String[] args) {
