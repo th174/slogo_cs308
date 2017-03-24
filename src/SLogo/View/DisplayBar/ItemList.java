@@ -1,3 +1,9 @@
+// This entire file is part of my masterpiece.
+// Alex Salas
+/* I chose this piece of code as my masterpiece because it is easily implementable (See the 4 different implementations) for various features. This abstract class essentially turned 4
+ * separate extensions into the work of just one which I thought was very nifty! This class covered display of the Variables, Functions, Images, and Colors. Additionally added
+ * functionality to put commands in commandline on click.
+ **/
 package SLogo.View.DisplayBar;
 
 import SLogo.View.SLogoGUIElement;

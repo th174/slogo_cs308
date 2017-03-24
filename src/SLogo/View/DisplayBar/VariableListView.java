@@ -1,3 +1,5 @@
+// This entire file is part of my masterpiece.
+// Alex Salas
 package SLogo.View.DisplayBar;
 
 import SLogo.FunctionEvaluate.Environment;

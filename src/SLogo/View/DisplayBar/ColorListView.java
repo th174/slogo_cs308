@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Alex Salas
+
 package SLogo.View.DisplayBar;
 
 import SLogo.View.CanvasViewImpl;
@@ -41,7 +44,8 @@ public class ColorListView extends ItemList<IndexNode> {
         Map<Integer, Color> colorMap = myCanvasView.getColorMap();
         getMyListView().getChildren().clear();
         for (Integer i : colorMap.keySet()) {
-            Rectangle rectangle = new Rectangle(20, 20);
+            Rectangle rectangle = new Rectangle(Integer.parseInt(getMyResources().getString("ImageSize")),
+            		                            Integer.parseInt(getMyResources().getString("ImageSize")));
             rectangle.setFill(colorMap.get(i));
             addItem(new IndexNode(i, rectangle));
         }

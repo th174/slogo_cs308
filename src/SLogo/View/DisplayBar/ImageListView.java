@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Alex Salas
+
 package SLogo.View.DisplayBar;
 
 import SLogo.View.CanvasViewImpl;
@@ -42,8 +45,8 @@ public class ImageListView extends ItemList<IndexNode> {
         getMyListView().getChildren().clear();
         for (Integer i : imageMap.keySet()) {
             ImageView imageView = new ImageView(imageMap.get(i));
-            imageView.setFitWidth(20);
-            imageView.setFitHeight(20);
+            imageView.setFitWidth(Integer.parseInt(getMyResources().getString("ImageSize")));
+            imageView.setFitHeight(Integer.parseInt(getMyResources().getString("ImageSize")));
             addItem(new IndexNode(i, imageView));
         }
     }
