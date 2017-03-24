@@ -17,6 +17,11 @@ import java.util.function.Predicate;
 public interface Environment {
 
     /**
+     * @return Outer environment enclosing this
+     */
+    Environment outer();
+
+    /**
      * @return Get all defined variables in current most local scope
      */
     Map<String, Variable> getLocalVars();

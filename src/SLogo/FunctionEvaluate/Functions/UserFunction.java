@@ -50,7 +50,7 @@ public final class UserFunction implements Invokable {
     public Variable eval(Repl repl, Environment env, Expression... exprs) {
         Environment functionEnvrionment = new EnvironmentImpl(env);
         for (int i = 0; i < exprs.length; i++) {
-            functionEnvrionment.addUserVariable(params.get(i), body[i].eval(repl, env));
+            functionEnvrionment.addUserVariable(params.get(i), exprs[i].eval(repl,env));
         }
         return PredefinedCommandList.$DEFAULT_OPERATION$.eval(repl, functionEnvrionment, body);
     }

@@ -27,7 +27,7 @@ public class ReplImpl implements Repl {
      */
     public ReplImpl() {
         myHistory = new ArrayList<>();
-        userEnv = new EnvironmentImpl(EnvironmentImpl.GLOBAL_ENVIRONMENT, Collections.singletonList(1));
+        userEnv = new EnvironmentImpl(new EnvironmentImpl(), Collections.singletonList(1));
         parser = new PolishParser();
         currentIndex = 0;
     }

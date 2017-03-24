@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
  * @author Created by th174 on 2/16/2017.
  */
 public class EnvironmentImpl extends Observable implements Environment {
-    public static final Environment GLOBAL_ENVIRONMENT = new EnvironmentImpl();
     private static final int DEFAULT_TURTLE_ID = 1;
     private final Environment outer;
     private final Map<String, Variable> inScopeVariables;
@@ -27,7 +26,10 @@ public class EnvironmentImpl extends Observable implements Environment {
     private final ObservableMap<Integer, Turtle> myTurtles;
     private List<Turtle> myActiveTurtles;
 
-    private EnvironmentImpl() {
+    /**
+     * A constructor for a top level environment, using default values
+     */
+    public EnvironmentImpl() {
         this(initCommandDictionary(), initVariableDictonary());
         selectTurtles(Collections.singletonList(DEFAULT_TURTLE_ID));
     }
@@ -71,6 +73,11 @@ public class EnvironmentImpl extends Observable implements Environment {
     }
 
     @Override
+    public Environment outer() {
+        return outer;
+    }
+
+    @Override
     public Map<String, Variable> getLocalVars() {
         return Collections.unmodifiableMap(inScopeVariables.entrySet().stream().filter(e -> !e.getKey().matches(Parser.REGEX.getString("Hidden"))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
@@ -93,7 +100,7 @@ public class EnvironmentImpl extends Observable implements Environment {
 
     @Override
     public Map<String, Invokable> getAllFunctions() {
-        if (outer.equals(GLOBAL_ENVIRONMENT)) {
+        if (Objects.isNull(outer.outer())) {
             return Collections.unmodifiableMap(getLocalFunctions());
         } else {
             HashMap<String, Invokable> funcs = new HashMap<>(outer.getLocalFunctions());
