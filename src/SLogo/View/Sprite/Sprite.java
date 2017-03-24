@@ -1,17 +1,29 @@
+// This entire file is part of my masterpiece.
+// Riley Nisbet
+
 package SLogo.View.Sprite;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import SLogo.Turtles.ObservableTurtle;
 import SLogo.Turtles.Turtle;
 import SLogo.View.TurtleMath;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * This class is the Sprite object used by CanvasView to be able to keep track of Turtles (and their properties0 on the front end
+ * This class is the Sprite object used by CanvasView to be able to keep track of Turtles (and their properties) on the front end
+ * Throughout the project, this class had to change significantly to reflect the constantly-changing data path between the front-
+ * end and back end in regards to the turtle's position and properties. I particularly refactored this class to implement the Observer
+ * pattern so that it can be added as an observer to each turtle. By doing this, there is a indirect path between the back and front 
+ * end that is more efficient than having to pass this information along individually. As a result, the class becomes more passive and 
+ * requires less attention.
  *
  * @author Riley Nisbet
  */
 
-public class Sprite {
+public class Sprite implements Observer{
     private int myID;
     private Image defaultSpriteIMG;
     private ImageView spriteIV;
@@ -37,15 +49,29 @@ public class Sprite {
         myTurtRef = turtRef;
         defaultSpriteIMG = adefaultSpriteIMG;
         spriteIV = new ImageView();
-        setImage(defaultSpriteIMG);
-        position = new double[]{viewWidth / 2, viewHeight / 2};
-        setPosition(position);
-        setDirection(90);
-        setHidden(false);
+        setDefaults();
         tMath = new TurtleMath();
         propDisp = new TurtlePropertiesDisplay(myID, tMath.absoluteToZero(viewWidth, viewHeight, getPosition()),
                 getDirection(), getHidden(), penDown, myTurtRef);
         spriteIV.setOnMouseClicked(e -> propDisp.toggleDisplay());
+    }
+
+	private void setDefaults() {
+		setImage(defaultSpriteIMG);
+        position = new double[]{viewWidth / 2, viewHeight / 2};
+        setPosition(position);
+        setDirection(90);
+        setHidden(false);
+	}
+    
+    /**
+     * This is the method that's called whenever ObservableTurtle is changed so that this class can update it's properties
+     */
+    public void update(Observable o, Object n) {
+        ObservableTurtle turtle = (ObservableTurtle) o;
+        setPen(turtle.isPenDown());
+        setDirection((int) turtle.getHeading());
+        setHidden(!turtle.isTurtleShow());
     }
 
     /**
@@ -69,6 +95,9 @@ public class Sprite {
         penDown = newPen;
     }
 
+    /**
+     * @return	instance of ImageView
+     */
     public ImageView getImageView() {
         return spriteIV;
     }
@@ -79,7 +108,6 @@ public class Sprite {
     public double[] getPosition() {
         return position;
     }
-
     public void setPosition(double[] newPos) {
         position = newPos;
         spriteIV.setX(position[0] - spriteWidth / 2);
