@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * This entire file is part of my masterpiece.
+ * <strong>This entire file is part of my masterpiece.</strong>
  * It's responsible for SLogo's Javascript-inspired dynamic typing, which currently supports Booleans, Numbers, Strings, and Lists.
  * SLogo's dynamic type system was something that I had designed from the start, and the very first thing I implemented.
  * It was only after it was complete that I realized SLogo's specifications only supported numerical variable types, so this is one of the most unique things about our SLogo language implementation.
