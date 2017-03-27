@@ -43,11 +43,12 @@ public class ReplImpl implements Repl {
         }
     }
 
-
+    @Override
     public List<Expression> getHistory() {
         return myHistory;
     }
 
+    @Override
     public Expression lastCommand() {
         return myHistory.get(currentIndex - 1);
     }
