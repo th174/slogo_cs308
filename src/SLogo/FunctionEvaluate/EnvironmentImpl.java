@@ -183,7 +183,9 @@ public class EnvironmentImpl extends Observable implements Environment {
 		commands.putAll(ResourceBundle.getBundle("resources/AdditionalFunctions").keySet().stream().collect(Collectors.toMap(String::toUpperCase, e -> {
 			try {
 				return (Invokable) Class.forName("SLogo.FunctionEvaluate.Functions.DefinedFunctions." + e).newInstance();
-			} catch (InstantiationException | ClassNotFoundException | IllegalAccessException | ClassCastException e1) {
+			} catch (ClassCastException ignored) {
+				return null;
+			} catch (InstantiationException | ClassNotFoundException | IllegalAccessException e1) {
 				throw new Error(e1);
 			}
 		})));
